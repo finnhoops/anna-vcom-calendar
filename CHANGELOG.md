@@ -751,3 +751,39 @@ carries his project id and the first publish fails.
 
 **Not done:** the Drive drop folder is still shared with nobody, and the project
 is still not backed up anywhere off Finn's Mac.
+
+## 2026-08-27 (later still) — the exam run-up is finally complete
+
+Anna specified days 2 and 1, the two rows Finn had twice said he would fill in
+and hadn't. `TEST_RUNUP` now covers the whole five-day window.
+
+- **2 days out** — `Extreme Chat test Recall + Focus on weak list: <exam> (Lectures n-m)`
+- **1 day out** — `DAY BEFORE EXAM <exam> (Lectures n-m) → Work on focused/weak
+  concepts + do some anki if you have time`
+
+Both are **her wording verbatim, capitalisation included**. `Chat test Recall`
+with that exact casing is what she wrote; it is not a typo and must not be
+normalised. She asked for the exam name and lecture range to land where she had
+written `###`, and that is where they land.
+
+Days 2 and 1 were already inside `upcomingTests` (`out >= 1 && out <= 5`) — they
+returned no rows only because `TEST_RUNUP` had no entry for them. So this was
+two table entries and nothing else, exactly as the table's own comment promised.
+
+Verified by evaluating the real `TEST_RUNUP` out of `app_template.html` against
+two real exams from the parsed schedule — Anatomy Exam 1 (ranged) and the Drug
+Card Exam (no range) — and reading all ten resulting strings rather than assuming
+the interpolation was right.
+
+**Known gap, raised with Anna rather than papered over:** practicals, OSCE
+stations and the Drug Card exam get one prompt at five days out and then silence
+through the last four days. All four of the later wordings end in a lecture range
+those exams do not have, so `plain` stays null. Filling it needs wording from her
+per day; inventing one is exactly what the naming rules forbid.
+
+Also settled this round: exam names carrying brackets ship as printed (Anna: "I
+don't really care the specifics on that"), and cross-device checkmark syncing
+stays out of scope at her request.
+
+Deployed to https://anna-vcom-calendar.vercel.app — 140 days, 374 sessions,
+32 exams, 794 contrast pairs at AA.

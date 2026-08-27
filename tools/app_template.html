@@ -1227,8 +1227,14 @@ function upcomingTests(dateStr){
 
    `null` means that day asks nothing of that exam, and a day where nothing is
    asked of any exam does not render the section at all -- an empty dropdown is
-   worse than no dropdown. Days 3, 2 and 1 are still unspecified; adding them is
-   a line each in this table and nothing else. */
+   worse than no dropdown.
+
+   All five days are now specified: 5 and 4 from Finn, 3 from Finn, 2 and 1 from
+   Anna on 2026-08-27. `plain` is null on 4, 3, 2 and 1 -- a practical states no
+   lecture range, and every one of those four wordings puts one in brackets, so
+   there is nothing to render. Only day 5 asks anything of a practical. If Anna
+   wants the practicals prompted later in the run-up, that is a wording from her
+   per day, not something to invent here. */
 const chatRecall = e => `Chat test recall: ${e.examTitle} (${e.lectureLabel})`;
 
 const TEST_RUNUP = {
@@ -1246,6 +1252,17 @@ const TEST_RUNUP = {
   },
   3: {
     ranged:  e => `Extreme chat test recall and weakness list: ${e.examTitle} (${e.lectureLabel})`,
+    plain:   null,
+  },
+  2: {
+    // Anna's wording, verbatim, capitalisation included (2026-08-27).
+    ranged:  e => `Extreme Chat test Recall + Focus on weak list: ${e.examTitle} (${e.lectureLabel})`,
+    plain:   null,
+  },
+  1: {
+    // The day BEFORE the exam. Anna's wording, verbatim; the exam name and its
+    // lecture range go where she wrote ### and the arrow is hers.
+    ranged:  e => `DAY BEFORE EXAM ${e.examTitle} (${e.lectureLabel}) \u2192 Work on focused/weak concepts + do some anki if you have time`,
     plain:   null,
   },
 };

@@ -476,7 +476,18 @@ Each day gets up to five sections, in this order:
    | 5 | `Chat test recall: <exam> (Lectures n-m)` | `5 days before test: <exam>` |
    | 4 | same wording as day 5 | *(nothing)* |
    | 3 | `Extreme chat test recall and weakness list: <exam> (Lectures n-m)` | *(nothing)* |
-   | 2, 1 | *(not specified yet)* | *(not specified yet)* |
+   | 2 | `Extreme Chat test Recall + Focus on weak list: <exam> (Lectures n-m)` | *(nothing)* |
+   | 1 | `DAY BEFORE EXAM <exam> (Lectures n-m) → Work on focused/weak concepts + do some anki if you have time` | *(nothing)* |
+
+   **The table is complete as of 2026-08-27.** Days 2 and 1 are Anna's own
+   wording, given verbatim including its capitalisation — `Chat test Recall`
+   is hers, not a typo to tidy. Do not normalise it.
+
+   **Every practical gets exactly one prompt, five days out, and then nothing.**
+   That falls out of `plain: null` on days 4, 3, 2 and 1, which in turn falls out
+   of all four of those wordings ending in a lecture range a practical does not
+   have. Anna was shown this explicitly and it is a known gap, not an oversight —
+   filling it needs a wording from her per day, never an invented one.
 
    Days 5 and 4 share one function (`chatRecall`) so they cannot drift apart —
    they are meant to be word-for-word the same. Day 4 briefly read "Chat test
