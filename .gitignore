@@ -1,8 +1,11 @@
 # Old builds — 19MB of history the pipeline regenerates anyway
 versions/
 
-# Generated page (rebuilt from tools/app_template.html every run)
-build/index.html
+# The generated page is COMMITTED on purpose — Vercel deploys it from this repo
+# on every push to master (see vercel.json "outputDirectory": "build").
+# Do not re-ignore build/index.html or pushes will publish an empty site.
+
+# Design proof images — dev artifacts, not part of the deployed page
 build/*.png
 
 # Vercel account bookkeeping — machine-specific, must not travel
