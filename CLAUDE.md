@@ -486,8 +486,13 @@ Each day gets up to five sections, in this order:
    **Every practical gets exactly one prompt, five days out, and then nothing.**
    That falls out of `plain: null` on days 4, 3, 2 and 1, which in turn falls out
    of all four of those wordings ending in a lecture range a practical does not
-   have. Anna was shown this explicitly and it is a known gap, not an oversight —
-   filling it needs a wording from her per day, never an invented one.
+   have.
+
+   **This is settled, not an open gap.** Anna was shown it explicitly on
+   2026-08-27 and chose to leave it: she has no study plan for practicals and
+   expects one to differ per exam, so she will add her own manual to-dos for
+   those instead. **Do not fill `plain` in on days 4-1 uninvited** — if she ever
+   wants it, the wording comes from her, per day.
 
    Days 5 and 4 share one function (`chatRecall`) so they cannot drift apart —
    they are meant to be word-for-word the same. Day 4 briefly read "Chat test
