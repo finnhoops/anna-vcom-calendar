@@ -1,0 +1,1904 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>__TITLE__</title>
+<meta name="description" content="__DESCRIPTION__">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,200..800&family=Public+Sans:wght@300;400;500;600;800&display=swap" rel="stylesheet">
+<style>
+/* ============================================================================
+   Tokens. Every colour in this file resolves through a custom property; the
+   seasonal packs below are the only place a literal hex appears.
+   ========================================================================= */
+:root{
+  --display:'Fraunces','Iowan Old Style',Georgia,'Times New Roman',serif;
+  --body:'Public Sans','Avenir Next','Helvetica Neue',Helvetica,sans-serif;
+
+  --s1:8px; --s2:16px; --s3:24px; --s4:32px; --s5:48px; --s6:64px; --s7:96px;
+  --r1:6px; --r2:10px; --r3:16px; --r4:24px;
+
+  --fast:120ms; --mid:200ms; --slow:320ms;
+  --ease-out:cubic-bezier(.22,.68,.36,1);
+  --ease-in:cubic-bezier(.5,0,.75,0);
+
+  --shadow-1:0 1px 2px rgba(0,0,0,.05), 0 1px 1px rgba(0,0,0,.03);
+  --shadow-2:0 6px 16px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.04);
+  --shadow-3:0 24px 60px rgba(0,0,0,.22), 0 6px 16px rgba(0,0,0,.12);
+
+  --maxw:1240px;
+}
+__THEME_CSS__
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; color:var(--ink);
+  background-color:var(--bg);
+  background-image:var(--pattern);
+  background-size:var(--pattern-size);
+  background-position:0 0;
+  font-family:var(--body); font-size:16px; line-height:1.55;
+  font-weight:400; letter-spacing:.005em;
+  -webkit-font-smoothing:antialiased;
+  font-variant-numeric:tabular-nums;
+}
+h1,h2,h3{font-family:var(--display); margin:0; letter-spacing:-.02em; line-height:1.05}
+p{margin:0}
+button{font:inherit; color:inherit; background:none; border:0; margin:0; padding:0}
+:focus-visible{outline:3px solid var(--ring); outline-offset:2px; border-radius:var(--r1)}
+:focus:not(:focus-visible){outline:none}
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+.wrap{max-width:var(--maxw); margin:0 auto; padding:0 var(--s3) var(--s7)}
+@media (max-width:640px){ .wrap{padding:0 var(--s2) var(--s6)} }
+
+/* ---- masthead ---------------------------------------------------------- */
+/* The masthead is the one place text sits straight on the floral rather than on
+   a card, and the roses are dark enough that the small uppercase type under the
+   title falls below AA against them -- it did against the old tile too, and a
+   sharper tile only widened the gap. `--veil` is a soft wash of the ground that
+   fades out downward: it lifts the pattern behind the type without hiding it,
+   and it is `transparent` for every pack that has no pattern to fight. */
+.masthead{
+  display:flex; align-items:flex-end; justify-content:space-between; gap:var(--s3);
+  flex-wrap:wrap; padding:var(--s5) 0 var(--s3);
+  position:relative;
+}
+.masthead::before{
+  content:""; position:absolute; inset:-6% -6% -10%; z-index:-1; pointer-events:none;
+  background:radial-gradient(120% 100% at 50% 40%, var(--veil) 0 55%, transparent 100%);
+}
+.brand h1{font-size:clamp(26px,3.4vw,38px); font-weight:800; font-variation-settings:'opsz' 40}
+.brand .sub{color:var(--ink2); font-size:13px; font-weight:500; letter-spacing:.08em; text-transform:uppercase; margin-top:6px}
+
+.themepick{display:flex; align-items:center; gap:var(--s1); flex-wrap:wrap}
+.themepick .lbl{color:var(--ink2); font-size:12px; letter-spacing:.1em; text-transform:uppercase; font-weight:600}
+.swatch{
+  width:32px; height:32px; border-radius:50%; cursor:pointer; position:relative;
+  border:2px solid var(--line); background:var(--sw);
+  transition:transform var(--fast) var(--ease-out), box-shadow var(--mid) var(--ease-out), border-color var(--mid) var(--ease-out);
+}
+.swatch:hover{transform:translateY(-2px); box-shadow:var(--shadow-2)}
+.swatch:active{transform:translateY(0) scale(.94); transition-duration:80ms}
+.swatch[aria-pressed="true"]{border-color:var(--ink); box-shadow:0 0 0 3px var(--bg),0 0 0 5px var(--ink)}
+
+/* ---- lace ---------------------------------------------------------------
+   "With matching white lace borders on things" (STUDY 1.0). Broderie anglaise:
+   a scalloped edge, a round eyelet inside every scallop, a picot bead at each
+   Broderie anglaise, and it is a PHOTOGRAPH, not a drawing. `lace.jpeg` is cut
+   into a nine-slice by tools/make_lace.py and dropped in here as a single
+   border-image; the 17 layers of radial-gradients this replaces were a decent
+   approximation of lace and still only an approximation.
+
+   Three things about it are load-bearing:
+
+   - `background-clip:padding-box` stops the card's white surface at the padding
+     edge, so the border band is genuinely open and the floral shows through
+     every hole in the lace. Without it the surface paints under the border and
+     the lace sits on a white slab.
+   - `round`, not `repeat`. `repeat` cuts the motif wherever the edge happens to
+     end; `round` rescales the run slightly so a whole number of them fits.
+   - The tint is baked into the asset from the pack's `lace` token, so changing
+     a lace colour means rerunning tools/make_lace.py, not just editing CSS.
+
+   Not an SVG. An SVG data URI renders correctly as an <img> but paints nothing
+   as a CSS background-image or border-image on this machine, in headless-shell
+   and full Chromium alike, and it fails silently. A raster data URI is fine --
+   that is what both this and the floral tile are. Packs without lace set
+   --lace-w:0 and --lace-img:none. */
+#today,.month,.weekwrap,.card{
+  border:var(--lace-w) solid transparent;
+  background-color:var(--surface);
+  background-clip:padding-box;
+  border-image:var(--lace-img) var(--lace-slice) round;
+}
+
+/* ---- today panel ------------------------------------------------------- */
+#today{
+  box-shadow:var(--shadow-2); border-radius:var(--r4); overflow:hidden;
+  margin-bottom:var(--s5);
+  outline:1px solid var(--card-outline); outline-offset:calc(var(--lace-w) * -1);
+}
+.today-head{
+  display:grid; grid-template-columns:1fr auto; gap:var(--s3);
+  align-items:start; padding:var(--s4) var(--s4) var(--s3);
+  border-bottom:1px solid var(--line); background:var(--surface2);
+}
+.today-date .eyebrow{color:var(--accent); font-size:12px; font-weight:800; letter-spacing:.16em; text-transform:uppercase}
+.today-date h2{font-size:clamp(32px,5.6vw,58px); font-weight:200; font-variation-settings:'opsz' 90;
+  margin:4px 0 0; text-wrap:balance}
+.today-date h2 b{font-weight:800}
+.today-meta{color:var(--ink2); font-size:14px; margin-top:var(--s1); font-weight:500}
+
+/* The next exam is the one thing on this panel Anna needs from across the room,
+   so the card is FILLED with the accent rather than tinted with it -- on a page
+   this pale, a tint is just another pale rectangle. Everything on it resolves
+   through --accentInk, which check_contrast.py already holds to AA against
+   --accent in every pack. */
+.countdown{
+  text-align:right; background:var(--accent); border-radius:var(--r3);
+  padding:var(--s2) var(--s3); min-width:230px; max-width:340px;
+  box-shadow:var(--shadow-2);
+}
+.countdown .k{color:var(--accentInk); opacity:.75; font-size:11px; font-weight:800;
+  letter-spacing:.14em; text-transform:uppercase}
+.countdown .v{font-family:var(--display); font-size:42px; font-weight:800; line-height:1.05;
+  color:var(--accentInk); letter-spacing:-.01em; margin-top:2px}
+.countdown .n{color:var(--accentInk); font-size:13px; margin-top:4px; font-weight:600;
+  display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical;
+  overflow:hidden; overflow-wrap:anywhere}
+
+/* The two exams after it. Same card, quieter: they are context for the headline,
+   not three competing headlines.
+
+   The count runs INLINE at the end of the name rather than in its own column on
+   the right. As a column it looked tidier until a name wrapped -- and most of
+   these names wrap -- at which point the second line stopped short of the count
+   and the whole block went ragged. Inline, a wrapped name just flows. */
+/* In the day view the card sits at the top of the to-do column rather than in a
+   panel head, so it needs its own bottom margin and has no min-width to fight:
+   the column sets the width. */
+.card-cd{margin-bottom:var(--s3)}
+.card-cd .countdown{min-width:0; max-width:none; text-align:left}
+.card-cd .cd-then .row{text-align:left}
+
+.cd-then{margin-top:var(--s2); padding-top:var(--s1);
+  border-top:1px solid color-mix(in srgb, var(--accentInk) 30%, transparent)}
+.cd-then .row{color:var(--accentInk); font-size:12.5px; line-height:1.45;
+  padding:3px 0; text-align:right; opacity:.88; overflow-wrap:anywhere}
+.cd-then .row .d{font-weight:800; font-variant-numeric:tabular-nums; white-space:nowrap}
+
+.today-body{display:grid; grid-template-columns:1.35fr 1fr; gap:0}
+.today-col{padding:var(--s3) var(--s4) var(--s4)}
+.today-col + .today-col{border-left:1px solid var(--line)}
+.colhead{
+  display:flex; align-items:center; justify-content:space-between; gap:var(--s1) var(--s2);
+  flex-wrap:wrap; color:var(--ink3); font-size:12px; font-weight:800; letter-spacing:.14em;
+  text-transform:uppercase; margin-bottom:var(--s2);
+}
+.colhead > span{min-width:0; overflow-wrap:anywhere}
+
+/* ---- session rows ------------------------------------------------------ */
+.slot{display:grid; grid-template-columns:76px 1fr; gap:var(--s2); align-items:stretch; padding:6px 0}
+.slot .time{color:var(--ink3); font-size:12px; font-weight:600; padding-top:10px; text-align:right; white-space:nowrap}
+.sess{
+  width:100%; text-align:left; cursor:pointer; position:relative;
+  border-radius:var(--r2); padding:10px 12px 10px 16px;
+  background:var(--surface2); border:1px solid var(--line);
+  transition:transform var(--fast) var(--ease-out), box-shadow var(--mid) var(--ease-out), border-color var(--mid) var(--ease-out);
+}
+.sess::before{content:""; position:absolute; left:0; top:0; bottom:0; width:4px; border-radius:var(--r2) 0 0 var(--r2); background:var(--cat)}
+.sess:hover{transform:translateY(-1px); box-shadow:var(--shadow-2); border-color:var(--cat)}
+.sess:active{transform:translateY(0) scale(.995); transition-duration:80ms}
+.sess .nm{font-weight:600; font-size:15px; line-height:1.3; overflow-wrap:anywhere}
+.sess .dt{color:var(--ink3); font-size:12.5px; margin-top:3px}
+.sess.is-exam{background:var(--accentSoft); border-color:var(--cat)}
+.sess.is-break{opacity:.62}
+.sess.edited::after{content:"edited"; position:absolute; right:10px; top:8px; font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink3); font-weight:700}
+
+.tag{display:inline-flex; align-items:center; gap:4px; font-size:10.5px; font-weight:800; letter-spacing:.09em; text-transform:uppercase; padding:2px 7px; border-radius:999px; margin-left:6px; vertical-align:1px}
+.tag-mand{background:var(--cat); color:var(--surface)}
+.tag-exam{background:var(--cat-exam); color:var(--surface)}
+
+/* ---- study workflow ---------------------------------------------------- */
+.study{margin-bottom:var(--s3)}
+.tdsec{border-top:1px solid var(--line)}
+.tdsec:first-child{border-top:0}
+.tdsec h4,.tdsec-own{
+  font-family:var(--body); font-size:12px; font-weight:800; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--ink2); margin:0 0 var(--s1);
+}
+.tdsec h4{margin:0}
+.tdsec-own{margin-top:var(--s3); padding-top:var(--s2); border-top:1px solid var(--line)}
+
+/* Each phase is a disclosure. The header is the whole row so the target clears
+   44px, and the count keeps a folded section informative. */
+.tdtoggle{
+  display:flex; align-items:center; gap:10px; text-align:left; cursor:pointer;
+  min-height:44px; padding:var(--s1) 0; width:100%; color:var(--ink2);
+  font-family:var(--body); font-size:12px; font-weight:800; letter-spacing:.12em;
+  text-transform:uppercase;
+  transition:color var(--mid) var(--ease-out), background var(--mid) var(--ease-out),
+             transform var(--fast) var(--ease-out);
+}
+.tdtoggle:hover{color:var(--accent); background:var(--accentSoft)}
+.tdtoggle:active{transform:scale(.985)}
+.tdtoggle .chev{
+  flex:0 0 auto; display:block; color:var(--ink3);
+  transition:transform var(--mid) var(--ease-out), color var(--mid) var(--ease-out);
+}
+.tdtoggle:hover .chev{color:var(--accent)}
+.tdtoggle[aria-expanded="true"] .chev{transform:rotate(90deg)}
+.tdcount{
+  margin-left:auto; flex:0 0 auto; font-size:11px; font-weight:800; letter-spacing:.08em;
+  font-variant-numeric:tabular-nums; color:var(--ink2);
+}
+.tdcount.all{color:var(--accent)}
+.tdbody{padding:0 0 var(--s2)}
+.tdbody[hidden]{display:none}
+.tdbody.anim{animation:tdReveal var(--mid) var(--ease-out)}
+@keyframes tdReveal{from{opacity:0; transform:translateY(-4px)} to{opacity:1; transform:none}}
+.steps{list-style:none; margin:0 0 var(--s1); padding:0}
+.steps li{font-size:13.5px; line-height:1.5; color:var(--ink2); padding:5px 0 5px 18px; position:relative}
+.steps li::before{content:""; position:absolute; left:4px; top:13px; width:5px; height:5px; border-radius:50%; background:var(--ink3)}
+.steps li.lead{padding-left:0; color:var(--ink); font-weight:600}
+.steps li.lead::before{display:none}
+.hl{display:inline-flex; align-items:center; gap:6px; font-weight:700; color:var(--hlc)}
+.hl::before{content:""; width:11px; height:11px; border-radius:3px; background:var(--hlc); flex:0 0 auto}
+.task.gen{border-bottom:0; padding:5px 0}
+.task.gen .txt{cursor:default; font-weight:500}
+
+/* ---- tasks ------------------------------------------------------------- */
+.task{display:flex; align-items:flex-start; gap:10px; padding:8px 0; border-bottom:1px solid var(--line)}
+.task:last-child{border-bottom:0}
+.check{
+  flex:0 0 auto; width:22px; height:22px; margin-top:1px; border-radius:7px; cursor:pointer;
+  border:2px solid var(--ink3); background:transparent; position:relative;
+  transition:background var(--fast) var(--ease-out), border-color var(--fast) var(--ease-out), transform var(--fast) var(--ease-out);
+}
+.check:hover{border-color:var(--accent)}
+.check:active{transform:scale(.9)}
+.check[aria-checked="true"]{background:var(--accent); border-color:var(--accent)}
+.check[aria-checked="true"]::after{
+  content:""; position:absolute; left:6px; top:2px; width:5px; height:10px;
+  border:solid var(--accentInk); border-width:0 2.5px 2.5px 0; transform:rotate(43deg);
+}
+.task .txt{flex:1; font-size:14.5px; line-height:1.45; cursor:text}
+.task.done .txt{text-decoration:line-through; color:var(--ink3)}
+.task .del{
+  flex:0 0 auto; width:28px; height:28px; border-radius:var(--r1); cursor:pointer; color:var(--ink3);
+  opacity:0; transition:opacity var(--fast) var(--ease-out), background var(--fast) var(--ease-out), color var(--fast) var(--ease-out);
+}
+.task:hover .del,.task:focus-within .del{opacity:1}
+/* A phone has no hover, so on touch the delete is simply always there. Without
+   this it is invisible and unreachable on the only device Anna uses. */
+@media (hover:none){.task .del{opacity:1}}
+.task .del:hover{background:var(--accentSoft); color:var(--accent)}
+
+.assigned{margin-top:var(--s3)}
+.assigned li{font-size:14px; color:var(--ink2); padding:6px 0 6px 18px; position:relative; list-style:none}
+.assigned li::before{content:""; position:absolute; left:4px; top:14px; width:5px; height:5px; border-radius:50%; background:var(--ink3)}
+.assigned ul{margin:0; padding:0}
+
+.addrow{display:flex; gap:var(--s1); margin-top:var(--s2)}
+input[type=text],input[type=time],select,textarea{
+  font:inherit; width:100%; padding:9px 12px; border-radius:var(--r2);
+  border:1.5px solid var(--line); background:var(--bg); color:var(--ink);
+  transition:border-color var(--fast) var(--ease-out), box-shadow var(--fast) var(--ease-out);
+}
+input:hover,select:hover,textarea:hover{border-color:var(--ink3)}
+input:focus,select:focus,textarea:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accentSoft)}
+input::placeholder{color:var(--ink3)}
+
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:6px; cursor:pointer;
+  padding:9px 16px; border-radius:var(--r2); font-weight:600; font-size:14px;
+  background:var(--accent); color:var(--accentInk); border:1.5px solid var(--accent);
+  min-height:40px; white-space:nowrap;
+  transition:transform var(--fast) var(--ease-out), box-shadow var(--mid) var(--ease-out), filter var(--fast) var(--ease-out);
+}
+.btn:hover{transform:translateY(-1px); box-shadow:var(--shadow-2); filter:brightness(1.06)}
+.btn:active{transform:translateY(0) scale(.98); transition-duration:80ms}
+.btn[disabled]{opacity:.45; cursor:not-allowed; transform:none; box-shadow:none; filter:none}
+.btn.ghost{background:transparent; color:var(--ink); border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--ink3); background:var(--surface2); filter:none}
+.btn.danger{background:transparent; color:var(--cat-exam); border-color:var(--cat-exam)}
+.btn.danger:hover{background:var(--cat-exam); color:var(--surface)}
+.btn.sm{padding:5px 11px; min-height:32px; font-size:13px}
+
+.empty{color:var(--ink3); font-size:14px; line-height:1.6; padding:var(--s2) 0}
+.empty strong{display:block; color:var(--ink2); font-weight:600; margin-bottom:2px}
+
+/* ---- edit mode --------------------------------------------------------- */
+/* Anna reads this on a phone, so nothing that can be pressed may depend on
+   hover. The delete on a to-do used to be opacity:0 until :hover, which on a
+   touch screen is the same as not existing -- that is the bug behind "the
+   to-do list cannot be edited". Edit mode makes every remove and reorder
+   control permanently visible, and the hover-less fallback further down keeps
+   the plain list usable with edit mode off. */
+.headbtns{display:flex; align-items:center; gap:var(--s1); flex:0 0 auto}
+.btn.on{background:var(--accent); color:var(--accentInk); border-color:var(--accent)}
+.edithint{
+  font-size:11.5px; font-weight:600; letter-spacing:.01em; text-transform:none;
+  color:var(--ink3); line-height:1.5; margin:0 0 var(--s2);
+}
+/* The grid's hint sits straight on the floral, so it carries a surface for the
+   same reason the legend does. */
+.gridhint{display:inline-block; margin-bottom:var(--s2); padding:6px 14px;
+  background:var(--surface); border:1px solid var(--line); border-radius:999px}
+.rm,.move{
+  flex:0 0 auto; position:relative; width:36px; height:36px; border-radius:var(--r2);
+  display:grid; place-items:center; cursor:pointer; color:var(--ink2);
+  border:1.5px solid var(--line); background:var(--surface);
+  transition:background var(--fast) var(--ease-out), color var(--fast) var(--ease-out),
+             border-color var(--fast) var(--ease-out), transform var(--fast) var(--ease-out);
+}
+/* The visual box is 36px; this pushes the touch target past the 44px minimum
+   without making the button look like a slab. */
+.rm::after,.move::after{content:""; position:absolute; inset:-4px}
+.rm svg,.move svg{width:16px; height:16px; fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round}
+.rm:hover{background:var(--cat-exam); border-color:var(--cat-exam); color:var(--surface)}
+.move:hover{background:var(--accentSoft); border-color:var(--accent); color:var(--accent)}
+.rm:active,.move:active{transform:scale(.92)}
+.rm[disabled],.move[disabled]{opacity:.38; cursor:not-allowed; transform:none}
+.rm[disabled]:hover,.move[disabled]:hover{background:var(--surface); border-color:var(--line); color:var(--ink2)}
+.slot.editing{grid-template-columns:76px 1fr auto}
+.task .rm,.task .move{width:32px; height:32px}
+.task .rm svg,.task .move svg{width:15px; height:15px}
+
+/* Removing never destroys anything -- it goes here, one press from undone. */
+.restore{margin-top:var(--s2); padding:var(--s2); border-radius:var(--r2);
+  background:var(--surface2); border:1px dashed var(--line)}
+.restore h5{font-family:var(--body); font-size:11px; font-weight:800; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--ink3); margin-bottom:6px}
+.restore .rrow{display:flex; align-items:center; gap:var(--s1); padding:4px 0;
+  font-size:13.5px; color:var(--ink2)}
+.restore .rrow span{flex:1; overflow-wrap:anywhere}
+
+/* The day sheet the month and the week open. A month cell is 45px wide on a
+   phone, so it cannot carry a delete per class; this list can, and it is the
+   same add / edit / remove / restore the day view already has. */
+.sheet{list-style:none; margin:0; padding:0}
+.sheet li{display:flex; align-items:center; gap:var(--s1); padding:6px 0; border-top:1px solid var(--line)}
+.sheet li:first-child{border-top:0}
+.sheet .pick{
+  flex:1; min-width:0; text-align:left; cursor:pointer; min-height:44px;
+  border-radius:var(--r2); padding:8px 11px; position:relative;
+  background:var(--surface2); border:1px solid var(--line);
+  transition:border-color var(--fast) var(--ease-out), background var(--fast) var(--ease-out);
+}
+.sheet .pick::before{content:""; position:absolute; left:0; top:0; bottom:0; width:3px;
+  border-radius:var(--r2) 0 0 var(--r2); background:var(--cat)}
+.sheet .pick:hover{border-color:var(--cat); background:var(--surface)}
+.sheet .pick:active{transform:scale(.995)}
+.sheet .pick b{display:block; font-size:14.5px; font-weight:600; line-height:1.3; overflow-wrap:anywhere}
+.sheet .pick small{display:block; color:var(--ink3); font-size:12px; margin-top:2px}
+
+/* ---- view switcher ----------------------------------------------------- */
+.bar{display:flex; align-items:center; justify-content:space-between; gap:var(--s2); flex-wrap:wrap; margin-bottom:var(--s3)}
+.barleft{display:flex; align-items:center; gap:var(--s2); flex-wrap:wrap; min-width:0}
+
+/* Key to the dots in the month grid. It carries its own surface for the same
+   reason the masthead carries a veil: this bar sits straight on the floral, and
+   11px text at --ink2 does not clear AA against the darker roses. On white it
+   does, with room to spare. */
+.legend{
+  display:flex; align-items:center; flex-wrap:wrap; gap:2px var(--s2);
+  list-style:none; margin:0; padding:6px var(--s2);
+  background:var(--surface); border:1px solid var(--line); border-radius:999px;
+}
+.legend li{display:inline-flex; align-items:center; gap:6px; font-size:11.5px;
+  font-weight:600; color:var(--ink2); white-space:nowrap}
+.legend .dot{width:8px; height:8px; flex:0 0 auto}
+.views{display:inline-flex; background:var(--surface2); border:1px solid var(--line); border-radius:999px; padding:4px; gap:2px}
+.views button{
+  padding:7px 18px; border-radius:999px; cursor:pointer; font-weight:600; font-size:14px; color:var(--ink2);
+  min-height:36px;
+  transition:background var(--mid) var(--ease-out), color var(--mid) var(--ease-out), transform var(--fast) var(--ease-out);
+}
+.views button:hover{color:var(--ink); background:var(--surface)}
+.views button:active{transform:scale(.97)}
+.views button[aria-selected="true"]{background:var(--accent); color:var(--accentInk); box-shadow:var(--shadow-1)}
+.nav{display:inline-flex; align-items:center; gap:var(--s1)}
+.nav .ttl{font-family:var(--display); font-size:22px; font-weight:600; min-width:230px; text-align:center}
+.iconbtn{
+  width:40px; height:40px; border-radius:var(--r2); cursor:pointer; display:grid; place-items:center;
+  border:1.5px solid var(--line); color:var(--ink2); background:var(--surface);
+  transition:background var(--fast) var(--ease-out), color var(--fast) var(--ease-out), transform var(--fast) var(--ease-out), border-color var(--fast) var(--ease-out);
+}
+.iconbtn:hover{background:var(--surface2); color:var(--ink); border-color:var(--ink3)}
+.iconbtn:active{transform:scale(.94)}
+.iconbtn svg{width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round}
+
+/* ---- month ------------------------------------------------------------- */
+.month{border-radius:var(--r3); overflow:hidden; box-shadow:var(--shadow-1);
+  outline:1px solid var(--card-outline); outline-offset:calc(var(--lace-w) * -1)}
+.dow{display:grid; grid-template-columns:44px repeat(7,minmax(0,1fr)); background:var(--surface2); border-bottom:1px solid var(--line)}
+.dow span{padding:10px 8px; font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:var(--ink3); text-align:center}
+.mrow{display:grid; grid-template-columns:44px repeat(7,minmax(0,1fr)); border-bottom:1px solid var(--line)}
+.mrow:last-child{border-bottom:0}
+.wk{
+  display:grid; place-items:center; cursor:pointer; border-right:1px solid var(--line);
+  background:var(--surface2); color:var(--ink3); font-size:11px; font-weight:700;
+  transition:background var(--fast) var(--ease-out), color var(--fast) var(--ease-out);
+}
+.wk:hover{background:var(--accentSoft); color:var(--accent)}
+.wk:active{transform:scale(.96)}
+.day{
+  position:relative; min-height:104px; padding:8px 8px 10px; cursor:pointer; text-align:left;
+  border-right:1px solid var(--line); display:flex; flex-direction:column; gap:5px; min-width:0;
+  transition:background var(--fast) var(--ease-out), box-shadow var(--fast) var(--ease-out);
+}
+.day:last-child{border-right:0}
+.day:hover{background:var(--surface2)}
+.day:active{background:var(--accentSoft)}
+.day.out{opacity:.32}
+.day.weekend{background:var(--surface2)}
+.day.weekend .num{color:var(--ink3)}
+.day .num{font-family:var(--display); font-size:16px; font-weight:600; color:var(--ink2)}
+.day.today .num{
+  background:var(--accent); color:var(--accentInk); width:28px; height:28px;
+  border-radius:50%; display:grid; place-items:center; font-weight:800; margin:-3px 0 0 -3px;
+}
+.day.today{box-shadow:inset 0 0 0 2px var(--accent)}
+/* Dashed, not the solid ring today wears -- the two can land on the same cell.
+   Held to 1.5px and inset 4px so it does not sit on the grid's own rules: at 2px
+   against the border it read as a cage over the month rather than a hint, and
+   the month still has to be readable while you look for the day you want.
+   accentSoft as a ground is checked by check_contrast.py -- the dots, the day
+   number and the class count all sit on it here. */
+.day.editable{outline:1.5px dashed var(--accent); outline-offset:-4px; background:var(--accentSoft)}
+.day.editable:hover{background:var(--accentSoft); filter:brightness(.97)}
+.day .pencil{position:absolute; right:5px; top:5px; color:var(--accent); line-height:0}
+.day .pencil svg{width:15px; height:15px; fill:none; stroke:currentColor; stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round}
+.dots{display:flex; flex-wrap:wrap; gap:3px}
+.dot{width:6px; height:6px; border-radius:50%; background:var(--cat)}
+.chip{
+  font-size:10.5px; font-weight:700; letter-spacing:.03em; padding:2px 6px; border-radius:5px;
+  background:var(--cat); color:var(--surface); align-self:flex-start;
+  max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.day .cnt{margin-top:auto; color:var(--ink3); font-size:10.5px; font-weight:600}
+
+/* ---- week -------------------------------------------------------------- */
+.weekwrap{border-radius:var(--r3); overflow-x:auto; box-shadow:var(--shadow-1);
+  outline:1px solid var(--card-outline); outline-offset:calc(var(--lace-w) * -1)}
+.weekgrid{min-width:860px}
+.whead{display:grid; grid-template-columns:64px repeat(7,minmax(0,1fr)); border-bottom:1px solid var(--line); background:var(--surface2); position:sticky; top:0; z-index:2}
+.whead div{padding:10px 8px; text-align:center; font-size:12px; font-weight:700; color:var(--ink2)}
+.whead div.is-today{color:var(--accent)}
+.whead div small{display:block; font-size:10.5px; font-weight:600; color:var(--ink3); letter-spacing:.1em; text-transform:uppercase}
+.whead .whedit{display:block; margin:5px auto 0; padding:3px 12px; min-height:30px; font-size:11px}
+.wbody{display:grid; grid-template-columns:64px repeat(7,minmax(0,1fr)); position:relative}
+.hours{border-right:1px solid var(--line)}
+.hour{height:56px; padding:2px 8px 0 0; text-align:right; font-size:11px; color:var(--ink3); font-weight:600; border-bottom:1px solid var(--line)}
+.wcol{position:relative; border-right:1px solid var(--line)}
+.wcol:last-child{border-right:0}
+.wcol .lines div{height:56px; border-bottom:1px solid var(--line)}
+.wsess{
+  position:absolute; left:3px; right:3px; border-radius:var(--r1); cursor:pointer; overflow:hidden;
+  background:var(--cat); color:var(--surface); padding:5px 7px; text-align:left;
+  border:1px solid color-mix(in srgb, var(--cat) 70%, black);
+  transition:transform var(--fast) var(--ease-out), box-shadow var(--mid) var(--ease-out), filter var(--fast) var(--ease-out);
+}
+.wsess:hover{transform:scale(1.015); box-shadow:var(--shadow-2); filter:brightness(1.08); z-index:3}
+.wsess:active{transform:scale(.995)}
+.wsess .n{font-size:12px; font-weight:700; line-height:1.25; overflow-wrap:anywhere}
+.wsess .t{font-size:10.5px; opacity:.88; margin-top:1px}
+
+/* ---- day view ---------------------------------------------------------- */
+.dayview{display:grid; grid-template-columns:1.35fr 1fr; gap:var(--s3)}
+.card{border-radius:var(--r3); padding:var(--s3); box-shadow:var(--shadow-1);
+  outline:1px solid var(--card-outline); outline-offset:calc(var(--lace-w) * -1)}
+.card h3{font-size:19px; font-weight:600; margin-bottom:var(--s2)}
+.notelist{list-style:none; margin:var(--s2) 0 0; padding:0}
+.notelist li{font-size:13.5px; color:var(--ink2); padding:7px 0 7px 16px; position:relative; border-top:1px solid var(--line)}
+.notelist li::before{content:""; position:absolute; left:2px; top:15px; width:6px; height:2px; background:var(--ink3)}
+
+/* ---- modal ------------------------------------------------------------- */
+.scrim{
+  position:fixed; inset:0; background:rgba(10,6,4,.55); backdrop-filter:blur(3px);
+  display:grid; place-items:center; padding:var(--s2); z-index:100;
+  animation:fade var(--mid) var(--ease-out);
+}
+.modal{
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--r4);
+  box-shadow:var(--shadow-3); width:min(520px,100%); max-height:90vh; overflow:auto;
+  animation:pop var(--slow) var(--ease-out);
+}
+.modal header{padding:var(--s3) var(--s3) 0}
+.modal header h3{font-size:22px; font-weight:600}
+.modal header p{color:var(--ink3); font-size:13px; margin-top:4px}
+.modal .fields{padding:var(--s3); display:grid; gap:var(--s2)}
+.field label{display:block; font-size:12px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--ink3); margin-bottom:5px}
+.pair{display:grid; grid-template-columns:1fr 1fr; gap:var(--s2)}
+.modal footer{display:flex; gap:var(--s1); justify-content:flex-end; padding:0 var(--s3) var(--s3); flex-wrap:wrap}
+.modal footer .spacer{flex:1}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes pop{from{opacity:0; transform:translateY(14px) scale(.97)}to{opacity:1; transform:none}}
+
+.foot{margin-top:var(--s5); color:var(--ink3); font-size:12px; text-align:center; line-height:1.7}
+
+/* ---- responsive -------------------------------------------------------- */
+@media (max-width:920px){
+  .today-body,.dayview{grid-template-columns:1fr}
+  .today-col + .today-col{border-left:0; border-top:1px solid var(--line)}
+}
+@media (max-width:640px){
+  .masthead{padding:var(--s3) 0 var(--s2)}
+  .today-head{grid-template-columns:1fr; padding:var(--s3)}
+  /* The card flips to left-aligned here, and the two rows under it have to flip
+     with it -- a left-aligned headline over right-aligned sub-rows reads broken. */
+  .countdown{text-align:left; min-width:0; max-width:none}
+  .cd-then .row{text-align:left}
+  .today-col{padding:var(--s2) var(--s3) var(--s3)}
+  .dow{grid-template-columns:26px repeat(7,minmax(0,1fr))}
+  .mrow{grid-template-columns:26px repeat(7,minmax(0,1fr))}
+  .dow span{padding:8px 2px; font-size:9.5px; letter-spacing:.04em}
+  .day{min-height:62px; padding:4px 3px 6px; gap:3px}
+  .day .num{font-size:13px}
+  .day .chip,.day .cnt{display:none}
+  .nav .ttl{font-size:18px; min-width:150px}
+  .slot{grid-template-columns:62px 1fr}
+  .views button{padding:7px 13px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms !important; animation-iteration-count:1 !important;
+    transition-duration:.01ms !important; scroll-behavior:auto !important;
+  }
+  .sess:hover,.btn:hover,.wsess:hover,.swatch:hover{transform:none}
+}
+
+@media print{
+  body{background:#fff}
+  .masthead .themepick,.views,.nav,.iconbtn,.addrow,.btn,.del,.rm,.move,.edithint,.restore{display:none !important}
+  #today,.month,.weekwrap,.card{box-shadow:none; border-color:#bbb; break-inside:avoid}
+  .wrap{max-width:none; padding:0}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <div class="brand">
+      <h1>__HEADING__</h1>
+      <p class="sub" id="brandsub"></p>
+    </div>
+    <div class="themepick" role="group" aria-label="Calendar theme">
+      <span class="lbl">Theme</span>
+      <div id="swatches" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+    </div>
+  </header>
+
+  <section class="today" id="today" aria-labelledby="todayheading"></section>
+
+  <div class="bar">
+    <div class="barleft">
+      <div class="views" role="tablist" aria-label="Calendar view">
+        <button role="tab" id="tab-month" data-view="month">Month</button>
+        <button role="tab" id="tab-week" data-view="week">Week</button>
+        <button role="tab" id="tab-day" data-view="day">Day</button>
+      </div>
+      <ul class="legend" id="legend" aria-label="What the colours on each day mean"></ul>
+    </div>
+    <div class="nav">
+      <button class="iconbtn" id="prev" aria-label="Previous"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <span class="ttl" id="rangettl" aria-live="polite"></span>
+      <button class="iconbtn" id="next" aria-label="Next"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button>
+      <button class="btn ghost sm" id="gotoday">Today</button>
+      <button class="btn ghost sm" id="gridedit" type="button" aria-pressed="false">Edit</button>
+    </div>
+  </div>
+
+  <main id="main"></main>
+
+  <p class="foot" id="foot"></p>
+</div>
+
+<div id="modalroot"></div>
+<div class="sr" id="live" aria-live="polite"></div>
+
+<script>
+"use strict";
+const DATA   = __DATA__;
+const THEMES = __THEMES__;
+
+/* ---------------------------------------------------------------------------
+   Storage adapter. Anna's edits live here. Everything the browser can refuse
+   (private mode, blocked site data) is caught -- the calendar must still render
+   from the schedule alone. Swapping this for a shared backend later means
+   replacing these two functions and nothing else.
+   ------------------------------------------------------------------------ */
+const KEY = "anna-vcom-cal-v1";
+const blank = () => ({version:1, theme:THEMES.default, sessionEdits:{}, addedSessions:[], hidden:[], tasks:{}, gen:{}, genHidden:{},
+                      open:{tests:true, recall:true, before:true, during:false, after:true}});
+let S = blank();
+try{
+  const raw = localStorage.getItem(KEY);
+  if(raw) S = Object.assign(blank(), JSON.parse(raw));
+}catch(e){ /* unreadable storage: carry on with defaults */ }
+if(!S.open || typeof S.open !== "object") S.open = blank().open;
+/* Saved before genHidden existed, or saved corrupt: a missing map here would
+   throw on every generated to-do row, which is most of the list. */
+if(!S.genHidden || typeof S.genHidden !== "object") S.genHidden = {};
+if(!Array.isArray(S.hidden)) S.hidden = [];
+function persist(){
+  try{ localStorage.setItem(KEY, JSON.stringify(S)); }
+  catch(e){ announce("Couldn't save — this browser is blocking storage."); }
+}
+
+/* ---- dates ------------------------------------------------------------- */
+const DAYNAMES=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+const MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
+const iso = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+const fromIso = s => { const [y,m,d]=s.split("-").map(Number); return new Date(y,m-1,d); };
+const addDays = (d,n) => { const x=new Date(d); x.setDate(x.getDate()+n); return x; };
+const startOfWeek = d => addDays(d, -((d.getDay()+6)%7));           // Monday
+const sameDay = (a,b) => iso(a)===iso(b);
+function fmtTime(hhmm){
+  if(!hhmm) return "";
+  let [h,m] = hhmm.split(":").map(Number);
+  const ap = h>=12 ? "PM":"AM"; h = h%12 || 12;
+  return m ? `${h}:${String(m).padStart(2,"0")} ${ap}` : `${h} ${ap}`;
+}
+const mins = hhmm => { const [h,m]=hhmm.split(":").map(Number); return h*60+m; };
+/* 2026-09-08 -> "9/8". No leading zeros and no year: it is always a day or two
+   back from the one being looked at, so the year is noise. */
+const shortDate = s => { const [,m,d] = s.split("-"); return `${+m}/${+d}`; };
+
+/* Two SEPARATE parameters, and keeping them separate is the whole point.
+
+   ?today= fakes what the page believes today is, so the pre-term and mid-term
+   states can be checked without waiting for the calendar to reach them.
+   ?date=   is only where the lower half is parked, and `setView` rewrites it
+            every time Anna opens a day.
+
+   They used to be one parameter, and that was a real bug: tapping 11 September
+   in the month grid wrote date=2026-09-11 into the URL, and the next load -- a
+   refresh, or a phone restoring a backgrounded tab -- read it back as "today is
+   11 September" and moved the today panel there. The today panel must never be
+   reachable from anything the lower half writes. */
+const qs = new URLSearchParams(location.search);
+const isDate = v => v && /^\d{4}-\d{2}-\d{2}$/.test(v);
+const todayOverride = isDate(qs.get("today")) ? qs.get("today") : null;
+const TODAY = todayOverride ? fromIso(todayOverride) : new Date();
+TODAY.setHours(0,0,0,0);
+
+const TERM_START = fromIso(DATA.meta.term_start);
+const TERM_END   = fromIso(DATA.meta.term_end);
+const TAUGHT = Object.keys(DATA.days).filter(k => DATA.days[k].sessions.length).sort();
+
+/* ---- merge schedule with Anna's edits ----------------------------------
+   An id that turns up on more than one day is NOT identifying an occurrence
+   that can move -- it is identifying a kind. "Lunch" is one content hash across
+   66 days, "Break" across five, and so on: 95 of the block's 374 sessions carry
+   an id like that. Keyed on the id alone, taking Lunch off one Tuesday took it
+   off all 66 days, and renaming one renamed all 66.
+
+   So the storage key is the date AND the id for those, and the id alone for a
+   session that occurs once -- which keeps the thing the content hash was FOR:
+   when the school moves Anatomy #3 to another day, Anna's rename of it follows.
+   The set is derived from DATA at load, so a new PDF recomputes it rather than
+   inheriting yesterday's answer.
+   ------------------------------------------------------------------------ */
+const REPEAT_IDS = (() => {
+  const firstDay = new Map();
+  for(const day in DATA.days)
+    for(const s of DATA.days[day].sessions){
+      const seen = firstDay.get(s.id);
+      if(seen === undefined) firstDay.set(s.id, day);
+      else if(seen !== day) firstDay.set(s.id, "*");
+    }
+  const out = new Set();
+  firstDay.forEach((v, k) => { if(v === "*") out.add(k); });
+  return out;
+})();
+const stateKey = (s, dateStr) => REPEAT_IDS.has(s.id) ? `${dateStr}|${s.id}` : s.id;
+
+function sessionsFor(dateStr){
+  const base = (DATA.days[dateStr]?.sessions || []).map(s => {
+    const patch = S.sessionEdits[stateKey(s, dateStr)];
+    return patch ? Object.assign({}, s, patch, {_edited:true}) : s;
+  });
+  const added = S.addedSessions.filter(s => s.date===dateStr);
+  return base.concat(added)
+             .filter(s => !S.hidden.includes(stateKey(s, dateStr)))
+             .sort((a,b) => (a.start||"99:99").localeCompare(b.start||"99:99"));
+}
+function catColor(s){
+  if(s.kind==="exam") return "EXAM";
+  if(s.kind==="break") return "BREAK";
+  const c = (s.category||"").toUpperCase();
+  if(THEMES.categories[c]) return c;
+  if(/HOLIDAY|NO CLASSES|BREAK/.test(c)) return "HOLIDAY";
+  return "OTHER";
+}
+/* The countdown reads DATA.recallExams, not DATA.exams: it is the same exams
+   with the instructors, rooms and durations stripped off their names and the two
+   the PDF lists twice collapsed. Showing "Airway Assessment" twice in a row of
+   three would look like a bug. */
+const upcomingExamsFrom = (ref, n) => DATA.recallExams
+  .filter(e => fromIso(e.date) >= ref)
+  .slice(0, n);
+const upcomingExams = n => upcomingExamsFrom(TODAY, n);
+const nextExam = () => upcomingExams(1)[0] || null;
+const daysOutFrom = (ref, e) => Math.round((fromIso(e.date) - ref) / 864e5);
+const daysOut = e => daysOutFrom(TODAY, e);
+const outWord = n => n === 0 ? "Today" : n === 1 ? "Tomorrow" : `${n} days`;
+
+/* The exam card, built against whatever day is being looked at. The today panel
+   passes TODAY; the day view passes the date on screen, so the count always
+   answers "from THIS day, how far is the next exam" -- which is the same
+   question the to-do list beside it is answering. On the day view's own today
+   the two cards therefore agree. */
+function countdownCard(ref){
+  const cd = el("div",{class:"countdown"});
+  const [ex, ...then] = upcomingExamsFrom(ref, 3);
+  if(!ex){
+    cd.appendChild(el("p",{class:"k",text:"Exams"}));
+    cd.appendChild(el("p",{class:"v",text:"None left"}));
+    cd.appendChild(el("p",{class:"n",text:"Nothing scheduled ahead."}));
+    return cd;
+  }
+  cd.appendChild(el("p",{class:"k",text:"Next exam"}));
+  cd.appendChild(el("p",{class:"v",text:outWord(daysOutFrom(ref, ex))}));
+  cd.appendChild(el("p",{class:"n",text:ex.examTitle}));
+  if(then.length){
+    const rest = el("div",{class:"cd-then"});
+    then.forEach(e => rest.appendChild(el("div",{class:"row"},[
+      e.examTitle + " · ",
+      el("span",{class:"d", text:outWord(daysOutFrom(ref, e))})
+    ])));
+    cd.appendChild(rest);
+  }
+  return cd;
+}
+
+/* ---- tiny DOM helper --------------------------------------------------- */
+function el(tag, props, kids){
+  const n = document.createElement(tag);
+  for(const k in (props||{})){
+    const v = props[k];
+    if(v===null||v===undefined||v===false) continue;
+    if(k==="class") n.className = v;
+    else if(k==="text") n.textContent = v;
+    else if(k==="html") n.innerHTML = v;
+    else if(k.startsWith("on")) n.addEventListener(k.slice(2), v);
+    else if(k==="style") n.setAttribute("style", v);
+    else n.setAttribute(k, v);
+  }
+  (Array.isArray(kids)?kids:kids?[kids]:[]).filter(Boolean).forEach(c =>
+    n.appendChild(typeof c==="string" ? document.createTextNode(c) : c));
+  return n;
+}
+const announce = msg => { document.getElementById("live").textContent = msg; };
+
+/* ---- edit mode ---------------------------------------------------------
+   Three independent toggles, one per thing Anna edits: the schedule column, the
+   to-do column, and the month/week grid. They are deliberately NOT persisted --
+   edit mode is somewhere you are for a minute, not a setting, and opening the
+   calendar tomorrow already in it would be a trap.
+
+   The schedule and to-do toggles are shared by the today panel and the day view
+   on purpose. Those two can be showing the same date at once, and a control
+   that only worked on one of the copies would read as broken. Same reasoning as
+   S.open for the disclosures -- except this one re-renders, because rows appear
+   and disappear rather than just unfolding.
+   ------------------------------------------------------------------------ */
+let EDIT = {sched:false, todo:false, grid:false};
+const EDIT_LABEL = {sched:"schedule", todo:"to-do list", grid:"calendar"};
+function setEdit(zone, on){
+  EDIT[zone] = on;
+  render();
+  announce(on ? `Editing the ${EDIT_LABEL[zone]}.` : `Finished editing the ${EDIT_LABEL[zone]}.`);
+}
+const editToggle = zone => el("button",{
+  class:"btn ghost sm" + (EDIT[zone] ? " on" : ""), type:"button",
+  "aria-pressed":String(!!EDIT[zone]),
+  "aria-label":EDIT[zone] ? `Finish editing the ${EDIT_LABEL[zone]}`
+                          : `Edit the ${EDIT_LABEL[zone]}`,
+  text:EDIT[zone] ? "Done" : "Edit",
+  onclick:() => setEdit(zone, !EDIT[zone])
+});
+
+const ICON_X    = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>';
+const ICON_UP   = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>';
+const ICON_DOWN = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>';
+const ICON_PEN  = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg>';
+
+const rmBtn = (label, fn) => el("button",{
+  class:"rm", type:"button", "aria-label":label, title:label, html:ICON_X, onclick:fn
+});
+
+/* Removing never destroys anything: it goes on a hidden list and the strip
+   below puts it back. Two reasons. A mistap on a phone with no undo is a real
+   loss, and -- worse -- hiding a school class used to make it unrecoverable,
+   because the only control that could reset it lived in the modal you open by
+   tapping the row that just went. Custom classes hide by the same route rather
+   than being spliced out, so there is one rule and one undo, not two. */
+function allFor(dateStr){
+  const base = (DATA.days[dateStr]?.sessions || []);
+  const added = S.addedSessions.filter(s => s.date===dateStr);
+  return base.concat(added).map(s => {
+    const patch = S.sessionEdits[stateKey(s, dateStr)];
+    return patch ? Object.assign({}, s, patch) : s;
+  });
+}
+const hiddenFor = dateStr => allFor(dateStr).filter(s => S.hidden.includes(stateKey(s, dateStr)));
+const sessName = s => s.label || s.title || "Untitled";
+/* The restore strip needs the time as well as the name. A day can teach the same
+   class three times -- 15 September is three consecutive Clinical Skills MLA --
+   and a strip offering three identical "Clinical Skills MLA" rows tells Anna
+   nothing about which one she took off. */
+const sessStamp = s => sessName(s) + (s.start ? ` · ${fmtTime(s.start)}` : "");
+function hideSession(s, dateStr, then){
+  const k = stateKey(s, dateStr);
+  if(!S.hidden.includes(k)) S.hidden.push(k);
+  persist(); render(); if(then) then();
+  announce(`“${sessName(s)}” removed from this day. Restore it under Edit.`);
+}
+function unhideSession(s, dateStr, then){
+  const k = stateKey(s, dateStr);
+  S.hidden = S.hidden.filter(x => x !== k);
+  persist(); render(); if(then) then();
+  announce(`“${sessName(s)}” put back.`);
+}
+/* rows: [{text, undo}] */
+function restoreStrip(title, rows){
+  if(!rows.length) return null;
+  const box = el("div",{class:"restore"});
+  box.appendChild(el("h5",{text:title}));
+  rows.forEach(r => box.appendChild(el("div",{class:"rrow"},[
+    el("span",{text:r.text}),
+    el("button",{class:"btn ghost sm", type:"button", text:"Restore",
+      "aria-label":`Restore “${r.text}”`, onclick:r.undo})
+  ])));
+  return box;
+}
+
+/* ---- theme ------------------------------------------------------------- */
+function applyTheme(name){
+  S.theme = THEMES.packs[name] ? name : THEMES.default;
+  document.documentElement.setAttribute("data-theme", S.theme);
+  document.querySelectorAll("#swatches .swatch").forEach(b =>
+    b.setAttribute("aria-pressed", String(b.dataset.theme===S.theme)));
+  persist();
+}
+/* The six numbered courses -- the ones whose dots are a distinct hue and worth
+   decoding. The remaining categories the dots can show (Orientation,
+   Professionalism, Break, Holiday, Other) are all near-greys, indistinguishable
+   from each other at 6px, so naming them separately would promise a precision
+   the dot does not have. Exams are not here either: they render as a labelled
+   chip rather than a dot, so they say what they are. */
+const LEGEND_KEYS = ["ANATOMY","PHARMACOLOGY","CLINICAL SKILLS",
+                     "TECHNOLOGY & MONITORING","PHYSIOLOGY","ELECTROPHYSIOLOGY"];
+
+function buildLegend(){
+  const host = document.getElementById("legend");
+  host.textContent = "";
+  LEGEND_KEYS.forEach(k => {
+    const cat = THEMES.categories[k];
+    if(!cat) return;                       // a new block may not teach all six
+    host.appendChild(el("li",{},[
+      el("span",{class:"dot", "aria-hidden":"true", style:`--cat:var(--cat-${cat_key(k)})`}),
+      cat.label
+    ]));
+  });
+}
+
+function buildSwatches(){
+  const host = document.getElementById("swatches");
+  host.textContent = "";
+  THEMES.order.forEach(k => {
+    const p = THEMES.packs[k];
+    host.appendChild(el("button", {
+      class:"swatch", "data-theme":k, type:"button",
+      title:`${p.name} — ${p.note}`, "aria-label":`${p.name} theme`,
+      "aria-pressed":String(k===S.theme),
+      style:`--sw:linear-gradient(135deg,${p.light.accent} 0%,${p.light.accent} 48%,${p.light.surface2} 52%,${p.light.surface2} 100%)`,
+      onclick:() => { applyTheme(k); announce(`${p.name} theme applied.`); }
+    }));
+  });
+}
+
+/* ---- today panel ------------------------------------------------------- */
+function dayIndex(dateStr){ return TAUGHT.indexOf(dateStr) + 1; }
+
+function renderToday(){
+  const host = document.getElementById("today");
+  host.textContent = "";
+  const ts = iso(TODAY);
+  const day = DATA.days[ts];
+  const preTerm = TODAY < TERM_START;
+  const postTerm = TODAY > TERM_END;
+
+  const head = el("div",{class:"today-head"});
+  const left = el("div",{class:"today-date"});
+  left.appendChild(el("p",{class:"eyebrow", text: preTerm ? "Before the block begins" : postTerm ? "Block complete" : "Today"}));
+  const h2 = el("h2",{id:"todayheading"});
+  h2.appendChild(document.createTextNode(DAYNAMES[TODAY.getDay()]+" "));
+  h2.appendChild(el("b",{text:`${MONTHS[TODAY.getMonth()]} ${TODAY.getDate()}`}));
+  left.appendChild(h2);
+
+  let meta;
+  if(preTerm){
+    meta = `First day is ${DAYNAMES[TERM_START.getDay()]}, ${MONTHS[TERM_START.getMonth()]} ${TERM_START.getDate()}.`;
+  }else if(postTerm){
+    meta = `${DATA.meta.block} ran ${MONTHS[TERM_START.getMonth()]} ${TERM_START.getDate()} to ${MONTHS[TERM_END.getMonth()]} ${TERM_END.getDate()}.`;
+  }else{
+    const n = dayIndex(ts);
+    meta = `${DATA.meta.block} · Week ${day?day.week:"—"}` + (n>0 ? ` · Day ${n} of ${TAUGHT.length}` : "");
+  }
+  left.appendChild(el("p",{class:"today-meta", text:meta}));
+  head.appendChild(left);
+
+  /* The exam card, in every state of the block including before it starts. It
+     used to count down to day one instead while pre-term, on the reasoning that
+     there is no exam worth counting to yet; Finn wanted the exams there too, and
+     nothing is lost -- the meta line on the left of this panel already reads
+     "First day is Wednesday, September 2." Same card as the day view's, so the
+     two are always identical. */
+  head.appendChild(countdownCard(TODAY));
+  host.appendChild(head);
+
+  const body = el("div",{class:"today-body"});
+  const schedCol = el("div",{class:"today-col"});
+  const showDate = preTerm ? DATA.meta.term_start : ts;
+  schedCol.appendChild(el("div",{class:"colhead"},[
+    el("span",{text: preTerm ? "First day’s schedule" : "Schedule"}),
+    el("div",{class:"headbtns"},[
+      editToggle("sched"),
+      el("button",{class:"btn ghost sm", type:"button", text:"Add",
+        onclick:() => sessionModal(null, showDate)})
+    ])
+  ]));
+  if(EDIT.sched) schedCol.appendChild(el("p",{class:"edithint",
+    text:"Tap a class to change its name or time. ✕ takes it off this day — nothing is lost, it comes back from the strip underneath."}));
+  schedCol.appendChild(scheduleList(showDate, preTerm));
+  body.appendChild(schedCol);
+
+  const taskCol = el("div",{class:"today-col"});
+  taskCol.appendChild(el("div",{class:"colhead"},[
+    el("span",{text:"To-do"}),
+    el("div",{class:"headbtns"},[editToggle("todo")])
+  ]));
+  if(EDIT.todo) taskCol.appendChild(el("p",{class:"edithint",
+    text:"✕ removes a box from this day, and the arrows move your own to-dos up and down. Anything removed comes back from the strip at the bottom."}));
+  taskCol.appendChild(taskList(ts));
+  body.appendChild(taskCol);
+  host.appendChild(body);
+}
+
+function scheduleList(dateStr, isPreview){
+  const list = sessionsFor(dateStr);
+  const box = el("div",{});
+  if(!list.length){
+    box.appendChild(el("div",{class:"empty"},[
+      el("strong",{text:"Nothing scheduled."}),
+      "No classes on the block schedule for this day. Use Add if something belongs here."
+    ]));
+  }else{
+    list.forEach((s,i) => {
+      const row = el("div",{class:"slot" + (EDIT.sched ? " editing" : "")});
+      row.appendChild(el("p",{class:"time", text:fmtTime(s.start)}));
+      row.appendChild(sessionButton(s, dateStr));
+      /* The row itself is still the edit target in edit mode -- one control per
+         row, not two, because a 375px slot has no room for a pencil beside an
+         ✕ and the row is already the bigger, more obvious target. */
+      if(EDIT.sched) row.appendChild(rmBtn(`Remove “${sessStamp(s)}” from this day`, () => hideSession(s, dateStr)));
+      if(!isPreview) row.style.animationDelay = `${Math.min(i*35,280)}ms`;
+      box.appendChild(row);
+    });
+  }
+  if(EDIT.sched){
+    const strip = restoreStrip("Removed from this day",
+      hiddenFor(dateStr).map(s => ({text:sessStamp(s), undo:() => unhideSession(s, dateStr)})));
+    if(strip) box.appendChild(strip);
+  }
+  return box;
+}
+
+function sessionButton(s, dateStr){
+  const cat = catColor(s);
+  const b = el("button",{
+    class:"sess"+(s.kind==="exam"?" is-exam":"")+(s.kind==="break"?" is-break":"")+(s._edited?" edited":""),
+    type:"button",
+    style:`--cat:var(--cat-${cssKey(cat)})`,
+    onclick:() => sessionModal(s, dateStr)
+  });
+  const nm = el("p",{class:"nm"});
+  nm.appendChild(document.createTextNode(s.label || s.title));
+  if(s.mandatory) nm.appendChild(el("span",{class:"tag tag-mand", text:"Required", style:`--cat:var(--cat-${cssKey(cat)})`}));
+  b.appendChild(nm);
+  const bits = [];
+  if(s.start && s.end) bits.push(`${fmtTime(s.start)} – ${fmtTime(s.end)}`);
+  if(s.instructor) bits.push(s.instructor);
+  if(s.location) bits.push(titleish(s.location));
+  if(bits.length) b.appendChild(el("p",{class:"dt", text:bits.join(" · ")}));
+  return b;
+}
+const cssKey = c => c.toLowerCase().replace(/[^a-z0-9]+/g,"-");
+const cat_key = cssKey;
+const titleish = t => t.replace(/\w\S*/g, w => w[0].toUpperCase()+w.slice(1).toLowerCase());
+
+/* ---------------------------------------------------------------------------
+   Study workflow. The before/after checklists are generated from whichever
+   lectures that day qualifies (the parser sets `study`), so they follow the
+   schedule automatically. The middle section is the same every day.
+   Tick state is keyed by date + phase + session id and kept apart from manual
+   to-dos, so rebuilding from a new PDF never disturbs either one.
+   ------------------------------------------------------------------------ */
+const DURING_LEAD = "Label lectures as the following";
+const DURING_STEPS = [
+  {hl:"yellow", head:"Yellow = Memorize",
+   body:"definitions, numbers, lists, structures, formulas, clear-cut facts"},
+  {hl:"blue", head:"Blue = Important / Understand / High Priority",
+   body:"professor emphasis, testable/high-yield information, mechanisms, relationships, cause-and-effect, important concepts"},
+  {hl:"pink", head:"Pink = Confused",
+   body:"don’t waste lecture time figuring it out; mark it and keep listening"}
+];
+const AFTER_STEPS = [
+  "Look at pink labeled notes → figure it out → recolor yellow or blue",
+  "Send ChatGPT the marked up lecture and say → “Make my Post-Lecture Anki.” (Memorization cards & Understanding cards)",
+  "Put into Anki",
+  "Go through the created cards"
+];
+
+const studyLectures = dateStr => sessionsFor(dateStr).filter(s => s.study && s.todoLabel);
+
+/* Each phase is a disclosure. The open/closed choice is per phase and global,
+   not per day: a section Anna folds away stays folded on every day, which is
+   the point of folding it. During-lecture starts closed because it is the same
+   reference text every day; the two tickable phases start open.
+   `aria-controls` ids are uniquified -- the today panel and the day view can
+   both be showing the same date at once, so studyBlock runs twice. */
+const PHASES = {tests:"Upcoming Tests", recall:"Daily Tasks",
+                before:"Before lecture tasks", during:"During lecture tasks",
+                after:"After lecture tasks"};
+const CHEV = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>';
+let discSeq = 0;
+
+/* Toggling updates the DOM in place rather than re-rendering, so focus stays on
+   the header Anna just pressed and both copies of the section stay in step. */
+function setOpen(phase, open){
+  S.open[phase] = open;
+  persist();
+  document.querySelectorAll('.tdtoggle[data-phase="'+phase+'"]').forEach(btn => {
+    btn.setAttribute("aria-expanded", String(open));
+    const body = document.getElementById(btn.getAttribute("aria-controls"));
+    if(!body) return;
+    body.hidden = !open;
+    if(open){ body.classList.remove("anim"); void body.offsetWidth; body.classList.add("anim"); }
+  });
+  announce(`${PHASES[phase]} ${open ? "expanded" : "collapsed"}.`);
+}
+
+function disclosure(phase, done, total){
+  const id = `td-${phase}-${++discSeq}`;
+  const open = !!S.open[phase];
+  const label = total
+    ? `${PHASES[phase]}, ${done} of ${total} done`
+    : PHASES[phase];
+  const btn = el("button",{
+    class:"tdtoggle", type:"button", "data-phase":phase, "aria-label":label,
+    "aria-expanded":String(open), "aria-controls":id,
+    onclick:() => setOpen(phase, !S.open[phase])
+  });
+  btn.appendChild(el("span",{class:"chev", html:CHEV}));
+  btn.appendChild(el("span",{class:"tdlabel", text:PHASES[phase]}));
+  if(total) btn.appendChild(el("span",{
+    class:"tdcount"+(done===total ? " all" : ""), "aria-hidden":"true", text:`${done}/${total}`
+  }));
+
+  const sec = el("section",{class:"tdsec"});
+  sec.appendChild(el("h4",{}, btn));
+  const body = el("div",{class:"tdbody", id:id});
+  body.hidden = !open;
+  sec.appendChild(body);
+  return {sec, body};
+}
+
+const genCheck = (dateStr, phase, session, label) =>
+  checkRow(`${dateStr}|${phase}|${session.id}`, phase, label || session.todoLabel);
+
+/* Returns null when Anna has taken this box off the day. Every caller has to
+   cope with that -- they filter -- which is why the counts on the disclosure
+   headers are computed from the surviving rows rather than from the lecture
+   list they came from. */
+function checkRow(id, phase, text){
+  if(S.genHidden[id]) return null;
+  const done = !!S.gen[id];
+  const row = el("div",{class:"task gen"+(done?" done":"")});
+  row.appendChild(el("button",{
+    class:"check", role:"checkbox", type:"button",
+    "aria-checked":String(done),
+    "aria-label":`${PHASES[phase]} — ${text}`,
+    onclick:() => {
+      if(S.gen[id]) delete S.gen[id]; else S.gen[id] = true;
+      persist(); render();
+      announce(S.gen[id] ? "Marked done." : "Marked not done.");
+    }
+  }));
+  row.appendChild(el("span",{class:"txt", text:text}));
+  if(EDIT.todo) row.appendChild(rmBtn(`Remove “${text}” from this day`, () => {
+    S.genHidden[id] = text;              // the label, so the restore strip can name it
+    persist(); render();
+    announce("Removed from this day. Restore it under Edit.");
+  }));
+  return row;
+}
+
+/* Chat Recall, from STUDY 1.0: the day after a lecture, sit down and recall it.
+   `yesterday` is the previous CALENDAR day, not the previous teaching day, which
+   is what Finn asked for and is also what a one-day spacing means -- so Friday's
+   lectures surface on Saturday, and a Monday after a quiet Sunday carries no
+   recall.
+
+   It is ONE box naming the day -- "Chat Recall from 9/8" -- not a box per
+   lecture. It listed every lecture at first and Finn cut it back: six boxes
+   saying the same thing in six ways is a worse prompt than one saying it once.
+   The lectures are still worked out, because whether the day had any qualifying
+   ones at all is what decides if the box appears. */
+const recallLectures = dateStr => studyLectures(iso(addDays(fromIso(dateStr), -1)));
+
+/* Anki review lists the qualifying lectures taught EXACTLY two days ago -- the
+   day after their Chat Recall. It does not accumulate and it does not care about
+   exams; Finn chose that over a running backlog after seeing what the backlog
+   did. Two consequences worth knowing before "fixing" either:
+
+   - A day whose two-days-ago taught nothing gets **no Anki box at all**. Monday
+     is usually that day, because Saturday rarely teaches.
+   - The box can name a lecture whose exam is tomorrow. That is fine: the exam
+     run-up in Upcoming Tests is what handles the last five days.
+
+   The accumulating version had a real hole, which is what surfaced this: a
+   lecture became eligible two days after it was taught but dropped five days
+   before its exam, so any lecture taught inside seven days of its own exam was
+   never listed once. That was 26 of the block's 106 lectures, Anatomy #3-#5
+   among them -- the ones Finn noticed missing on 12 September.
+
+   Clinical Skills ALA is excluded here and only here; it is still in Chat Recall
+   and in the before/after boxes. */
+const ANKI_LAG  = 2;
+const ANKI_SKIP = ["CLINICAL SKILLS"];
+/* A standing daily box on EVERY day of the block, weekends included -- it is a
+   backlog, so a quiet Saturday still carries one. It ran from a hardcoded
+   2026-09-11 until 2026-08-27, which was the only date in the whole to-do engine
+   not derived from the schedule and so the only thing that would not have
+   followed a new block. Finn chose "every day, from day one" over an offset into
+   the block, which means there is now no date here to carry over and nothing to
+   check when a new PDF is parsed.
+
+   The bounds are the block's own, so days outside it get no box: before day one
+   there is nothing to have made cards from, and after the last day the block is
+   over. */
+const inBlock = dateStr =>
+  dateStr >= DATA.meta.term_start && dateStr <= DATA.meta.term_end;
+
+function ankiLectures(dateStr){
+  const src = iso(addDays(fromIso(dateStr), -ANKI_LAG));
+  /* Grouped by course, then by lecture number -- the only order that stays
+     scannable when several run together on one line. */
+  return studyLectures(src)
+    .filter(s => !ANKI_SKIP.includes((s.category || "").toUpperCase()))
+    .sort((a, b) =>
+      a.todoLabel.replace(/\s*#\d+$/, "").localeCompare(b.todoLabel.replace(/\s*#\d+$/, ""))
+      || (parseInt(a.todoLabel.match(/#(\d+)$/)?.[1] || 0)
+          - parseInt(b.todoLabel.match(/#(\d+)$/)?.[1] || 0)));
+}
+
+/* Upcoming Tests. "Days out" counts the way Finn does: one day out is the day
+   BEFORE the test, so five days out from a Wednesday exam is the Friday before.
+   The window opens at TEST_WINDOW and the exam day itself is not in it.
+
+   This used to hand off from the Anki review line, which dropped a lecture as its
+   exam's window opened. That coupling is gone -- Anki review now lists only the
+   lectures from exactly two days back and ignores exams entirely -- so the two
+   overlap freely, and a lecture can sit on the Anki line while its exam is in
+   its run-up. That is intended, not a leak.
+
+   EVERY exam appears, not only the ones that state a lecture range: the Clinical
+   Skills practicals, the OSCE stations and the Drug Card exam examine a skill
+   rather than a numbered run of lectures, so they simply get their name with no
+   brackets after it. `DATA.recallExams` is that list, built by the generator --
+   deduplicated, because the PDF lists two of the practicals twice, once bare and
+   once with the instructors and room run into the title. */
+const TEST_WINDOW = 5;
+
+function upcomingTests(dateStr){
+  const today = fromIso(dateStr);
+  return DATA.recallExams
+    .map(e => ({e, out: Math.round((fromIso(e.date) - today) / 86400000)}))
+    .filter(x => x.out >= 1 && x.out <= TEST_WINDOW)   // never the exam day itself
+    .sort((a, b) => a.out - b.out || a.e.examTitle.localeCompare(b.e.examTitle));
+}
+
+/* What each day of the run-up asks for, keyed by how many days out it is.
+
+   `ranged` splits the exams that state a lecture range from the practicals, the
+   OSCE stations and the Drug Card exam, which state none. They are not the same
+   task and they do not read the same: a ranged exam names the lectures it covers
+   in brackets, and a practical is just a practical.
+
+   `null` means that day asks nothing of that exam, and a day where nothing is
+   asked of any exam does not render the section at all -- an empty dropdown is
+   worse than no dropdown. Days 3, 2 and 1 are still unspecified; adding them is
+   a line each in this table and nothing else. */
+const chatRecall = e => `Chat test recall: ${e.examTitle} (${e.lectureLabel})`;
+
+const TEST_RUNUP = {
+  5: {
+    ranged:  chatRecall,
+    plain:   e => `5 days before test: ${e.examTitle}`,
+  },
+  4: {
+    // Deliberately the SAME wording as day five, sharing one function so the two
+    // cannot drift apart. Day four briefly read "Chat test recall and weakness
+    // list" and Finn replaced that with a plain repeat; the weakness list moved
+    // to day three and got "Extreme" in front of it.
+    ranged:  chatRecall,
+    plain:   null,
+  },
+  3: {
+    ranged:  e => `Extreme chat test recall and weakness list: ${e.examTitle} (${e.lectureLabel})`,
+    plain:   null,
+  },
+};
+
+function testTasks(dateStr, entry){
+  const {e, out} = entry;
+  const spec = TEST_RUNUP[out];
+  if(!spec) return [];
+  const build = spec[e.lectureLabel ? "ranged" : "plain"];
+  if(!build) return [];
+  return [checkRow(`${dateStr}|test|${e.date}|${e.examTitle}|${out}`, "tests", build(e))].filter(Boolean);
+}
+
+function testsBlock(dateStr){
+  const rows = [];
+  let done = 0;
+  for(const entry of upcomingTests(dateStr)){
+    for(const row of testTasks(dateStr, entry)){
+      if(row.classList.contains("done")) done++;
+      rows.push(row);
+    }
+  }
+  if(!rows.length) return null;
+  const sec = disclosure("tests", done, rows.length);
+  rows.forEach(r => sec.body.appendChild(r));
+  return sec.sec;
+}
+
+function studyBlock(dateStr){
+  const lectures = studyLectures(dateStr);
+  const recall = recallLectures(dateStr);
+  const anki = ankiLectures(dateStr);
+  const tests = testsBlock(dateStr);
+  // A day can carry Daily Tasks or Upcoming Tests with no lectures of its own --
+  // a Saturday after a teaching Friday is exactly that -- so this cannot bail on
+  // `lectures` alone.
+  if(!lectures.length && !recall.length && !anki.length && !tests
+     && !inBlock(dateStr)) return null;
+  /* Counts come from the rows that survive Anna's removals, not from the
+     lecture list -- otherwise a header reads "0/6" over four boxes. */
+  const genId = (phase, s) => `${dateStr}|${phase}|${s.id}`;
+  const shown = phase => lectures.filter(s => !S.genHidden[genId(phase, s)]);
+  const doneIn = (phase, list) => list.filter(s => S.gen[genId(phase, s)]).length;
+
+
+  const box = el("div",{class:"study"});
+
+  /* An exam inside its window outranks the daily routine, so it leads. */
+  if(tests) box.appendChild(tests);
+
+  /* Recall comes first: it is yesterday's material, so it reads oddly after
+     three sections about today's. */
+  const standing = inBlock(dateStr);
+  if(recall.length || anki.length || standing){
+    const rows = [];
+    if(recall.length){
+      rows.push(checkRow(`${dateStr}|recall`, "recall",
+        `Chat Recall from ${shortDate(iso(addDays(fromIso(dateStr), -1)))}`));
+    }
+    if(anki.length){
+      rows.push(checkRow(`${dateStr}|anki`, "recall",
+        `Anki review: ${anki.map(s => s.todoLabel).join(", ")}`));
+    }
+    if(standing){
+      rows.push(checkRow(`${dateStr}|ankicards`, "recall",
+        "Remaining Anki memorization cards"));
+    }
+    const live = rows.filter(Boolean);
+    if(live.length){
+      const rc = disclosure("recall", live.filter(r => r.classList.contains("done")).length,
+                            live.length);
+      live.forEach(r => rc.body.appendChild(r));
+      box.appendChild(rc.sec);
+    }
+  }
+  if(!lectures.length) return box.children.length ? box : null;
+
+  /* A phase whose every box has been removed renders no section at all, for the
+     same reason testsBlock returns null on no rows: an empty dropdown is worse
+     than no dropdown. The restore strip is what gets them back. */
+  const bl = shown("before");
+  if(bl.length){
+    const before = disclosure("before", doneIn("before", bl), bl.length);
+    bl.forEach(s => before.body.appendChild(genCheck(dateStr,"before",s)));
+    box.appendChild(before.sec);
+  }
+
+  const during = disclosure("during", 0, 0);
+  const dl = el("ul",{class:"steps"});
+  dl.appendChild(el("li",{class:"lead", text:DURING_LEAD}));
+  DURING_STEPS.forEach(step => {
+    const li = el("li",{});
+    li.appendChild(el("span",{class:"hl", text:step.head, style:`--hlc:var(--hl-${step.hl})`}));
+    li.appendChild(document.createTextNode(" → " + step.body));
+    dl.appendChild(li);
+  });
+  during.body.appendChild(dl);
+  box.appendChild(during.sec);
+
+  const afl = shown("after");
+  const after = disclosure("after", doneIn("after", afl), afl.length);
+  const al = el("ul",{class:"steps"});
+  AFTER_STEPS.forEach(t => al.appendChild(el("li",{text:t})));
+  after.body.appendChild(al);
+  afl.forEach(s => after.body.appendChild(genCheck(dateStr,"after",s)));
+  box.appendChild(after.sec);
+
+  return box.children.length ? box : null;
+}
+
+/* ---- tasks ------------------------------------------------------------- */
+function taskList(dateStr){
+  const box = el("div",{});
+  const items = S.tasks[dateStr] || [];
+  const study = studyBlock(dateStr);
+  if(study){
+    box.appendChild(study);
+    box.appendChild(el("h4",{class:"tdsec-own", text:"My to-dos"}));
+  }
+  if(!items.length && !study){
+    box.appendChild(el("div",{class:"empty"},[
+      el("strong",{text:"No to-dos yet."}),
+      "Add what this day actually needs — study blocks, errands, anything. Items stay on this day."
+    ]));
+  }
+  items.forEach((t, i) => {
+    const row = el("div",{class:"task"+(t.done?" done":"")+(EDIT.todo?" editing":"")});
+    row.appendChild(el("button",{
+      class:"check", role:"checkbox", type:"button",
+      "aria-checked":String(!!t.done), "aria-label":`Mark “${t.text}” ${t.done?"not done":"done"}`,
+      onclick:() => { t.done = !t.done; persist(); render(); announce(t.done?"Marked done.":"Marked not done."); }
+    }));
+    row.appendChild(el("span",{
+      class:"txt", text:t.text, role:"textbox", tabindex:"0", contenteditable:"true",
+      onblur:e => { const v=e.target.textContent.trim(); if(v){ t.text=v; } else { e.target.textContent=t.text; } persist(); },
+      onkeydown:e => { if(e.key==="Enter"){ e.preventDefault(); e.target.blur(); } }
+    }));
+    if(EDIT.todo){
+      /* Arrows, not drag. Dragging a 32px row on a phone fights the page scroll,
+         and arrows are the only version of this that also works from a keyboard. */
+      row.appendChild(el("button",{
+        class:"move", type:"button", disabled: i===0 || null,
+        "aria-label":`Move “${t.text}” up`, title:"Move up", html:ICON_UP,
+        onclick:() => moveTask(dateStr, i, -1)
+      }));
+      row.appendChild(el("button",{
+        class:"move", type:"button", disabled: i===items.length-1 || null,
+        "aria-label":`Move “${t.text}” down`, title:"Move down", html:ICON_DOWN,
+        onclick:() => moveTask(dateStr, i, 1)
+      }));
+      row.appendChild(rmBtn(`Delete “${t.text}”`, () => {
+        S.tasks[dateStr] = items.filter(x => x !== t);
+        persist(); render(); announce("To-do deleted.");
+      }));
+    }else{
+      /* The hover-revealed original, kept for the pointer case. On touch the CSS
+         forces it visible; edit mode replaces it outright with the bordered set
+         above so the three controls match. */
+      row.appendChild(el("button",{
+        class:"del", type:"button", "aria-label":`Delete “${t.text}”`,
+        html:'<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>',
+        onclick:() => { S.tasks[dateStr] = items.filter(x => x!==t); persist(); render(); announce("To-do deleted."); }
+      }));
+    }
+    box.appendChild(row);
+  });
+
+  /* Generated boxes hide rather than delete -- they are regenerated from the
+     schedule every render, so "delete" could only ever mean "not on this day". */
+  if(EDIT.todo){
+    const pre = dateStr + "|";
+    const strip = restoreStrip("Removed from this day",
+      Object.keys(S.genHidden).filter(k => k.indexOf(pre) === 0).map(k => ({
+        text:S.genHidden[k],
+        undo:() => { delete S.genHidden[k]; persist(); render(); announce("Put back."); }
+      })));
+    if(strip) box.appendChild(strip);
+  }
+
+  const form = el("form",{class:"addrow", onsubmit:e => {
+    e.preventDefault();
+    const input = form.querySelector("input");
+    const v = input.value.trim();
+    if(!v) return;
+    (S.tasks[dateStr] = S.tasks[dateStr] || []).push({id:"t"+Date.now(), text:v, done:false, source:"manual"});
+    input.value = ""; persist(); render();
+    announce("To-do added.");
+    document.querySelectorAll(".addrow input").forEach(i => { if(i.dataset.d===dateStr) i.focus(); });
+  }});
+  form.appendChild(el("input",{type:"text", placeholder:"Add a to-do…", "aria-label":"New to-do", "data-d":dateStr}));
+  form.appendChild(el("button",{class:"btn sm", type:"submit", text:"Add"}));
+  box.appendChild(form);
+  return box;
+}
+
+function moveTask(dateStr, i, dir){
+  const arr = S.tasks[dateStr];
+  if(!arr) return;
+  const j = i + dir;
+  if(j < 0 || j >= arr.length) return;
+  const t = arr[i];
+  arr[i] = arr[j]; arr[j] = t;
+  persist(); render();
+  announce(`Moved “${t.text}” ${dir < 0 ? "up" : "down"}.`);
+}
+
+/* ---- month ------------------------------------------------------------- */
+let cursor = new Date(TODAY);
+
+function renderMonth(){
+  const host = el("div",{class:"month"});
+  const dow = el("div",{class:"dow"});
+  dow.appendChild(el("span",{text:"Wk", title:"Week"}));
+  ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].forEach(d => dow.appendChild(el("span",{text:d})));
+  host.appendChild(dow);
+
+  const first = new Date(cursor.getFullYear(), cursor.getMonth(), 1);
+  let d = startOfWeek(first);
+  for(let w=0; w<6; w++){
+    const row = el("div",{class:"mrow"});
+    const weekStart = new Date(d);
+    const wkNo = DATA.days[iso(weekStart)]?.week;
+    row.appendChild(el("button",{
+      class:"wk", type:"button", text: wkNo ? String(wkNo) : "·",
+      "aria-label":`Week of ${MONTHS[weekStart.getMonth()]} ${weekStart.getDate()}`,
+      onclick:() => { cursor = weekStart; setView("week"); }
+    }));
+    for(let i=0;i<7;i++){
+      row.appendChild(monthCell(d, cursor.getMonth()));
+      d = addDays(d,1);
+    }
+    host.appendChild(row);
+    if(d.getMonth() !== cursor.getMonth() && d > new Date(cursor.getFullYear(), cursor.getMonth()+1, 0)) break;
+  }
+  return host;
+}
+
+function monthCell(date, month){
+  const ds = iso(date);
+  const list = sessionsFor(ds).filter(s => s.kind!=="break");
+  const info = DATA.days[ds];
+  const isToday = sameDay(date, TODAY);
+  const editing = EDIT.grid;
+  const stamp = `${DAYNAMES[date.getDay()]} ${MONTHS[date.getMonth()]} ${date.getDate()}`;
+  const cell = el("button",{
+    class:"day"+(date.getMonth()!==month?" out":"")+(isToday?" today":"")+([5,6].includes((date.getDay()+6)%7)?" weekend":"")+(editing?" editable":""),
+    type:"button",
+    "aria-label": editing ? `Edit ${stamp}` : `${stamp}, ${list.length} scheduled`,
+    /* In edit mode a day opens the sheet instead of navigating. The cell is
+       45px wide on a phone, so it can carry one gesture and only one -- and
+       while Edit is on, editing is the one you asked for. */
+    onclick:() => { if(editing) dayEditor(ds); else { cursor = new Date(date); setView("day"); } }
+  });
+  cell.appendChild(el("span",{class:"num", text:String(date.getDate())}));
+  if(editing) cell.appendChild(el("span",{class:"pencil", "aria-hidden":"true", html:ICON_PEN}));
+
+  const exam = list.find(s => s.kind==="exam");
+  if(exam){
+    cell.appendChild(el("span",{class:"chip", text:exam.label||"Exam", style:`--cat:var(--cat-exam)`}));
+  }else if(list.length){
+    const dots = el("div",{class:"dots"});
+    [...new Set(list.map(catColor))].slice(0,6).forEach(c =>
+      dots.appendChild(el("span",{class:"dot", style:`--cat:var(--cat-${cssKey(c)})`})));
+    cell.appendChild(dots);
+  }
+  const tasks = (S.tasks[ds]||[]).filter(t => !t.done).length;
+  const bits = [];
+  if(list.length) bits.push(`${list.length} class${list.length>1?"es":""}`);
+  if(tasks) bits.push(`${tasks} to-do`);
+  /* A cell used to report "N assigned" here as well. That went when Finn had the
+     "From the schedule" list taken out: the count had nowhere left to lead, and a
+     number you cannot click through to is worse than no number. The assignments
+     are still in data/schedule.json, so putting them back is a render away. */
+  if(bits.length) cell.appendChild(el("p",{class:"cnt", text:bits.join(" · ")}));
+  return cell;
+}
+
+/* ---- week -------------------------------------------------------------- */
+const H_START = 8, H_END = 17, PX = 56;
+
+function renderWeek(){
+  const start = startOfWeek(cursor);
+  const wrap = el("div",{class:"weekwrap"});
+  const grid = el("div",{class:"weekgrid"});
+
+  const head = el("div",{class:"whead"});
+  head.appendChild(el("div",{text:""}));
+  for(let i=0;i<7;i++){
+    const d = addDays(start,i);
+    const c = el("div",{class: sameDay(d,TODAY)?"is-today":""});
+    c.appendChild(el("small",{text:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"][i]}));
+    c.appendChild(document.createTextNode(`${MONTHS[d.getMonth()].slice(0,3)} ${d.getDate()}`));
+    /* The blocks in the grid are already tap-to-edit; what the week had no way
+       to do was ADD. This is that, per day, and it opens the same sheet the
+       month does so there is one thing to learn. */
+    if(EDIT.grid) c.appendChild(el("button",{
+      class:"btn ghost sm whedit", type:"button", text:"Edit",
+      "aria-label":`Edit ${DAYNAMES[d.getDay()]} ${MONTHS[d.getMonth()]} ${d.getDate()}`,
+      onclick:() => dayEditor(iso(d))
+    }));
+    head.appendChild(c);
+  }
+  grid.appendChild(head);
+
+  const body = el("div",{class:"wbody"});
+  const hours = el("div",{class:"hours"});
+  for(let h=H_START; h<H_END; h++) hours.appendChild(el("div",{class:"hour", text:fmtTime(`${String(h).padStart(2,"0")}:00`)}));
+  body.appendChild(hours);
+
+  for(let i=0;i<7;i++){
+    const d = addDays(start,i);
+    const col = el("div",{class:"wcol"});
+    const lines = el("div",{class:"lines"});
+    for(let h=H_START; h<H_END; h++) lines.appendChild(el("div",{}));
+    col.appendChild(lines);
+    sessionsFor(iso(d)).forEach(s => {
+      if(!s.start || !s.end) return;
+      const top = (mins(s.start) - H_START*60) / 60 * PX;
+      const height = Math.max((mins(s.end)-mins(s.start))/60*PX - 3, 22);
+      if(top < -PX) return;
+      const cat = catColor(s);
+      const b = el("button",{
+        class:"wsess", type:"button",
+        style:`top:${top}px; height:${height}px; --cat:var(--cat-${cssKey(cat)})`,
+        onclick:() => sessionModal(s, iso(d))
+      });
+      b.appendChild(el("p",{class:"n", text:s.label||s.title}));
+      if(height > 40) b.appendChild(el("p",{class:"t", text:`${fmtTime(s.start)} – ${fmtTime(s.end)}`}));
+      col.appendChild(b);
+    });
+    body.appendChild(col);
+  }
+  grid.appendChild(body);
+  wrap.appendChild(grid);
+  return wrap;
+}
+
+/* ---- day --------------------------------------------------------------- */
+function renderDay(){
+  const ds = iso(cursor);
+  const info = DATA.days[ds];
+  const grid = el("div",{class:"dayview"});
+
+  const sched = el("div",{class:"card"});
+  sched.appendChild(el("div",{class:"colhead"},[
+    el("span",{text:"Schedule"}),
+    el("div",{class:"headbtns"},[
+      editToggle("sched"),
+      el("button",{class:"btn ghost sm", type:"button", text:"Add", onclick:() => sessionModal(null, ds)})
+    ])
+  ]));
+  if(EDIT.sched) sched.appendChild(el("p",{class:"edithint",
+    text:"Tap a class to change its name or time. ✕ takes it off this day — nothing is lost, it comes back from the strip underneath."}));
+  sched.appendChild(scheduleList(ds));
+  if(info && (info.items.length || info.notes.length)){
+    const ul = el("ul",{class:"notelist"});
+    info.items.concat(info.notes).forEach(n => ul.appendChild(el("li",{text:n})));
+    sched.appendChild(el("h3",{text:"Also this day", style:"margin-top:24px;font-size:15px"}));
+    sched.appendChild(ul);
+  }
+  grid.appendChild(sched);
+
+  const side = el("div",{class:"card"});
+  /* The day ON SCREEN, not TODAY -- so the count answers the same question the
+     to-do list beside it is answering: from this day, how far is the next exam.
+     The today panel's copy stays on TODAY, so the two agree only when the day
+     view is showing today, which is the intent. */
+  side.appendChild(el("div",{class:"card-cd"}, countdownCard(fromIso(ds))));
+  side.appendChild(el("div",{class:"colhead"},[
+    el("span",{text:"To-do"}),
+    el("div",{class:"headbtns"},[editToggle("todo")])
+  ]));
+  if(EDIT.todo) side.appendChild(el("p",{class:"edithint",
+    text:"✕ removes a box from this day, and the arrows move your own to-dos up and down. Anything removed comes back from the strip at the bottom."}));
+  side.appendChild(taskList(ds));
+  grid.appendChild(side);
+  return grid;
+}
+
+/* ---- session modal ----------------------------------------------------- */
+let lastFocus = null;
+/* Set by whoever opened the modal, to say what should happen when it closes.
+   The day sheet uses it so that editing a class from inside the sheet returns
+   to the sheet rather than dumping you back on the grid. It is read and cleared
+   here so Escape and a scrim click behave exactly like the Cancel button. */
+let modalAfter = null;
+function closeModal(){
+  const after = modalAfter;
+  modalAfter = null;
+  document.getElementById("modalroot").textContent = "";
+  document.removeEventListener("keydown", modalKeys);
+  if(after){ after(); return; }
+  if(lastFocus && lastFocus.isConnected) lastFocus.focus();
+}
+function modalKeys(e){
+  if(e.key==="Escape"){ e.preventDefault(); closeModal(); return; }
+  if(e.key!=="Tab") return;
+  const f = [...document.querySelectorAll(".modal button, .modal input, .modal select")].filter(x => !x.disabled);
+  if(!f.length) return;
+  const first = f[0], last = f[f.length-1];
+  if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
+  else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+}
+
+function sessionModal(session, dateStr, after){
+  lastFocus = document.activeElement;
+  const isNew = !session;
+  const s = session || {id:"c"+Date.now(), date:dateStr, start:"08:00", end:"09:00",
+                        title:"", category:"", instructor:"", kind:"lecture", mandatory:false, custom:true};
+
+  const root = document.getElementById("modalroot");
+  root.textContent = "";
+  modalAfter = after || null;
+  const scrim = el("div",{class:"scrim", onclick:e => { if(e.target===scrim) closeModal(); }});
+  const modal = el("div",{class:"modal", role:"dialog", "aria-modal":"true", "aria-labelledby":"mtitle"});
+
+  const d = fromIso(dateStr);
+  modal.appendChild(el("header",{},[
+    el("h3",{id:"mtitle", text:isNew?"Add to the day":"Edit this class"}),
+    el("p",{text:`${DAYNAMES[d.getDay()]}, ${MONTHS[d.getMonth()]} ${d.getDate()}`})
+  ]));
+
+  const fields = el("div",{class:"fields"});
+  const nameIn = el("input",{type:"text", value:s.label||s.title||"", placeholder:"e.g. Anatomy #8", id:"f-name"});
+  fields.appendChild(el("div",{class:"field"},[el("label",{for:"f-name",text:"Name"}), nameIn]));
+
+  const startIn = el("input",{type:"time", value:s.start||"08:00", id:"f-start"});
+  const endIn   = el("input",{type:"time", value:s.end||"09:00", id:"f-end"});
+  fields.appendChild(el("div",{class:"pair"},[
+    el("div",{class:"field"},[el("label",{for:"f-start",text:"Starts"}), startIn]),
+    el("div",{class:"field"},[el("label",{for:"f-end",text:"Ends"}), endIn])
+  ]));
+
+  const catSel = el("select",{id:"f-cat"});
+  Object.keys(THEMES.categories).forEach(k => {
+    const o = el("option",{value:k, text:THEMES.categories[k].label});
+    if((s.category||"").toUpperCase()===k || (!s.category && k==="OTHER")) o.selected = true;
+    catSel.appendChild(o);
+  });
+  const instrIn = el("input",{type:"text", value:s.instructor||"", placeholder:"Optional", id:"f-instr"});
+  fields.appendChild(el("div",{class:"pair"},[
+    el("div",{class:"field"},[el("label",{for:"f-cat",text:"Course"}), catSel]),
+    el("div",{class:"field"},[el("label",{for:"f-instr",text:"Instructor"}), instrIn])
+  ]));
+  modal.appendChild(fields);
+
+  const foot = el("footer",{});
+  if(!isNew){
+    /* One word and one behaviour for both kinds. "Delete" spliced a custom class
+       out for good and "Hide" put a school one somewhere with no way back --
+       two different promises on the same button, and one of them was a trap. */
+    foot.appendChild(el("button",{class:"btn danger sm", type:"button", text:"Remove",
+      onclick:() => {
+        const k = stateKey(s, dateStr);
+        if(!S.hidden.includes(k)) S.hidden.push(k);
+        persist(); closeModal(); render();
+        announce("Removed from the day. Restore it under Edit.");
+      }}));
+    if(!s.custom && S.sessionEdits[stateKey(s, dateStr)]){
+      foot.appendChild(el("button",{class:"btn ghost sm", type:"button", text:"Reset",
+        onclick:() => { delete S.sessionEdits[stateKey(s, dateStr)]; persist(); closeModal(); render();
+                        announce("Reset to the block schedule."); }}));
+    }
+  }
+  foot.appendChild(el("span",{class:"spacer"}));
+  foot.appendChild(el("button",{class:"btn ghost", type:"button", text:"Cancel", onclick:closeModal}));
+  foot.appendChild(el("button",{class:"btn", type:"button", text:isNew?"Add":"Save", onclick:() => {
+    const patch = {
+      label: nameIn.value.trim() || s.label || s.title,
+      title: nameIn.value.trim() || s.title,
+      start: startIn.value, end: endIn.value,
+      category: catSel.value === "OTHER" ? (s.category||"") : catSel.value,
+      instructor: instrIn.value.trim(),
+      kind: catSel.value === "EXAM" ? "exam" : catSel.value === "BREAK" ? "break" : (s.kind||"lecture")
+    };
+    if(isNew || s.custom){
+      const rec = Object.assign({}, s, patch, {date:dateStr, custom:true, mandatory:!!s.mandatory});
+      S.addedSessions = S.addedSessions.filter(x => x.id!==s.id).concat([rec]);
+    }else{
+      S.sessionEdits[stateKey(s, dateStr)] = patch;
+    }
+    persist(); closeModal(); render();
+    announce(isNew ? "Class added." : "Class updated.");
+  }}));
+  modal.appendChild(foot);
+
+  scrim.appendChild(modal);
+  root.appendChild(scrim);
+  document.addEventListener("keydown", modalKeys);
+  nameIn.focus();
+}
+
+/* ---- day sheet ---------------------------------------------------------
+   What the month and the week open when the grid's Edit is on. Neither of those
+   two can carry a control per class: a month cell is 45px wide on a phone and a
+   week block can be 22px tall. This list can, and it is the same four things the
+   day view already offers -- add, edit, remove, restore -- so there is one thing
+   to learn rather than three.
+   ------------------------------------------------------------------------ */
+function dayEditor(dateStr){
+  lastFocus = document.activeElement;
+  const root = document.getElementById("modalroot");
+  root.textContent = "";
+  modalAfter = null;
+  const back = () => dayEditor(dateStr);          // where the session modal returns to
+  const d = fromIso(dateStr);
+
+  const scrim = el("div",{class:"scrim", onclick:e => { if(e.target===scrim) closeModal(); }});
+  const modal = el("div",{class:"modal", role:"dialog", "aria-modal":"true", "aria-labelledby":"mtitle"});
+  modal.appendChild(el("header",{},[
+    el("h3",{id:"mtitle", text:"Edit this day"}),
+    el("p",{text:`${DAYNAMES[d.getDay()]}, ${MONTHS[d.getMonth()]} ${d.getDate()}`})
+  ]));
+
+  const fields = el("div",{class:"fields"});
+  const list = sessionsFor(dateStr);
+  if(!list.length){
+    fields.appendChild(el("div",{class:"empty"},[
+      el("strong",{text:"Nothing on this day."}),
+      "Add a class and it shows up everywhere — here, the week, and the day’s own page."
+    ]));
+  }else{
+    const ul = el("ul",{class:"sheet"});
+    list.forEach(s => {
+      const li = el("li",{});
+      const pick = el("button",{
+        class:"pick", type:"button", style:`--cat:var(--cat-${cssKey(catColor(s))})`,
+        "aria-label":`Edit “${sessName(s)}”`,
+        onclick:() => sessionModal(s, dateStr, back)
+      });
+      pick.appendChild(el("b",{text:sessName(s)}));
+      pick.appendChild(el("small",{text: s.start && s.end
+        ? `${fmtTime(s.start)} – ${fmtTime(s.end)}` : "No time set"}));
+      li.appendChild(pick);
+      li.appendChild(rmBtn(`Remove “${sessStamp(s)}” from this day`, () => hideSession(s, dateStr, back)));
+      ul.appendChild(li);
+    });
+    fields.appendChild(ul);
+  }
+
+  const strip = restoreStrip("Removed from this day",
+    hiddenFor(dateStr).map(s => ({text:sessStamp(s), undo:() => unhideSession(s, dateStr, back)})));
+  if(strip) fields.appendChild(strip);
+  modal.appendChild(fields);
+
+  const foot = el("footer",{});
+  foot.appendChild(el("button",{class:"btn ghost sm", type:"button", text:"Open this day",
+    onclick:() => { cursor = fromIso(dateStr); modalAfter = null; closeModal(); setView("day"); }}));
+  foot.appendChild(el("span",{class:"spacer"}));
+  foot.appendChild(el("button",{class:"btn ghost", type:"button", text:"Done", onclick:closeModal}));
+  foot.appendChild(el("button",{class:"btn", type:"button", text:"Add a class",
+    onclick:() => sessionModal(null, dateStr, back)}));
+  modal.appendChild(foot);
+
+  scrim.appendChild(modal);
+  root.appendChild(scrim);
+  document.addEventListener("keydown", modalKeys);
+  const first = modal.querySelector(".sheet .pick") || modal.querySelector("footer .btn");
+  if(first) first.focus();
+}
+
+/* ---- shell ------------------------------------------------------------- */
+/* ?view= and ?date= make any day or week a shareable link, and let the
+   pre-term / mid-term states be checked without waiting for the calendar. */
+const wantView = new URLSearchParams(location.search).get("view");
+let view = ["month","week","day"].includes(wantView) ? wantView : "month";
+function setView(v){
+  view = v;
+  const u = new URL(location.href);
+  u.searchParams.set("view", v);
+  u.searchParams.set("date", iso(cursor));
+  history.replaceState(null, "", u);
+  render();
+}
+
+function render(){
+  renderToday();
+  document.querySelectorAll(".views button").forEach(b => {
+    const on = b.dataset.view===view;
+    b.setAttribute("aria-selected", String(on));
+    b.tabIndex = on ? 0 : -1;
+  });
+  /* Hidden on the day view on purpose: that view already carries its own two
+     Edit buttons, over the two columns they act on. A third one in the bar with
+     nothing left to do would read as broken. */
+  const ge = document.getElementById("gridedit");
+  ge.hidden = (view === "day");
+  ge.textContent = EDIT.grid ? "Done" : "Edit";
+  ge.className = "btn ghost sm" + (EDIT.grid ? " on" : "");
+  ge.setAttribute("aria-pressed", String(EDIT.grid));
+  ge.setAttribute("aria-label", EDIT.grid ? "Finish editing the calendar" : "Edit the calendar");
+
+  const main = document.getElementById("main");
+  main.textContent = "";
+  if(EDIT.grid && view !== "day") main.appendChild(el("p",{class:"edithint gridhint",
+    text: view === "month"
+      ? "Tap any day to add, change or remove its classes."
+      : "Use Edit over a day to add, change or remove its classes — or tap a class straight in the grid."}));
+  const ttl = document.getElementById("rangettl");
+  if(view==="month"){
+    ttl.textContent = `${MONTHS[cursor.getMonth()]} ${cursor.getFullYear()}`;
+    main.appendChild(renderMonth());
+  }else if(view==="week"){
+    const s = startOfWeek(cursor), e = addDays(s,6);
+    ttl.textContent = s.getMonth()===e.getMonth()
+      ? `${MONTHS[s.getMonth()]} ${s.getDate()} – ${e.getDate()}`
+      : `${MONTHS[s.getMonth()].slice(0,3)} ${s.getDate()} – ${MONTHS[e.getMonth()].slice(0,3)} ${e.getDate()}`;
+    main.appendChild(renderWeek());
+  }else{
+    ttl.textContent = `${DAYNAMES[cursor.getDay()]}, ${MONTHS[cursor.getMonth()]} ${cursor.getDate()}`;
+    main.appendChild(renderDay());
+  }
+}
+
+function step(dir){
+  if(view==="month") cursor = new Date(cursor.getFullYear(), cursor.getMonth()+dir, 1);
+  else if(view==="week") cursor = addDays(cursor, 7*dir);
+  else cursor = addDays(cursor, dir);
+  render();
+}
+
+document.querySelectorAll(".views button").forEach(b => {
+  b.addEventListener("click", () => setView(b.dataset.view));
+  b.addEventListener("keydown", e => {
+    const order = ["month","week","day"];
+    const i = order.indexOf(view);
+    if(e.key==="ArrowRight"){ e.preventDefault(); setView(order[(i+1)%3]); document.getElementById("tab-"+order[(i+1)%3]).focus(); }
+    if(e.key==="ArrowLeft"){ e.preventDefault(); setView(order[(i+2)%3]); document.getElementById("tab-"+order[(i+2)%3]).focus(); }
+  });
+});
+document.getElementById("prev").addEventListener("click", () => step(-1));
+document.getElementById("next").addEventListener("click", () => step(1));
+document.getElementById("gotoday").addEventListener("click", () => { cursor = new Date(TODAY); render(); announce("Jumped to today."); });
+document.getElementById("gridedit").addEventListener("click", () => setEdit("grid", !EDIT.grid));
+
+document.getElementById("brandsub").textContent =
+  `${DATA.meta.block} · ${MONTHS[TERM_START.getMonth()]} ${TERM_START.getDate()} – ${MONTHS[TERM_END.getMonth()]} ${TERM_END.getDate()}, ${TERM_END.getFullYear()}`;
+document.getElementById("foot").textContent =
+  `Built from “${DATA.meta.source_pdf}” · parsed ${DATA.meta.parsed_at.replace("T"," ")} · your edits are saved in this browser`;
+
+buildSwatches();
+buildLegend();
+applyTheme(S.theme);
+/* Opening on a month with nothing in it is a dead first impression, so before
+   the block starts the grid lands on the first taught month instead. */
+cursor = (TODAY < TERM_START) ? new Date(TERM_START)
+       : (TODAY > TERM_END)   ? new Date(TERM_END)
+       : new Date(TODAY);
+/* A ?date= in the URL parks the lower half there -- that is the deep link, and
+   it is what setView writes back. It cannot touch TODAY. */
+if(isDate(qs.get("date"))) cursor = fromIso(qs.get("date"));
+else if(todayOverride) cursor = new Date(TODAY);
+render();
+</script>
+</body>
+</html>

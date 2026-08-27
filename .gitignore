@@ -1,0 +1,17 @@
+# Old builds — 19MB of history the pipeline regenerates anyway
+versions/
+
+# Generated page (rebuilt from tools/app_template.html every run)
+build/index.html
+build/*.png
+
+# Vercel account bookkeeping — machine-specific, must not travel
+build/.vercel/
+
+# Python
+__pycache__/
+*.pyc
+
+# Working files
+data/.schedule_prev.json
+.DS_Store

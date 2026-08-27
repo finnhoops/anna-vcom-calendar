@@ -1,0 +1,310 @@
+{
+  "_comment": [
+    "Seasonal theme packs. Each pack sets the neutral ground and ONE sharp accent;",
+    "category hues stay constant across packs so Anna never has to relearn what a",
+    "colour means. Every pack ships light and dark variants -- the page follows the",
+    "viewer's prefers-color-scheme within whichever pack is chosen.",
+    "Contrast is verified by tools/check_contrast.py; do not hand-edit without rerunning it."
+  ],
+  "default": "floral",
+  "order": [
+    "floral",
+    "autumn",
+    "halloween",
+    "thanksgiving",
+    "winter",
+    "newyear"
+  ],
+  "packs": {
+    "floral": {
+      "name": "Floral",
+      "note": "Anna's swatch as Finn re-sent it (assets/floral-light.webp, from background.jpeg): pale blue roses on a near-white ground. Ground #feffff and hue 210 are sampled from that file, not chosen. This pack is deliberately SINGLE-COLOURWAY -- see noDark. Text is blue rather than near-black, at Finn's request.",
+      "light": {
+        "bg": "#feffff",
+        "surface": "#ffffff",
+        "surface2": "#f5f9fc",
+        "line": "#d4e0ed",
+        "ink": "#19334d",
+        "ink2": "#365472",
+        "ink3": "#4d6b89",
+        "accent": "#296199",
+        "accentInk": "#ffffff",
+        "accentSoft": "#e7f0f9",
+        "ring": "#296199",
+        "lace": "#9dbad6",
+        "laceLine": "#80a3c6",
+        "pattern": "floral"
+      },
+      "dark": {
+        "bg": "#feffff",
+        "surface": "#ffffff",
+        "surface2": "#f5f9fc",
+        "line": "#d4e0ed",
+        "ink": "#19334d",
+        "ink2": "#365472",
+        "ink3": "#4d6b89",
+        "accent": "#296199",
+        "accentInk": "#ffffff",
+        "accentSoft": "#e7f0f9",
+        "ring": "#296199",
+        "lace": "#9dbad6",
+        "laceLine": "#80a3c6",
+        "pattern": "floral"
+      },
+      "noDark": true
+    },
+    "autumn": {
+      "name": "Autumn",
+      "note": "Amber, rust and dry leaves.",
+      "light": {
+        "bg": "#fbf6ef",
+        "surface": "#ffffff",
+        "surface2": "#f6ecdf",
+        "line": "#e4d2ba",
+        "ink": "#2b2117",
+        "ink2": "#5f4a33",
+        "ink3": "#806647",
+        "accent": "#9a4515",
+        "accentInk": "#ffffff",
+        "accentSoft": "#fbe8dc",
+        "ring": "#9a4515",
+        "lace": "transparent"
+      },
+      "dark": {
+        "bg": "#161009",
+        "surface": "#201810",
+        "surface2": "#2b2015",
+        "line": "#3f2f1e",
+        "ink": "#f7eede",
+        "ink2": "#d4bd99",
+        "ink3": "#ab9673",
+        "accent": "#f0954f",
+        "accentInk": "#2a1204",
+        "accentSoft": "#3a2413",
+        "ring": "#f0954f",
+        "lace": "transparent"
+      }
+    },
+    "halloween": {
+      "name": "Halloween",
+      "note": "Deep violet night, pumpkin accent.",
+      "light": {
+        "bg": "#f7f4fa",
+        "surface": "#ffffff",
+        "surface2": "#efe9f5",
+        "line": "#d9cee6",
+        "ink": "#241a2e",
+        "ink2": "#4f3f63",
+        "ink3": "#6c5a80",
+        "accent": "#a03c00",
+        "accentInk": "#ffffff",
+        "accentSoft": "#fbe6d8",
+        "ring": "#7b3fb5",
+        "lace": "transparent"
+      },
+      "dark": {
+        "bg": "#120c19",
+        "surface": "#1b1324",
+        "surface2": "#241a30",
+        "line": "#372949",
+        "ink": "#f2ecf8",
+        "ink2": "#c6b3da",
+        "ink3": "#9d89b3",
+        "accent": "#ff8b3d",
+        "accentInk": "#2a1000",
+        "accentSoft": "#3a2214",
+        "ring": "#ff8b3d",
+        "lace": "transparent"
+      }
+    },
+    "thanksgiving": {
+      "name": "Thanksgiving",
+      "note": "Warm brown, cranberry, candlelight.",
+      "light": {
+        "bg": "#faf5f0",
+        "surface": "#ffffff",
+        "surface2": "#f3e9e0",
+        "line": "#ddcabb",
+        "ink": "#2a1f18",
+        "ink2": "#5c463a",
+        "ink3": "#7b6152",
+        "accent": "#8f2437",
+        "accentInk": "#ffffff",
+        "accentSoft": "#f9e4e6",
+        "ring": "#8f2437",
+        "lace": "transparent"
+      },
+      "dark": {
+        "bg": "#150f0b",
+        "surface": "#1f1712",
+        "surface2": "#2a1f18",
+        "line": "#3e2e23",
+        "ink": "#f6ede4",
+        "ink2": "#d2bba7",
+        "ink3": "#a8917e",
+        "accent": "#e8788a",
+        "accentInk": "#2c0a12",
+        "accentSoft": "#3a1c22",
+        "ring": "#e8788a",
+        "lace": "transparent"
+      }
+    },
+    "winter": {
+      "name": "Winter",
+      "note": "Cold slate and evergreen.",
+      "light": {
+        "bg": "#f4f7f8",
+        "surface": "#ffffff",
+        "surface2": "#e9eff2",
+        "line": "#cbd8de",
+        "ink": "#16232a",
+        "ink2": "#3f5560",
+        "ink3": "#5c727e",
+        "accent": "#0f6b5c",
+        "accentInk": "#ffffff",
+        "accentSoft": "#dcefea",
+        "ring": "#0f6b5c",
+        "lace": "transparent"
+      },
+      "dark": {
+        "bg": "#0b1216",
+        "surface": "#131c22",
+        "surface2": "#1b262d",
+        "line": "#2b3941",
+        "ink": "#eaf3f7",
+        "ink2": "#b0c5cf",
+        "ink3": "#8aa1ac",
+        "accent": "#4fd2b3",
+        "accentInk": "#04241d",
+        "accentSoft": "#12302a",
+        "ring": "#4fd2b3",
+        "lace": "transparent"
+      }
+    },
+    "newyear": {
+      "name": "New Year",
+      "note": "Ink black and champagne gold.",
+      "light": {
+        "bg": "#f8f7f4",
+        "surface": "#ffffff",
+        "surface2": "#efece4",
+        "line": "#d8d2c4",
+        "ink": "#1c1b18",
+        "ink2": "#4b4840",
+        "ink3": "#6a665b",
+        "accent": "#7a5c12",
+        "accentInk": "#ffffff",
+        "accentSoft": "#f6ecd2",
+        "ring": "#7a5c12",
+        "lace": "transparent"
+      },
+      "dark": {
+        "bg": "#101010",
+        "surface": "#191917",
+        "surface2": "#222120",
+        "line": "#34322e",
+        "ink": "#f4f2ec",
+        "ink2": "#c8c4b8",
+        "ink3": "#9d9a8e",
+        "accent": "#e8c66a",
+        "accentInk": "#241c04",
+        "accentSoft": "#332c17",
+        "ring": "#e8c66a",
+        "lace": "transparent"
+      }
+    }
+  },
+  "_categoryComment": [
+    "Course colours are deliberately theme-independent: a schedule is read at a",
+    "glance and the mapping must not shift when the season does. Each entry gives a",
+    "light-mode and dark-mode hue plus the text colour that sits on it."
+  ],
+  "categories": {
+    "ANATOMY": {
+      "light": "#1f6f8b",
+      "dark": "#6fc6e0",
+      "label": "Anatomy"
+    },
+    "PHARMACOLOGY": {
+      "light": "#7b3fb5",
+      "dark": "#c39cf0",
+      "label": "Pharmacology"
+    },
+    "CLINICAL SKILLS": {
+      "light": "#0f7350",
+      "dark": "#5fd39f",
+      "label": "Clinical Skills"
+    },
+    "TECHNOLOGY & MONITORING": {
+      "light": "#a35a00",
+      "dark": "#f0a95a",
+      "label": "Technology & Monitoring"
+    },
+    "PHYSIOLOGY": {
+      "light": "#96336b",
+      "dark": "#f091c2",
+      "label": "Physiology"
+    },
+    "ELECTROPHYSIOLOGY": {
+      "light": "#3f5ec4",
+      "dark": "#93a8f5",
+      "label": "Electrophysiology"
+    },
+    "ORIENTATION": {
+      "light": "#5d6470",
+      "dark": "#aab3c0",
+      "label": "Orientation"
+    },
+    "PROFESSIONALISM": {
+      "light": "#5d6470",
+      "dark": "#aab3c0",
+      "label": "Professionalism"
+    },
+    "EXAM": {
+      "light": "#b3261e",
+      "dark": "#ff8b82",
+      "label": "Exam"
+    },
+    "BREAK": {
+      "light": "#868173",
+      "dark": "#a9a498",
+      "label": "Break"
+    },
+    "HOLIDAY": {
+      "light": "#3f7d3f",
+      "dark": "#8ed08e",
+      "label": "Holiday"
+    },
+    "OTHER": {
+      "light": "#6b6660",
+      "dark": "#a9a49c",
+      "label": "Other"
+    }
+  },
+  "_highlighterComment": [
+    "Anna's real highlighter colours, used in the during-lecture instructions.",
+    "These name physical objects, so they stay yellow/blue/pink in every pack --",
+    "only their lightness shifts so they stay legible on a dark ground."
+  ],
+  "highlighters": {
+    "yellow": {
+      "light": "#806103",
+      "dark": "#e8bf55"
+    },
+    "blue": {
+      "light": "#2460cd",
+      "dark": "#8fb4f7"
+    },
+    "pink": {
+      "light": "#b72b71",
+      "dark": "#f28fc0"
+    }
+  },
+  "_laceComment": "`lace` is the colour the lace photograph is TINTED with at build time by tools/make_lace.py -- it is not a fill behind anything. White is not an option on the floral ground: the ground is near-white, so white lace disappears entirely.",
+  "_patternComment": [
+    "The floral pack paints a cream-and-blue ditsy floral on the page. It is built",
+    "from radial gradients, not an SVG: an SVG data URI renders as an <img> but not",
+    "as a CSS background-image or border-image on this machine, and it fails",
+    "silently. Packs with transparent flower tokens paint nothing."
+  ]
+}
