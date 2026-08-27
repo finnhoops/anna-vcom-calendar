@@ -150,23 +150,9 @@ step "Building the calendar"
 "$PY" tools/check_contrast.py || { echo "STOP: the colour check failed — not publishing."; exit 1; }
 "$PY" tools/generate_calendar.py || { echo "STOP: the page could not be built — not publishing."; exit 1; }
 
-# --- 10. publish -----------------------------------------------------------
-step "Publishing"
-if ! command -v vercel >/dev/null 2>&1; then
-  echo "The calendar was built successfully but couldn't be published:"
-  echo "the 'vercel' command isn't installed. Install it once with:"
-  echo "    npm install -g vercel"
-  echo "Then run this script again — nothing will need re-reading."
-  exit 1
-fi
-( cd build && vercel deploy --prod --yes ) || {
-  echo
-  echo "The calendar was BUILT fine but publishing failed."
-  echo "Everything is saved, so just run this script again once that's sorted."
-  exit 1
-}
-
-# --- 11. record ------------------------------------------------------------
+# --- 10. record ------------------------------------------------------------
+# Done BEFORE publishing now, so the changelog and the PDF hash travel in the
+# same commit as the page they describe.
 echo "$NEW_HASH" > data/.last_pdf_hash
 rm -f data/.schedule_prev.json
 {
@@ -176,8 +162,53 @@ rm -f data/.schedule_prev.json
   echo "Run by update-calendar.sh. All safety checks passed."
 } >> CHANGELOG.md
 
+# --- 11. publish -----------------------------------------------------------
+# Publishing IS a git push. The Vercel project is connected to the GitHub repo
+# finnhoops/anna-vcom-calendar, so pushing master deploys build/index.html to
+# https://anna-vcom-calendar.vercel.app automatically. There is no separate
+# deploy command any more, and nothing here talks to Vercel directly.
+step "Publishing"
+
+if ! command -v git >/dev/null 2>&1 || [ ! -d .git ]; then
+  echo "The calendar was BUILT fine but couldn't be published:"
+  echo "this folder isn't a git repository, so there's nothing to push to."
+  echo "Everything is saved. See SETUP-FOR-ANNA.md for how to connect it."
+  exit 1
+fi
+
+if ! git remote get-url origin >/dev/null 2>&1; then
+  echo "The calendar was BUILT fine but couldn't be published:"
+  echo "there's no 'origin' remote to push to."
+  echo "Everything is saved. See SETUP-FOR-ANNA.md."
+  exit 1
+fi
+
+git add build/index.html data/schedule.json data/.last_pdf_hash CHANGELOG.md
+git add -A schedule/ 2>/dev/null || true
+
+if git diff --cached --quiet; then
+  echo "Nothing changed since the last publish — the live calendar is already"
+  echo "up to date. Not pushing an empty commit."
+else
+  git commit -q -m "Rebuild calendar from $BASE" || {
+    echo "The calendar was BUILT fine but the commit failed."
+    echo "Everything is saved on disk. Nothing was published."
+    exit 1
+  }
+  BRANCH="$(git rev-parse --abbrev-ref HEAD)"
+  if ! git push origin "$BRANCH"; then
+    echo
+    echo "The calendar was BUILT and COMMITTED fine, but the push failed."
+    echo "Nothing is lost — fix the connection and run:    git push origin $BRANCH"
+    echo "The live calendar still shows the previous version until that lands."
+    exit 1
+  fi
+  echo
+  echo "Pushed. Vercel is building now — the live page updates in under a minute."
+fi
+
 say "Done — your calendar is live and updated."
-echo "Open it at the address printed just above (it never changes once set up)."
+echo "Open it at https://anna-vcom-calendar.vercel.app  (this never changes)."
 echo
 echo "Reminder: your checkmarks and typed to-dos live in your browser."
 echo "They weren't touched. Anything the school MOVED will come back unticked,"

@@ -787,3 +787,27 @@ stays out of scope at her request.
 
 Deployed to https://anna-vcom-calendar.vercel.app — 140 days, 374 sessions,
 32 exams, 794 contrast pairs at AA.
+
+## 2026-08-27 — publishing moved to GitHub
+
+The project was pushed to `github.com/finnhoops/anna-vcom-calendar` (private —
+it carries Anna's name and her real schedule PDF) and the Vercel project was
+connected to it. **A push to `master` now deploys the calendar.**
+
+What changed:
+
+- `build/index.html` is committed instead of ignored. It is the artifact Vercel
+  serves, so ignoring it would publish an empty site.
+- `vercel.json` added, setting `outputDirectory` to `build` so only the built
+  page is public — the schedule PDF and `tools/` are not served.
+- `update-calendar.sh` step 11 no longer runs `vercel deploy`. It commits the
+  rebuilt page, changelog and PDF hash, then pushes. The record step moved
+  ahead of publishing so it travels in the same commit.
+
+The sanity gate is deliberately unchanged and still runs locally. Vercel does
+no build — a misparsed schedule can't reach the live site because there'd be no
+regenerated `index.html` to commit in the first place.
+
+Verified end to end: a marker committed to `build/index.html` appeared on
+https://anna-vcom-calendar.vercel.app after a push, then was removed by
+regenerating through the normal pipeline.

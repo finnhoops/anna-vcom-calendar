@@ -69,15 +69,45 @@ ones that reach the parser.
 
 **Running the pipeline off this Mac** needs the project folder, not just the
 skill. The skill is instructions; the parser, `app_template.html`, `themes.json`,
-the assets and the previous `data/schedule.json` are all required, and the
-project is not in version control, so there is currently no mechanism to sync it
-anywhere. The tools themselves resolve their paths from `__file__` and are
-portable — the folder is the thing that has to travel.
+the assets and the previous `data/schedule.json` are all required. The project
+is now a git repo pushed to `github.com/finnhoops/anna-vcom-calendar` (private),
+so cloning it is the way to move it. The tools resolve their paths from
+`__file__` and are portable.
 
-**Deploying off this Mac** needs a `VERCEL_TOKEN` scoped to `anna-vcom-calendar`.
-The CLI login on this machine is a personal credential covering all of
-`finn-hoops-projects` — webapp, fh-ai-consulting, ai-news, hockey-analytics —
-and must not be handed to anyone to deploy a calendar.
+## Publishing is a git push — do not run `vercel deploy`
+
+The Vercel project is connected to the GitHub repo. **A push to `master`
+deploys.** `update-calendar.sh` step 11 commits the rebuilt page and pushes;
+nothing in this project calls the Vercel CLI to deploy any more, and a manual
+`vercel deploy` from `build/` would publish content that isn't in the repo and
+put the live site out of sync with `master`.
+
+Three things make that work, and breaking any one of them silently publishes
+an empty site:
+
+- **`build/index.html` is COMMITTED**, not ignored. It is the deployed artifact.
+  Re-adding it to `.gitignore` — which looks like the tidy thing to do for a
+  generated file — makes Vercel serve nothing.
+- **`vercel.json` sets `"outputDirectory": "build"`.** The project's Root
+  Directory is the repo root, so without this Vercel serves the repo root and
+  the calendar 404s. Only `build/` is published, which is why the schedule PDF
+  and `tools/` never reach the public site.
+- **No build runs on Vercel.** There is no `package.json`, so Vercel does a
+  static deploy of `build/`. The page is generated *here*, by
+  `tools/generate_calendar.py`, and that is deliberate — see below.
+
+**Why the build stays local:** `tools/sanity_gate.py` stops a bad parse before
+it can ship. If Vercel regenerated the page from the PDF on push, a misparsed
+schedule would deploy straight to Anna with nothing in the way. Keeping
+generation on this machine means an `index.html` can only exist if the gate
+passed.
+
+**Deploying without the repo** would need a `VERCEL_TOKEN` scoped to
+`anna-vcom-calendar`. The CLI login on this machine is a personal credential
+covering all of `finn-hoops-projects` — webapp, fh-ai-consulting, ai-news,
+hockey-analytics — and must not be handed to anyone to deploy a calendar.
+With the GitHub connection this is no longer needed: a collaborator on the repo
+publishes by pushing, and never touches Vercel at all.
 
 ## The live URL is permanent
 
