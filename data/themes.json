@@ -241,8 +241,8 @@
       "label": "Technology & Monitoring"
     },
     "ELECTROPHYSIOLOGY": {
-      "light": "#79b8e6",
-      "dark": "#bfe0f4",
+      "light": "#3fc0b2",
+      "dark": "#9aeae0",
       "label": "Electrophysiology"
     },
     "CLINICAL SKILLS": {
@@ -276,8 +276,8 @@
       "label": "Professionalism"
     },
     "ZOOM": {
-      "light": "#14532d",
-      "dark": "#5fb87e",
+      "light": "#7fb8e8",
+      "dark": "#bfe0f7",
       "label": "Zoom meeting"
     },
     "SPECIAL EVENTS": {
