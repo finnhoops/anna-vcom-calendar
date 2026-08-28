@@ -540,7 +540,11 @@ input::placeholder{color:var(--ink3)}
   .dow span{padding:8px 2px; font-size:9.5px; letter-spacing:.04em}
   .day{min-height:62px; padding:4px 3px 6px; gap:3px}
   .day .num{font-size:13px}
-  .day .chip,.day .cnt{display:none}
+  .day .cnt{display:none}
+  /* The exam chip is NOT hidden on a phone -- a red test marker is the one
+     thing the month grid must never drop. Only compacted to fit the shorter
+     cell; the name ellipsis-truncates and the day opens on tap for the rest. */
+  .day .chip{font-size:9px; padding:1px 4px; letter-spacing:0}
   .nav .ttl{font-size:18px; min-width:150px}
   .slot{grid-template-columns:62px 1fr}
   .views button{padding:7px 13px}
