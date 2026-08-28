@@ -290,6 +290,11 @@
       "dark": "#ff8b82",
       "label": "Exam"
     },
+    "LUNCH": {
+      "light": "#8f764a",
+      "dark": "#d6c3a1",
+      "label": "Lunch"
+    },
     "BREAK": {
       "light": "#868173",
       "dark": "#a9a498",

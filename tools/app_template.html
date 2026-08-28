@@ -716,6 +716,7 @@ function sessionsFor(dateStr){
 }
 function catColor(s){
   if(s.kind==="exam") return "EXAM";
+  if((s.category||"").toUpperCase()==="LUNCH") return "LUNCH";
   if(s.kind==="break") return "BREAK";
   const c = (s.category||"").toUpperCase();
   const l = (s.label||"").toUpperCase();
@@ -1578,7 +1579,7 @@ function monthCell(date, month){
 }
 
 /* ---- week -------------------------------------------------------------- */
-const H_START = 8, H_END = 17, PX = 56;
+const H_START = 8, H_END = 21, PX = 56;   // show the grid through 8 PM
 
 function renderWeek(){
   const start = startOfWeek(cursor);
