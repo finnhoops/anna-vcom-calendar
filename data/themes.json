@@ -266,13 +266,13 @@
       "label": "Clinical Skills OSCE"
     },
     "ORIENTATION": {
-      "light": "#a84a1a",
-      "dark": "#e89055",
+      "light": "#f0a888",
+      "dark": "#f7cbb8",
       "label": "Orientation"
     },
     "PROFESSIONALISM": {
-      "light": "#efd93a",
-      "dark": "#f6e77e",
+      "light": "#c49a12",
+      "dark": "#dfbf47",
       "label": "Professionalism"
     },
     "ZOOM": {
@@ -281,8 +281,8 @@
       "label": "Zoom meeting"
     },
     "SPECIAL EVENTS": {
-      "light": "#6f7a10",
-      "dark": "#d4e04a",
+      "light": "#e6e600",
+      "dark": "#f0f04d",
       "label": "Special event"
     },
     "EXAM": {
