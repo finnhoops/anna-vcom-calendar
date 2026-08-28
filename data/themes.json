@@ -221,13 +221,13 @@
   ],
   "categories": {
     "ANATOMY": {
-      "light": "#26975e",
-      "dark": "#9aefc9",
+      "light": "#5fc99a",
+      "dark": "#b0f0d5",
       "label": "Anatomy"
     },
     "PHARMACOLOGY": {
-      "light": "#6b74d4",
-      "dark": "#bfc4f2",
+      "light": "#969ee6",
+      "dark": "#ccd1f6",
       "label": "Pharmacology"
     },
     "PHYSIOLOGY": {
@@ -236,13 +236,13 @@
       "label": "Physiology"
     },
     "TECHNOLOGY & MONITORING": {
-      "light": "#c65a8d",
-      "dark": "#eeb0d2",
+      "light": "#e08fbd",
+      "dark": "#f3cae0",
       "label": "Technology & Monitoring"
     },
     "ELECTROPHYSIOLOGY": {
-      "light": "#358ad0",
-      "dark": "#a9d6f2",
+      "light": "#79b8e6",
+      "dark": "#bfe0f4",
       "label": "Electrophysiology"
     },
     "CLINICAL SKILLS": {
