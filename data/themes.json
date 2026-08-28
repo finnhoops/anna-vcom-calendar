@@ -221,8 +221,8 @@
   ],
   "categories": {
     "ANATOMY": {
-      "light": "#5fc99a",
-      "dark": "#b0f0d5",
+      "light": "#3fa63f",
+      "dark": "#9fe89a",
       "label": "Anatomy"
     },
     "PHARMACOLOGY": {
@@ -241,8 +241,8 @@
       "label": "Technology & Monitoring"
     },
     "ELECTROPHYSIOLOGY": {
-      "light": "#3fc0b2",
-      "dark": "#9aeae0",
+      "light": "#6fd8cc",
+      "dark": "#bdf1ea",
       "label": "Electrophysiology"
     },
     "CLINICAL SKILLS": {
