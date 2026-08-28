@@ -282,18 +282,24 @@ def apply_overrides(schedule, path):
             print(f"  override warning: {date} is not in the schedule -- skipped")
             continue
         for e in entries:
-            lo, hi = e["clear"].split("-")
-            day["sessions"] = [s for s in day["sessions"]
-                               if not (s.get("start") and lo <= s["start"] < hi)]
+            if e.get("clear"):
+                lo, hi = e["clear"].split("-")
+                day["sessions"] = [s for s in day["sessions"]
+                                   if not (s.get("start") and lo <= s["start"] < hi)]
             oid = "ov" + hashlib.sha1(
                 f"{date}{e['start']}{e['label']}".encode("utf-8")).hexdigest()[:8]
-            day["sessions"].append({
+            sess = {
                 "id": oid, "start": e["start"], "end": e["end"],
                 "category": e.get("category", ""), "seq": None, "code": None,
                 "title": e["label"], "label": e["label"], "instructor": "",
                 "kind": e.get("kind", "lab"), "mandatory": False,
                 "study": False, "todoLabel": None,
-            })
+            }
+            # A "strip" session renders as a thin bar over whatever it overlaps
+            # in the week view (e.g. a 4 PM Zoom sitting on an all-afternoon lab).
+            if e.get("strip"):
+                sess["strip"] = True
+            day["sessions"].append(sess)
             day["sessions"].sort(key=lambda s: s.get("start") or "")
             applied += 1
     return applied

@@ -484,8 +484,16 @@ input::placeholder{color:var(--ink3)}
   border:1px solid color-mix(in srgb, var(--cat) 70%, black);
   transition:transform var(--fast) var(--ease-out), box-shadow var(--mid) var(--ease-out), filter var(--fast) var(--ease-out);
 }
-.wsess:hover{transform:scale(1.015); box-shadow:var(--shadow-2); filter:brightness(1.08); z-index:3}
+.wsess:hover{transform:scale(1.015); box-shadow:var(--shadow-2); filter:brightness(1.08); z-index:4}
 .wsess:active{transform:scale(.995)}
+/* A thin bar laid over the block(s) beneath it -- a 4 PM Zoom on top of an
+   all-afternoon lab. Sits above normal blocks and shows just its name. */
+.wsess.strip{
+  z-index:3; padding:2px 7px; display:flex; align-items:center;
+  border-color:color-mix(in srgb, var(--cat) 55%, black);
+  box-shadow:0 1px 4px rgba(0,0,0,.28);
+}
+.wsess.strip .n{font-size:10.5px; line-height:1.1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
 .wsess .n{font-size:12px; font-weight:700; line-height:1.25; overflow-wrap:anywhere}
 .wsess .t{font-size:10.5px; opacity:.88; margin-top:1px}
 
@@ -1622,16 +1630,19 @@ function renderWeek(){
     sessionsFor(iso(d)).forEach(s => {
       if(!s.start || !s.end) return;
       const top = (mins(s.start) - H_START*60) / 60 * PX;
-      const height = Math.max((mins(s.end)-mins(s.start))/60*PX - 3, 22);
+      // A "strip" session (e.g. a 4 PM Zoom over an all-afternoon lab) is a thin
+      // bar laid on top of whatever it overlaps, not a full-height block.
+      const strip = !!s.strip;
+      const height = strip ? 22 : Math.max((mins(s.end)-mins(s.start))/60*PX - 3, 22);
       if(top < -PX) return;
       const cat = catColor(s);
       const b = el("button",{
-        class:"wsess", type:"button",
+        class: strip ? "wsess strip" : "wsess", type:"button",
         style:`top:${top}px; height:${height}px; --cat:var(--cat-${cssKey(cat)})`,
         onclick:() => sessionModal(s, iso(d))
       });
       b.appendChild(el("p",{class:"n", text:s.label||s.title}));
-      if(height > 40) b.appendChild(el("p",{class:"t", text:`${fmtTime(s.start)} – ${fmtTime(s.end)}`}));
+      if(!strip && height > 40) b.appendChild(el("p",{class:"t", text:`${fmtTime(s.start)} – ${fmtTime(s.end)}`}));
       col.appendChild(b);
     });
     body.appendChild(col);
