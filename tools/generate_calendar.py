@@ -361,6 +361,12 @@ def main():
     orphans = attach_exam_dates(schedule, report)
 
     # separators=(",",":") keeps the payload tight; the schedule is the bulk of the file
+    # The VCOM Carolinas mark, base64'd in like the floral tile so build/index.html
+    # stays one self-contained file. White background already knocked out to
+    # transparent (assets/vcom-logo.png); replace that file to change the logo.
+    logo_uri = "data:image/png;base64," + base64.b64encode(
+        (ROOT / "assets" / "vcom-logo.png").read_bytes()).decode("ascii")
+
     payload = json.dumps(schedule, separators=(",", ":"), ensure_ascii=False)
     themes_payload = json.dumps(
         {k: v for k, v in themes.items() if not k.startswith("_")},
@@ -371,6 +377,7 @@ def main():
         ("__DATA__", payload),
         ("__THEMES__", themes_payload),
         ("__TITLE__", title),
+        ("__LOGO__", logo_uri),
         ("__HEADING__", "Anna’s Calendar"),
         ("__DESCRIPTION__", description),
     ):

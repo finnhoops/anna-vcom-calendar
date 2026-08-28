@@ -71,6 +71,17 @@ button{font:inherit; color:inherit; background:none; border:0; margin:0; padding
   content:""; position:absolute; inset:-6% -6% -10%; z-index:-1; pointer-events:none;
   background:radial-gradient(120% 100% at 50% 40%, var(--veil) 0 55%, transparent 100%);
 }
+.brand{display:flex; align-items:center; gap:var(--s3)}
+.brand-text{min-width:0}
+/* The school mark, next to the title. It is a fixed asset -- it cannot follow
+   the theme -- so it is left to sit straight on the ground like the title does;
+   the masthead veil already lifts this strip. Transparent PNG, so the floral
+   shows through the gaps in the sunburst. */
+.brand-logo{
+  height:clamp(46px,6vw,62px); width:auto; flex:none;
+  filter:drop-shadow(0 1px 2px rgba(0,0,0,.18));
+}
+@media (max-width:640px){ .brand-logo{height:40px} }
 .brand h1{font-size:clamp(26px,3.4vw,38px); font-weight:800; font-variation-settings:'opsz' 40}
 .brand .sub{color:var(--ink2); font-size:13px; font-weight:500; letter-spacing:.08em; text-transform:uppercase; margin-top:6px}
 
@@ -578,8 +589,11 @@ input::placeholder{color:var(--ink3)}
 <div class="wrap">
   <header class="masthead">
     <div class="brand">
-      <h1>__HEADING__</h1>
-      <p class="sub" id="brandsub"></p>
+      <img class="brand-logo" src="__LOGO__" alt="VCOM Carolinas" width="219" height="262">
+      <div class="brand-text">
+        <h1>__HEADING__</h1>
+        <p class="sub" id="brandsub"></p>
+      </div>
     </div>
     <div class="themepick" role="group" aria-label="Calendar theme">
       <span class="lbl">Theme</span>
