@@ -724,6 +724,9 @@ function catColor(s){
      all carry category "CLINICAL SKILLS" and are told apart only by the label
      the naming rules gave them. Anything else in the category keeps the base
      colour. */
+  // Named hands-on practicals -- "Clinical Skills- <what we're practising>" --
+  // ride the grey ALA colour, like the numbered ALA labs.
+  if(/^CLINICAL SKILLS-/.test(l)) return "CLINICAL SKILLS ALA";
   if(c === "CLINICAL SKILLS"){
     if(l === "CLINICAL SKILLS MLA") return "CLINICAL SKILLS MLA";
     if(l === "CLINICAL SKILLS OSCE") return "CLINICAL SKILLS OSCE";

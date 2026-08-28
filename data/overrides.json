@@ -1,0 +1,27 @@
+{
+  "_comment": "Manual corrections applied by generate_calendar.py AFTER the parse. The parser reads the schedule row by row; a merged Clinical Skills practical cell leaves its middle hours blank, so the block gets split or cut short. Each date maps to a list of {clear, start, end, label, category, kind}. 'clear' is an HH:MM-HH:MM window: any parsed session whose start falls inside it is dropped, then the override session below is inserted. Anything labelled 'Clinical Skills- ...' renders in the grey ALA colour. Re-check these if the school reissues the schedule.",
+  "2026-09-09": [
+    {"clear": "13:00-17:00", "start": "13:00", "end": "16:00",
+     "label": "Clinical Skills- Sterility Techniques", "category": "CLINICAL SKILLS", "kind": "lab"}
+  ],
+  "2026-09-23": [
+    {"clear": "13:00-17:00", "start": "13:00", "end": "16:00",
+     "label": "Clinical Skills- Anesthesia Workstation & Airway Setup", "category": "CLINICAL SKILLS", "kind": "lab"}
+  ],
+  "2026-10-06": [
+    {"clear": "11:00-17:00", "start": "11:00", "end": "16:00",
+     "label": "Clinical Skills- Intravenous Line Insertion & Fluid Management", "category": "CLINICAL SKILLS", "kind": "lab"}
+  ],
+  "2026-10-07": [
+    {"clear": "13:00-17:00", "start": "13:00", "end": "16:00",
+     "label": "Clinical Skills- Airway Assessment", "category": "CLINICAL SKILLS", "kind": "lab"}
+  ],
+  "2026-12-10": [
+    {"clear": "10:00-12:00", "start": "10:00", "end": "12:00",
+     "label": "Clinical Skills- Patient Interview", "category": "CLINICAL SKILLS", "kind": "lab"}
+  ],
+  "2027-01-11": [
+    {"clear": "13:00-17:00", "start": "13:00", "end": "16:00",
+     "label": "Clinical Skills- Anesthesia Care Plan Challenge", "category": "CLINICAL SKILLS", "kind": "lab"}
+  ]
+}

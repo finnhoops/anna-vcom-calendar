@@ -39,7 +39,7 @@ DATE_RE = re.compile(
 TIME_RE = re.compile(r"^(\d{1,2}):(\d{2})\s*(AM|PM)$", re.I)
 WEEK_RE = re.compile(r"WEEK\s*(\d+)", re.I)
 # "1. ALA: Axial Skeleton" / "5 ALA: Cranial Nerves II" / "6.ALA: Drug Calc"
-SEQ_RE = re.compile(r"^\s*(\d{1,2})\s*[.)]?\s*(?=[A-Za-z])")
+SEQ_RE = re.compile(r"^\s*(\d{1,2})\s*[.):]?\s*(?=[A-Za-z])")
 CODE_RE = re.compile(r"^\s*([A-Z]{2,4})\s*:\s*")
 MANDATORY_RE = re.compile(r"\*{0,2}\s*MANDATORY\s*\*{0,2}", re.I)
 
@@ -436,6 +436,17 @@ def label_session(session):
             return "Clinical Skills MLA", True
         if session["seq"] is not None:
             return f"Clinical Skills #{session['seq']}", True
+        # A named hands-on practical: "Clinical Skills- <what is being practised>".
+        # Strip a trailing run of instructor initials and any "CLASSROOM" /
+        # "ALL STUDENTS AS ASSIGNED" / "EVALUATORS" tail the PDF ran into it.
+        prac = title.lstrip(" :.-")
+        for _ in range(3):
+            prac = re.sub(r"\s+(CLASSROOM|ALL STUDENTS AS ASSIGNED|EVALUATORS?|"
+                          r"FACULTY REMOTAE GRADED|STAFF PROCTOR)\s*$", "", prac, flags=re.I)
+            prac = re.sub(r"\s+(?:[A-Za-z]\.\s*[A-Za-z][a-z]+\s*)+$", "", prac)
+        prac = norm(prac)
+        if prac and prac.upper() != "CLINICAL SKILLS":
+            return f"Clinical Skills- {prac}", True
         return "Clinical Skills", True
 
     if course:

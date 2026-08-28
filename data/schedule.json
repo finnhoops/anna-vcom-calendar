@@ -2,7 +2,7 @@
   "meta": {
     "source_pdf": "Block 1 Learning Calendar_CO28_CC_ Curriculum Schedule - 8.12.26.pdf",
     "source_sha256": "b9260f271be1af6369a18a2f7a33097bfc9165e624f7d8fbbe6f5d82cbc8b42f",
-    "parsed_at": "2026-08-28T11:26:35",
+    "parsed_at": "2026-08-28T11:50:05",
     "block": "Block 1",
     "term_start": "2026-09-02",
     "grid_start": "2026-08-31",
@@ -824,7 +824,7 @@
           "instructor": "S. Childress K. Dewitt M. Violette",
           "kind": "lab",
           "mandatory": false,
-          "label": "Clinical Skills",
+          "label": "Clinical Skills- Sterility Techniques",
           "study": false,
           "todoLabel": null
         }
@@ -1695,7 +1695,7 @@
           "instructor": "",
           "kind": "lab",
           "mandatory": false,
-          "label": "Clinical Skills",
+          "label": "Clinical Skills- Anesthesia Workstation & Airway Setup",
           "study": false,
           "todoLabel": null
         }
@@ -2142,7 +2142,7 @@
           "instructor": "",
           "kind": "lab",
           "mandatory": false,
-          "label": "Clinical Skills",
+          "label": "Clinical Skills- Drug Calculations Workshop",
           "study": false,
           "todoLabel": null
         },
@@ -4591,7 +4591,7 @@
           "instructor": "J. Babirak",
           "kind": "lab",
           "mandatory": false,
-          "label": "Clinical Skills",
+          "label": "Clinical Skills- Adult Basic Life Support (BLS) & Adult Cardiac Life Support (ACLS)",
           "study": false,
           "todoLabel": null
         },
@@ -4636,7 +4636,7 @@
           "instructor": "",
           "kind": "lab",
           "mandatory": false,
-          "label": "Clinical Skills",
+          "label": "Clinical Skills- ACLS WRITTEN EXAMINATION",
           "study": false,
           "todoLabel": null
         }
@@ -4722,7 +4722,7 @@
           "instructor": "",
           "kind": "lab",
           "mandatory": false,
-          "label": "Clinical Skills",
+          "label": "Clinical Skills- PALS WRITTEN EXAMINATION",
           "study": false,
           "todoLabel": null
         }
@@ -6088,19 +6088,19 @@
       "week": 15,
       "sessions": [
         {
-          "id": "f357581cb6",
+          "id": "048453fac1",
           "start": "08:00",
           "end": "10:00",
           "category": "CLINICAL SKILLS",
-          "seq": null,
-          "code": null,
-          "title": "24: ALA:The Patient Interview & Review of Systems",
+          "seq": 24,
+          "code": "ALA",
+          "title": "The Patient Interview & Review of Systems",
           "instructor": "S. Childress",
           "kind": "lab",
           "mandatory": false,
-          "label": "Clinical Skills",
-          "study": false,
-          "todoLabel": null
+          "label": "Clinical Skills #24",
+          "study": true,
+          "todoLabel": "Clinical Skills ALA #24"
         },
         {
           "id": "dee88787c8",
@@ -6113,7 +6113,7 @@
           "instructor": "S. Childress",
           "kind": "lab",
           "mandatory": false,
-          "label": "Clinical Skills",
+          "label": "Clinical Skills- Patient Interview",
           "study": false,
           "todoLabel": null
         },
@@ -6265,19 +6265,19 @@
       "week": 16,
       "sessions": [
         {
-          "id": "0c3471ea80",
+          "id": "33ac4ef862",
           "start": "08:00",
           "end": "11:00",
           "category": "CLINICAL SKILLS",
-          "seq": null,
-          "code": null,
-          "title": "26: ALA:The Standardized Patient Experience",
+          "seq": 26,
+          "code": "ALA",
+          "title": "The Standardized Patient Experience",
           "instructor": "J. Babirak",
           "kind": "lab",
           "mandatory": false,
-          "label": "Clinical Skills",
-          "study": false,
-          "todoLabel": null
+          "label": "Clinical Skills #26",
+          "study": true,
+          "todoLabel": "Clinical Skills ALA #26"
         },
         {
           "id": "6ec0e05132",
@@ -6494,13 +6494,13 @@
           "todoLabel": null
         },
         {
-          "id": "61745e94df",
+          "id": "7a8e038342",
           "start": "13:00",
           "end": "16:00",
           "category": "CLINICAL SKILLS",
           "seq": 28,
           "code": "ALA",
-          "title": "SOAP Notes, Laboratory Findings, Consults and Progress Notes 29: ALA:The Anesthesia Care Plan",
+          "title": "SOAP Notes, Laboratory Findings, Consults and Progress Notes The Anesthesia Care Plan",
           "instructor": "S. Childress",
           "kind": "lab",
           "mandatory": false,
@@ -7098,7 +7098,7 @@
           "instructor": "",
           "kind": "lab",
           "mandatory": false,
-          "label": "Clinical Skills",
+          "label": "Clinical Skills- Anesthesia Care Plan Challenge",
           "study": false,
           "todoLabel": null
         }

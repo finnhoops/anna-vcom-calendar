@@ -11,6 +11,7 @@ Usage:  generate_calendar.py [-o build/index.html] [--no-archive]
 
 import argparse
 import base64
+import hashlib
 import json
 import re
 import shutil
@@ -263,6 +264,41 @@ def attach_exam_dates(schedule, report):
     return orphans
 
 
+def apply_overrides(schedule, path):
+    """
+    Manual corrections layered on top of the parse. A merged Clinical Skills
+    practical cell leaves its middle hours blank, so the parser can't see how
+    long it runs -- these say so explicitly. See data/overrides.json.
+    """
+    if not Path(path).exists():
+        return 0
+    overrides = json.loads(Path(path).read_text(encoding="utf-8"))
+    applied = 0
+    for date, entries in overrides.items():
+        if date.startswith("_"):
+            continue
+        day = schedule["days"].get(date)
+        if day is None:
+            print(f"  override warning: {date} is not in the schedule -- skipped")
+            continue
+        for e in entries:
+            lo, hi = e["clear"].split("-")
+            day["sessions"] = [s for s in day["sessions"]
+                               if not (s.get("start") and lo <= s["start"] < hi)]
+            oid = "ov" + hashlib.sha1(
+                f"{date}{e['start']}{e['label']}".encode("utf-8")).hexdigest()[:8]
+            day["sessions"].append({
+                "id": oid, "start": e["start"], "end": e["end"],
+                "category": e.get("category", ""), "seq": None, "code": None,
+                "title": e["label"], "label": e["label"], "instructor": "",
+                "kind": e.get("kind", "lab"), "mandatory": False,
+                "study": False, "todoLabel": None,
+            })
+            day["sessions"].sort(key=lambda s: s.get("start") or "")
+            applied += 1
+    return applied
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("-o", "--out", default=str(ROOT / "build" / "index.html"))
@@ -274,6 +310,10 @@ def main():
     schedule = json.loads(Path(args.schedule).read_text(encoding="utf-8"))
     themes = json.loads(Path(args.themes).read_text(encoding="utf-8"))
     html = TEMPLATE.read_text(encoding="utf-8")
+
+    n_ov = apply_overrides(schedule, ROOT / "data" / "overrides.json")
+    if n_ov:
+        print(f"  applied {n_ov} manual override(s) from data/overrides.json")
 
     block = schedule["meta"].get("block") or "Block"
     title = f"Anna's Calendar — {block}"
