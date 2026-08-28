@@ -1713,7 +1713,7 @@
           "instructor": "",
           "kind": "lecture",
           "mandatory": false,
-          "label": "Classroom",
+          "label": "Clinical Skills in Classroom",
           "study": false,
           "todoLabel": null
         }
@@ -4640,7 +4640,7 @@
           "instructor": "J. Babirak",
           "kind": "lecture",
           "mandatory": false,
-          "label": "Classroom",
+          "label": "Clinical Skills in Classroom",
           "study": false,
           "todoLabel": null
         },
@@ -4685,7 +4685,7 @@
           "instructor": "J. Babirak",
           "kind": "lecture",
           "mandatory": false,
-          "label": "Classroom",
+          "label": "Clinical Skills in Classroom",
           "study": false,
           "todoLabel": null
         },
@@ -4756,7 +4756,7 @@
           "instructor": "J. Babirak",
           "kind": "lecture",
           "mandatory": false,
-          "label": "Classroom",
+          "label": "Clinical Skills in Classroom",
           "study": false,
           "todoLabel": null
         },
@@ -4801,7 +4801,7 @@
           "instructor": "J. Babirak",
           "kind": "lecture",
           "mandatory": false,
-          "label": "Classroom",
+          "label": "Clinical Skills in Classroom",
           "study": false,
           "todoLabel": null
         },

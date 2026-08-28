@@ -352,6 +352,7 @@ PLAIN_LABELS = {
     "NO CLASSES": "No Classes", "LABOR DAY": "Labor Day",
     "THANKSGIVING HOLIDAY": "Thanksgiving Holiday",
     "CHRISTMAS HOLIDAY BREAK": "Christmas Break",
+    "CLASSROOM": "Clinical Skills in Classroom",
 }
 EXAM_LABEL_RE = re.compile(
     r"(FINAL\s+EXAM|EXAM|EXAMINATION)\s*\(?(\d+)\)?\s*:?\s*(.*)", re.I)

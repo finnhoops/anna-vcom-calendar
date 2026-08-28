@@ -231,8 +231,8 @@
       "label": "Pharmacology"
     },
     "PHYSIOLOGY": {
-      "light": "#9a68d8",
-      "dark": "#d8c2f5",
+      "light": "#8c56cb",
+      "dark": "#d3bbf1",
       "label": "Physiology"
     },
     "TECHNOLOGY & MONITORING": {
