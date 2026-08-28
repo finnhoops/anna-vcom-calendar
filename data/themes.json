@@ -246,8 +246,8 @@
       "label": "Electrophysiology"
     },
     "CLINICAL SKILLS": {
-      "light": "#cc2f6e",
-      "dark": "#f584b0",
+      "light": "#1479d6",
+      "dark": "#6bbdf5",
       "label": "Clinical Skills"
     },
     "CLINICAL SKILLS ALA": {
@@ -256,13 +256,13 @@
       "label": "Clinical Skills ALA"
     },
     "CLINICAL SKILLS MLA": {
-      "light": "#cc2f6e",
-      "dark": "#f584b0",
+      "light": "#1479d6",
+      "dark": "#6bbdf5",
       "label": "Clinical Skills MLA"
     },
     "CLINICAL SKILLS OSCE": {
-      "light": "#cc2f6e",
-      "dark": "#f584b0",
+      "light": "#7d1f3d",
+      "dark": "#e08a9c",
       "label": "Clinical Skills OSCE"
     },
     "ORIENTATION": {
@@ -271,8 +271,8 @@
       "label": "Orientation"
     },
     "PROFESSIONALISM": {
-      "light": "#9a6a00",
-      "dark": "#ecc63e",
+      "light": "#efd93a",
+      "dark": "#f6e77e",
       "label": "Professionalism"
     },
     "ZOOM": {
