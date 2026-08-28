@@ -1,8 +1,8 @@
 {
   "meta": {
     "source_pdf": "Block 1 Learning Calendar_CO28_CC_ Curriculum Schedule - 8.12.26.pdf",
-    "source_sha256": "917ffacc4e10831769189cd5c9369f77ffe5859bd83ffec54583576e6d842533",
-    "parsed_at": "2026-08-27T12:21:15",
+    "source_sha256": "b9260f271be1af6369a18a2f7a33097bfc9165e624f7d8fbbe6f5d82cbc8b42f",
+    "parsed_at": "2026-08-28T11:26:35",
     "block": "Block 1",
     "term_start": "2026-09-02",
     "grid_start": "2026-08-31",
@@ -22,7 +22,6 @@
     "ANATOMY",
     "BREAK",
     "CHRISTMAS HOLIDAY BREAK",
-    "CLASSROOM",
     "CLINICAL SKILLS",
     "COMPETENCY EXAMS",
     "ELECTROPHYSIOLOGY",
@@ -36,7 +35,6 @@
     "PHYSIOLOGY",
     "PROFESSIONALISM",
     "PROGRESS & PROMOTIONS COMMITTEE MEETING",
-    "SCHEDULE TO FOLLOW",
     "SPECIAL EVENT END OF BLOCK PARTY",
     "TECHNOLOGY & MONITORING",
     "THANKSGIVING HOLIDAY",
@@ -818,7 +816,7 @@
         {
           "id": "d0c0c7f74a",
           "start": "13:00",
-          "end": "16:00",
+          "end": "15:00",
           "category": "CLINICAL SKILLS",
           "seq": null,
           "code": null,
@@ -826,7 +824,6 @@
           "instructor": "S. Childress K. Dewitt M. Violette",
           "kind": "lab",
           "mandatory": false,
-          "location": "CLASSROOM",
           "label": "Clinical Skills",
           "study": false,
           "todoLabel": null
@@ -1701,21 +1698,6 @@
           "label": "Clinical Skills",
           "study": false,
           "todoLabel": null
-        },
-        {
-          "id": "6b25ed37c1",
-          "start": "16:00",
-          "end": "17:00",
-          "category": "CLASSROOM",
-          "seq": null,
-          "code": null,
-          "title": "CLASSROOM",
-          "instructor": "",
-          "kind": "lecture",
-          "mandatory": false,
-          "label": "Clinical Skills in Classroom",
-          "study": false,
-          "todoLabel": null
         }
       ],
       "notes": [],
@@ -2439,21 +2421,6 @@
           "kind": "lecture",
           "mandatory": false,
           "label": "Intravenous Line Insertion & Fluid Management",
-          "study": false,
-          "todoLabel": null
-        },
-        {
-          "id": "48375b88eb",
-          "start": "15:00",
-          "end": "16:00",
-          "category": "SCHEDULE TO FOLLOW",
-          "seq": null,
-          "code": null,
-          "title": "SCHEDULE TO FOLLOW",
-          "instructor": "",
-          "kind": "lecture",
-          "mandatory": false,
-          "label": "Schedule to Follow",
           "study": false,
           "todoLabel": null
         }
@@ -3234,17 +3201,16 @@
           "todoLabel": "Clinical Skills ALA #14"
         },
         {
-          "id": "91a790ed03",
+          "id": "00767f7152",
           "start": "15:00",
-          "end": "17:00",
+          "end": "16:00",
           "category": "CLINICAL SKILLS",
           "seq": null,
           "code": "MLA",
           "title": "ALL STUDENTS: Basic Anesthetic Management Application",
-          "instructor": "S. Childress",
+          "instructor": "",
           "kind": "lab",
           "mandatory": false,
-          "location": "CLASSROOM",
           "label": "Clinical Skills MLA",
           "study": false,
           "todoLabel": null
@@ -4630,21 +4596,6 @@
           "todoLabel": null
         },
         {
-          "id": "434af1ffad",
-          "start": "11:00",
-          "end": "12:00",
-          "category": "CLASSROOM",
-          "seq": null,
-          "code": null,
-          "title": "CLASSROOM",
-          "instructor": "J. Babirak",
-          "kind": "lecture",
-          "mandatory": false,
-          "label": "Clinical Skills in Classroom",
-          "study": false,
-          "todoLabel": null
-        },
-        {
           "id": "636654314f",
           "start": "12:00",
           "end": "13:00",
@@ -4671,21 +4622,6 @@
           "kind": "lab",
           "mandatory": false,
           "label": "Clinical Skills MLA",
-          "study": false,
-          "todoLabel": null
-        },
-        {
-          "id": "434af1ffad",
-          "start": "15:00",
-          "end": "16:00",
-          "category": "CLASSROOM",
-          "seq": null,
-          "code": null,
-          "title": "CLASSROOM",
-          "instructor": "J. Babirak",
-          "kind": "lecture",
-          "mandatory": false,
-          "label": "Clinical Skills in Classroom",
           "study": false,
           "todoLabel": null
         },
@@ -4746,21 +4682,6 @@
           "todoLabel": null
         },
         {
-          "id": "434af1ffad",
-          "start": "11:00",
-          "end": "12:00",
-          "category": "CLASSROOM",
-          "seq": null,
-          "code": null,
-          "title": "CLASSROOM",
-          "instructor": "J. Babirak",
-          "kind": "lecture",
-          "mandatory": false,
-          "label": "Clinical Skills in Classroom",
-          "study": false,
-          "todoLabel": null
-        },
-        {
           "id": "636654314f",
           "start": "12:00",
           "end": "13:00",
@@ -4787,21 +4708,6 @@
           "kind": "lab",
           "mandatory": false,
           "label": "Clinical Skills MLA",
-          "study": false,
-          "todoLabel": null
-        },
-        {
-          "id": "434af1ffad",
-          "start": "15:00",
-          "end": "16:00",
-          "category": "CLASSROOM",
-          "seq": null,
-          "code": null,
-          "title": "CLASSROOM",
-          "instructor": "J. Babirak",
-          "kind": "lecture",
-          "mandatory": false,
-          "label": "Clinical Skills in Classroom",
           "study": false,
           "todoLabel": null
         },
@@ -7097,33 +7003,31 @@
           "todoLabel": null
         },
         {
-          "id": "d4a2fd6450",
+          "id": "9924f33044",
           "start": "10:00",
-          "end": "12:00",
+          "end": "11:00",
           "category": "CLINICAL SKILLS",
           "seq": null,
           "code": "MLA",
           "title": "Anesthesia Care Plan Checkoff Students: 1-23",
-          "instructor": "M. Varellas/ K. Dewitt",
+          "instructor": "",
           "kind": "lab",
           "mandatory": false,
-          "location": "CLASSROOM",
           "label": "Clinical Skills MLA",
           "study": false,
           "todoLabel": null
         },
         {
-          "id": "11970a5dd9",
+          "id": "5fe2f8c59b",
           "start": "12:00",
-          "end": "14:00",
+          "end": "13:00",
           "category": "CLINICAL SKILLS",
           "seq": null,
           "code": "MLA",
           "title": "Anesthesia Care Plan Checkoff Students: 24-44",
-          "instructor": "M. Varellas/ K. Dewitt",
+          "instructor": "",
           "kind": "lab",
           "mandatory": false,
-          "location": "CLASSROOM",
           "label": "Clinical Skills MLA",
           "study": false,
           "todoLabel": null

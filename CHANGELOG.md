@@ -811,3 +811,7 @@ regenerated `index.html` to commit in the first place.
 Verified end to end: a marker committed to `build/index.html` appeared on
 https://anna-vcom-calendar.vercel.app after a push, then was removed by
 regenerating through the normal pipeline.
+
+## 2026-08-28 — rebuilt from Block 1 Learning Calendar_CO28_CC_ Curriculum Schedule - 8.12.26.pdf
+
+Run by update-calendar.sh. All safety checks passed.
