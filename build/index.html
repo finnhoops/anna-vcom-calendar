@@ -2216,9 +2216,18 @@ function sessionModal(session, dateStr, after){
   ]));
 
   const catSel = el("select",{id:"f-cat"});
+  /* Pick the starting option honestly: the session's own category when the
+     dropdown offers it, otherwise fall back by kind (Lunch -> Break, a raw
+     "Labor Day" -> Other) rather than letting the browser default to whatever
+     option happens to be first. */
+  const curCat = (s.category||"").toUpperCase();
+  const preSel = (curCat in THEMES.categories) ? curCat
+               : s.kind === "break" ? "BREAK"
+               : s.kind === "exam"  ? "EXAM"
+               : "OTHER";
   Object.keys(THEMES.categories).forEach(k => {
     const o = el("option",{value:k, text:THEMES.categories[k].label});
-    if((s.category||"").toUpperCase()===k || (!s.category && k==="OTHER")) o.selected = true;
+    if(k === preSel) o.selected = true;
     catSel.appendChild(o);
   });
   const instrIn = el("input",{type:"text", value:s.instructor||"", placeholder:"Optional", id:"f-instr"});
@@ -2249,13 +2258,23 @@ function sessionModal(session, dateStr, after){
   foot.appendChild(el("span",{class:"spacer"}));
   foot.appendChild(el("button",{class:"btn ghost", type:"button", text:"Cancel", onclick:closeModal}));
   foot.appendChild(el("button",{class:"btn", type:"button", text:isNew?"Add":"Save", onclick:() => {
+    const chosen = catSel.value;
     const patch = {
       label: nameIn.value.trim() || s.label || s.title,
       title: nameIn.value.trim() || s.title,
       start: startIn.value, end: endIn.value,
-      category: catSel.value === "OTHER" ? (s.category||"") : catSel.value,
+      /* Whatever the dropdown says, save it -- including "Other". The old code
+         special-cased "OTHER" back to the original category, so you could never
+         actually move a class to Other. */
+      category: chosen,
       instructor: instrIn.value.trim(),
-      kind: catSel.value === "EXAM" ? "exam" : catSel.value === "BREAK" ? "break" : (s.kind||"lecture")
+      /* Course choice drives kind too: pick Exam/Break and it becomes one; pick
+         a real course for something that was an Exam or Break and it turns back
+         into a normal class instead of staying styled as the old kind. */
+      kind: chosen === "EXAM" ? "exam"
+          : chosen === "BREAK" ? "break"
+          : (s.kind === "exam" || s.kind === "break") ? "lecture"
+          : (s.kind || "lecture")
     };
     if(isNew || s.custom){
       const rec = Object.assign({}, s, patch, {date:dateStr, custom:true, mandatory:!!s.mandatory});
