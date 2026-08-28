@@ -221,68 +221,68 @@
   ],
   "categories": {
     "ANATOMY": {
-      "light": "#1f6f8b",
-      "dark": "#6fc6e0",
+      "light": "#1f74c4",
+      "dark": "#7cc0f2",
       "label": "Anatomy"
     },
     "PHARMACOLOGY": {
-      "light": "#7b3fb5",
-      "dark": "#c39cf0",
+      "light": "#8a4fd0",
+      "dark": "#c9a8f2",
       "label": "Pharmacology"
     },
     "PHYSIOLOGY": {
-      "light": "#96336b",
-      "dark": "#f091c2",
+      "light": "#4c871a",
+      "dark": "#a6d95a",
       "label": "Physiology"
     },
     "TECHNOLOGY & MONITORING": {
-      "light": "#a35a00",
-      "dark": "#f0a95a",
+      "light": "#b3477f",
+      "dark": "#e89bc4",
       "label": "Technology & Monitoring"
     },
     "ELECTROPHYSIOLOGY": {
-      "light": "#3f5ec4",
-      "dark": "#93a8f5",
+      "light": "#22357a",
+      "dark": "#8fa0dc",
       "label": "Electrophysiology"
     },
     "CLINICAL SKILLS": {
-      "light": "#0f7350",
-      "dark": "#5fd39f",
+      "light": "#b45309",
+      "dark": "#e0913f",
       "label": "Clinical Skills"
     },
     "CLINICAL SKILLS ALA": {
-      "light": "#5f7d00",
-      "dark": "#bcd44f",
+      "light": "#14532d",
+      "dark": "#4fae6a",
       "label": "Clinical Skills ALA"
     },
     "CLINICAL SKILLS MLA": {
-      "light": "#0f7350",
-      "dark": "#5fd39f",
+      "light": "#b45309",
+      "dark": "#e0913f",
       "label": "Clinical Skills MLA"
     },
     "CLINICAL SKILLS OSCE": {
-      "light": "#00787f",
-      "dark": "#45d0d8",
+      "light": "#7d6f00",
+      "dark": "#e6d24e",
       "label": "Clinical Skills OSCE"
     },
     "ORIENTATION": {
-      "light": "#8a6b00",
-      "dark": "#e6bd3c",
+      "light": "#5d6470",
+      "dark": "#aab3c0",
       "label": "Orientation"
     },
     "PROFESSIONALISM": {
-      "light": "#9b30bf",
-      "dark": "#d693ec",
+      "light": "#bd691b",
+      "dark": "#f2b57a",
       "label": "Professionalism"
     },
     "ZOOM": {
-      "light": "#4a45c7",
-      "dark": "#a9a5f2",
+      "light": "#0a7d99",
+      "dark": "#5fcfe6",
       "label": "Zoom meeting"
     },
     "SPECIAL EVENTS": {
-      "light": "#c0224f",
-      "dark": "#f589a4",
+      "light": "#e60073",
+      "dark": "#ff77b8",
       "label": "Special event"
     },
     "EXAM": {
