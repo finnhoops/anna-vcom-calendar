@@ -639,6 +639,32 @@ if(!S.open || typeof S.open !== "object") S.open = blank().open;
    throw on every generated to-do row, which is most of the list. */
 if(!S.genHidden || typeof S.genHidden !== "object") S.genHidden = {};
 if(!Array.isArray(S.hidden)) S.hidden = [];
+/* One-time repair. An earlier edit modal left its Course dropdown on the first
+   option ("Anatomy") when you opened Lunch, and saving wrote that in -- so on
+   any device where that happened, one day's Lunch (Sep 8 for one) came back
+   green instead of tan. Lunch is a kind, not a course: drop any saved edit that
+   moved a Lunch block onto a real course, keeping a genuine time change if the
+   same edit also made one. Harmless once there is nothing to fix. */
+(() => {
+  const lunchIds = new Set();
+  for(const day in DATA.days)
+    for(const s of DATA.days[day].sessions)
+      if((s.category||"").toUpperCase() === "LUNCH") lunchIds.add(s.id);
+  let fixed = 0;
+  for(const key of Object.keys(S.sessionEdits || {})){
+    const baseId = key.includes("|") ? key.slice(key.lastIndexOf("|") + 1) : key;
+    if(!lunchIds.has(baseId)) continue;
+    const p = S.sessionEdits[key], cat = (p.category || "").toUpperCase();
+    if(!cat || cat === "LUNCH") continue;
+    if(p.start || p.end){
+      delete p.category; delete p.kind; delete p.label; delete p.title; delete p.instructor;
+    }else{
+      delete S.sessionEdits[key];
+    }
+    fixed++;
+  }
+  if(fixed) try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){}
+})();
 function persist(){
   try{ localStorage.setItem(KEY, JSON.stringify(S)); }
   catch(e){ announce("Couldn't save — this browser is blocking storage."); }
