@@ -352,7 +352,6 @@ PLAIN_LABELS = {
     "NO CLASSES": "No Classes", "LABOR DAY": "Labor Day",
     "THANKSGIVING HOLIDAY": "Thanksgiving Holiday",
     "CHRISTMAS HOLIDAY BREAK": "Christmas Break",
-    "CLASSROOM": "Clinical Skills in Classroom",
 }
 EXAM_LABEL_RE = re.compile(
     r"(FINAL\s+EXAM|EXAM|EXAMINATION)\s*\(?(\d+)\)?\s*:?\s*(.*)", re.I)
@@ -537,6 +536,13 @@ def parse_page(page, page_no, report):
         subject = norm(MANDATORY_RE.sub("", subject))
         if not (category or subject):
             days[day]["notes"].append("MANDATORY")
+            continue
+
+        # A cell that holds only a room ("CLASSROOM") or a "SCHEDULE TO FOLLOW"
+        # placeholder is a location note on the merged class above it. The parser
+        # used to emit it as a phantom class one hour off from the real one --
+        # that is the "shows 3-4 when it is really 4-5" bug.
+        if not subject and (category or "").upper().strip() in ("CLASSROOM", "SCHEDULE TO FOLLOW"):
             continue
 
         seq, code, title = clean_title(subject or category)
