@@ -236,8 +236,8 @@
       "label": "Physiology"
     },
     "TECHNOLOGY & MONITORING": {
-      "light": "#b3477f",
-      "dark": "#e89bc4",
+      "light": "#c85f9a",
+      "dark": "#eaa9cf",
       "label": "Technology & Monitoring"
     },
     "ELECTROPHYSIOLOGY": {
@@ -251,8 +251,8 @@
       "label": "Clinical Skills"
     },
     "CLINICAL SKILLS ALA": {
-      "light": "#14532d",
-      "dark": "#4fae6a",
+      "light": "#cc2b2b",
+      "dark": "#ff9080",
       "label": "Clinical Skills ALA"
     },
     "CLINICAL SKILLS MLA": {
