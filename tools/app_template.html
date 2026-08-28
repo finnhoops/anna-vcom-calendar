@@ -718,6 +718,19 @@ function catColor(s){
   if(s.kind==="exam") return "EXAM";
   if(s.kind==="break") return "BREAK";
   const c = (s.category||"").toUpperCase();
+  const l = (s.label||"").toUpperCase();
+  /* Clinical Skills splits three ways -- MLA, OSCE and the numbered ALA labs
+     all carry category "CLINICAL SKILLS" and are told apart only by the label
+     the naming rules gave them. Anything else in the category keeps the base
+     colour. */
+  if(c === "CLINICAL SKILLS"){
+    if(l === "CLINICAL SKILLS MLA") return "CLINICAL SKILLS MLA";
+    if(l === "CLINICAL SKILLS OSCE") return "CLINICAL SKILLS OSCE";
+    if(/^CLINICAL SKILLS #\d/.test(l)) return "CLINICAL SKILLS ALA";
+    return "CLINICAL SKILLS";
+  }
+  if(/SPECIAL EVENT|WELCOME EVENT|END OF BLOCK PARTY/.test(c)) return "SPECIAL EVENTS";
+  if(/ZOOM/.test(c) || /ZOOM/.test(l)) return "ZOOM";
   if(THEMES.categories[c]) return c;
   if(/HOLIDAY|NO CLASSES|BREAK/.test(c)) return "HOLIDAY";
   return "OTHER";
@@ -873,21 +886,28 @@ function applyTheme(name){
     b.setAttribute("aria-pressed", String(b.dataset.theme===S.theme)));
   persist();
 }
-/* The six numbered courses -- the ones whose dots are a distinct hue and worth
-   decoding. The remaining categories the dots can show (Orientation,
-   Professionalism, Break, Holiday, Other) are all near-greys, indistinguishable
-   from each other at 6px, so naming them separately would promise a precision
-   the dot does not have. Exams are not here either: they render as a labelled
-   chip rather than a dot, so they say what they are. */
-const LEGEND_KEYS = ["ANATOMY","PHARMACOLOGY","CLINICAL SKILLS",
-                     "TECHNOLOGY & MONITORING","PHYSIOLOGY","ELECTROPHYSIOLOGY"];
+/* Every category whose dot carries a distinct hue, in the order they read best:
+   the numbered courses first, then the three Clinical Skills kinds, then the
+   admin and event types. Break, Holiday and Other stay off the key -- they are
+   near-greys with nothing to decode -- and exams are a labelled chip, not a dot.
+   buildLegend only shows the ones the current block actually schedules. */
+/* "CLINICAL SKILLS" (the base, for a lab the PDF left unclassified) is not
+   listed -- it shares the MLA green, and a second identical swatch in the key
+   only muddies it. */
+const LEGEND_KEYS = ["ANATOMY","PHARMACOLOGY","PHYSIOLOGY","TECHNOLOGY & MONITORING",
+                     "ELECTROPHYSIOLOGY","CLINICAL SKILLS ALA","CLINICAL SKILLS MLA",
+                     "CLINICAL SKILLS OSCE","ORIENTATION","PROFESSIONALISM","ZOOM",
+                     "SPECIAL EVENTS"];
 
 function buildLegend(){
   const host = document.getElementById("legend");
   host.textContent = "";
-  LEGEND_KEYS.forEach(k => {
+  const present = new Set();
+  for(const d in DATA.days)
+    for(const s of DATA.days[d].sessions) present.add(catColor(s));
+  LEGEND_KEYS.filter(k => present.has(k)).forEach(k => {
     const cat = THEMES.categories[k];
-    if(!cat) return;                       // a new block may not teach all six
+    if(!cat) return;
     host.appendChild(el("li",{},[
       el("span",{class:"dot", "aria-hidden":"true", style:`--cat:var(--cat-${cat_key(k)})`}),
       cat.label

@@ -230,35 +230,60 @@
       "dark": "#c39cf0",
       "label": "Pharmacology"
     },
-    "CLINICAL SKILLS": {
-      "light": "#0f7350",
-      "dark": "#5fd39f",
-      "label": "Clinical Skills"
+    "PHYSIOLOGY": {
+      "light": "#96336b",
+      "dark": "#f091c2",
+      "label": "Physiology"
     },
     "TECHNOLOGY & MONITORING": {
       "light": "#a35a00",
       "dark": "#f0a95a",
       "label": "Technology & Monitoring"
     },
-    "PHYSIOLOGY": {
-      "light": "#96336b",
-      "dark": "#f091c2",
-      "label": "Physiology"
-    },
     "ELECTROPHYSIOLOGY": {
       "light": "#3f5ec4",
       "dark": "#93a8f5",
       "label": "Electrophysiology"
     },
+    "CLINICAL SKILLS": {
+      "light": "#0f7350",
+      "dark": "#5fd39f",
+      "label": "Clinical Skills"
+    },
+    "CLINICAL SKILLS ALA": {
+      "light": "#5f7a12",
+      "dark": "#b9cc58",
+      "label": "Clinical Skills ALA"
+    },
+    "CLINICAL SKILLS MLA": {
+      "light": "#0f7350",
+      "dark": "#5fd39f",
+      "label": "Clinical Skills MLA"
+    },
+    "CLINICAL SKILLS OSCE": {
+      "light": "#1a7f86",
+      "dark": "#63cdd6",
+      "label": "Clinical Skills OSCE"
+    },
     "ORIENTATION": {
-      "light": "#5d6470",
-      "dark": "#aab3c0",
+      "light": "#8a6d00",
+      "dark": "#e6c14a",
       "label": "Orientation"
     },
     "PROFESSIONALISM": {
-      "light": "#5d6470",
-      "dark": "#aab3c0",
+      "light": "#6d4c2f",
+      "dark": "#cda886",
       "label": "Professionalism"
+    },
+    "ZOOM": {
+      "light": "#0e7f99",
+      "dark": "#6ccfe6",
+      "label": "Zoom meeting"
+    },
+    "SPECIAL EVENTS": {
+      "light": "#b02e6b",
+      "dark": "#f58ab8",
+      "label": "Special event"
     },
     "EXAM": {
       "light": "#b3261e",
