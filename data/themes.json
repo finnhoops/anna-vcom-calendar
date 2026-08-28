@@ -251,8 +251,8 @@
       "label": "Clinical Skills"
     },
     "CLINICAL SKILLS ALA": {
-      "light": "#5f7a12",
-      "dark": "#b9cc58",
+      "light": "#5f7d00",
+      "dark": "#bcd44f",
       "label": "Clinical Skills ALA"
     },
     "CLINICAL SKILLS MLA": {
@@ -261,28 +261,28 @@
       "label": "Clinical Skills MLA"
     },
     "CLINICAL SKILLS OSCE": {
-      "light": "#1a7f86",
-      "dark": "#63cdd6",
+      "light": "#00787f",
+      "dark": "#45d0d8",
       "label": "Clinical Skills OSCE"
     },
     "ORIENTATION": {
-      "light": "#8a6d00",
-      "dark": "#e6c14a",
+      "light": "#8a6b00",
+      "dark": "#e6bd3c",
       "label": "Orientation"
     },
     "PROFESSIONALISM": {
-      "light": "#6d4c2f",
-      "dark": "#cda886",
+      "light": "#9b30bf",
+      "dark": "#d693ec",
       "label": "Professionalism"
     },
     "ZOOM": {
-      "light": "#0e7f99",
-      "dark": "#6ccfe6",
+      "light": "#4a45c7",
+      "dark": "#a9a5f2",
       "label": "Zoom meeting"
     },
     "SPECIAL EVENTS": {
-      "light": "#b02e6b",
-      "dark": "#f58ab8",
+      "light": "#c0224f",
+      "dark": "#f589a4",
       "label": "Special event"
     },
     "EXAM": {
