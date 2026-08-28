@@ -1946,9 +1946,18 @@ function monthCell(date, month){
   cell.appendChild(el("span",{class:"num", text:String(date.getDate())}));
   if(editing) cell.appendChild(el("span",{class:"pencil", "aria-hidden":"true", html:ICON_PEN}));
 
-  const exam = list.find(s => s.kind==="exam");
-  if(exam){
-    cell.appendChild(el("span",{class:"chip", text:exam.label||"Exam", style:`--cat:var(--cat-exam)`}));
+  /* The red exam chip is sourced from DATA.exams -- the schedule's own exam
+     list -- not from the day's sessions, so a test still shows its rectangle
+     here even if that session was removed from the day in edit mode on this
+     device. Falls back to a session of kind "exam" for anything added by hand. */
+  const examName = (() => {
+    const e = (DATA.exams || []).find(x => x.date === ds);
+    if(e) return e.label || e.title || "Exam";
+    const s = list.find(x => x.kind === "exam");
+    return s ? (s.label || "Exam") : null;
+  })();
+  if(examName){
+    cell.appendChild(el("span",{class:"chip", text:examName, style:`--cat:var(--cat-exam)`}));
   }else if(list.length){
     const dots = el("div",{class:"dots"});
     [...new Set(list.map(catColor))].slice(0,6).forEach(c =>
