@@ -417,6 +417,25 @@ def label_session(session):
     if category in BARE_NAME_COURSES:
         return BARE_NAME_COURSES[category], True
 
+    # OSCE stations: "OSCE #<n> <what's being practised>" -- no instructor
+    # initials, no "ALL STUDENTS AS ASSIGNED", no "EVALUATORS" / grading notes.
+    m = re.search(r"OSCE\s*#\s*(\d+)", blob, re.I)
+    if m:
+        def _osce_strip(t):
+            for _ in range(4):
+                t = re.sub(r"\b(ALL\s+STUDENTS(?:\s+AS\s+ASSIGNED)?|EVALUATORS?|"
+                           r"FACULTY\s+REMOTAE\s+GRADED|STAFF\s+PROCTOR|CLASSROOM|"
+                           r"SPECIAL\s+SESSION)\b", " ", t, flags=re.I)
+                t = re.sub(r"\s+(?:[A-Za-z]\.\s*[A-Za-z][a-z]+\s*)+", " ", t)
+            return norm(t.strip(" :.-"))
+        desc = _osce_strip(re.sub(r"^\s*OSCE\s*#\s*\d+\s*[:.\-]?\s*", "", title, flags=re.I))
+        if re.fullmatch(r"(?:[A-Za-z]\.?\s*[A-Za-z][a-z]+[,/&\s]*)+", desc or ""):
+            desc = ""                     # what's left is only instructor names
+        if len(desc) < 4:
+            desc = _osce_strip(re.sub(r"OSCE\s*#\s*\d+", "", category, flags=re.I))
+        desc = title_case(desc)
+        return (f"OSCE #{m.group(1)} {desc}".rstrip() if desc else f"OSCE #{m.group(1)}"), True
+
     if session["kind"] == "exam":
         m = EXAM_LABEL_RE.search(title) or EXAM_LABEL_RE.search(category)
         stem = course or title_case(category) if course or category else ""

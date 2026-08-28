@@ -305,6 +305,31 @@ def apply_overrides(schedule, path):
     return applied
 
 
+def add_zoom_strips(schedule):
+    """
+    The weekly "4:00 PM TACC - Zoom Meeting" is printed in the assignment strip
+    at the foot of the page, not as a class, so the parser never makes it a
+    session. Turn it into a 4-5 PM dark-green strip on whatever day carries it.
+    """
+    added = 0
+    for date, day in schedule["days"].items():
+        text = " ".join(day.get("assignments", []))
+        if not re.search(r"zoom\s*meeting", text, re.I):
+            continue
+        if any(s.get("kind") == "zoom" for s in day["sessions"]):
+            continue
+        oid = "zm" + hashlib.sha1(date.encode("utf-8")).hexdigest()[:8]
+        day["sessions"].append({
+            "id": oid, "start": "16:00", "end": "17:00", "category": "ZOOM",
+            "seq": None, "code": None, "title": "TACC - Zoom Meeting",
+            "label": "TACC - Zoom Meeting", "instructor": "", "kind": "zoom",
+            "mandatory": False, "study": False, "todoLabel": None, "strip": True,
+        })
+        day["sessions"].sort(key=lambda s: s.get("start") or "")
+        added += 1
+    return added
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("-o", "--out", default=str(ROOT / "build" / "index.html"))
@@ -320,6 +345,9 @@ def main():
     n_ov = apply_overrides(schedule, ROOT / "data" / "overrides.json")
     if n_ov:
         print(f"  applied {n_ov} manual override(s) from data/overrides.json")
+    n_zoom = add_zoom_strips(schedule)
+    if n_zoom:
+        print(f"  added {n_zoom} weekly Zoom strip(s)")
 
     block = schedule["meta"].get("block") or "Block"
     title = f"Anna's Calendar — {block}"

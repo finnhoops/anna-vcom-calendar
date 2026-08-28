@@ -2,7 +2,7 @@
   "meta": {
     "source_pdf": "Block 1 Learning Calendar_CO28_CC_ Curriculum Schedule - 8.12.26.pdf",
     "source_sha256": "b9260f271be1af6369a18a2f7a33097bfc9165e624f7d8fbbe6f5d82cbc8b42f",
-    "parsed_at": "2026-08-28T11:57:18",
+    "parsed_at": "2026-08-28T12:01:57",
     "block": "Block 1",
     "term_start": "2026-09-02",
     "grid_start": "2026-08-31",
@@ -149,7 +149,7 @@
     {
       "date": "2026-10-28",
       "title": "ASSESSMENT STATIONS Direct Oral Intubation Video Intubation Nasal Intubation EVALUATORS",
-      "label": "OSCE #4 Assessment Stations Direct Oral Intubation Video Intubation Nasal Intubation Evaluators",
+      "label": "OSCE #4 Assessment Stations Direct Oral Intubation Video Intubation Nasal Intubation",
       "category": "OSCE #4",
       "start": "11:00"
     },
@@ -1331,7 +1331,7 @@
           "instructor": "M. Violette J. Moon K. Dewitt",
           "kind": "lab",
           "mandatory": false,
-          "label": "Clinical Skills OSCE",
+          "label": "OSCE #1 Sterile Technique, Donning & Doffing",
           "study": false,
           "todoLabel": null
         }
@@ -2116,7 +2116,7 @@
           "instructor": "",
           "kind": "lab",
           "mandatory": false,
-          "label": "Clinical Skills OSCE",
+          "label": "OSCE #2 Anesthesia Machine",
           "study": false,
           "todoLabel": null
         }
@@ -2172,7 +2172,7 @@
           "instructor": "",
           "kind": "lab",
           "mandatory": false,
-          "label": "Clinical Skills OSCE",
+          "label": "OSCE #2 Anesthesia Machine",
           "study": false,
           "todoLabel": null
         }
@@ -2228,7 +2228,7 @@
           "instructor": "",
           "kind": "lab",
           "mandatory": false,
-          "label": "Clinical Skills OSCE",
+          "label": "OSCE #2 Anesthesia Machine",
           "study": false,
           "todoLabel": null
         }
@@ -2680,7 +2680,7 @@
           "instructor": "S. Childress J. Brewer",
           "kind": "lecture",
           "mandatory": false,
-          "label": "OSCE #2 k. Dewitt All Students as Assigned",
+          "label": "OSCE #2 IV Insertion",
           "study": false,
           "todoLabel": null
         }
@@ -2778,7 +2778,7 @@
           "instructor": "K. Dewitt M. Violette J. Moon",
           "kind": "lab",
           "mandatory": false,
-          "label": "Clinical Skills OSCE",
+          "label": "OSCE #3 Basic Airway Management",
           "study": false,
           "todoLabel": null
         }
@@ -3531,7 +3531,7 @@
           "instructor": "",
           "kind": "exam",
           "mandatory": false,
-          "label": "OSCE #4 Assessment Stations Direct Oral Intubation Video Intubation Nasal Intubation Evaluators",
+          "label": "OSCE #4 Assessment Stations Direct Oral Intubation Video Intubation Nasal Intubation",
           "study": false,
           "todoLabel": null
         }
@@ -6543,7 +6543,7 @@
           "instructor": "J. Babirak",
           "kind": "lecture",
           "mandatory": false,
-          "label": "Standardized Patient Encounters Evaluators",
+          "label": "OSCE #5 Standardized Patient Encounters",
           "study": false,
           "todoLabel": null
         }
@@ -6879,7 +6879,7 @@
           "instructor": "S. Childress M. Violette",
           "kind": "lab",
           "mandatory": false,
-          "label": "Clinical Skills OSCE",
+          "label": "OSCE #5 Full Case Management",
           "study": false,
           "todoLabel": null
         },
@@ -6920,7 +6920,7 @@
           "instructor": "S. Childres J. Moon",
           "kind": "lab",
           "mandatory": false,
-          "label": "Clinical Skills OSCE",
+          "label": "OSCE #5 Full Case Management",
           "study": false,
           "todoLabel": null
         },
@@ -6959,7 +6959,7 @@
           "instructor": "K. Dewitt J. Moon",
           "kind": "lab",
           "mandatory": false,
-          "label": "Clinical Skills OSCE",
+          "label": "OSCE #5 Full Case Management",
           "study": false,
           "todoLabel": null
         },

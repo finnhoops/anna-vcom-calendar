@@ -735,6 +735,8 @@ function catColor(s){
   // Named hands-on practicals -- "Clinical Skills- <what we're practising>" --
   // ride the grey ALA colour, like the numbered ALA labs.
   if(/^CLINICAL SKILLS-/.test(l)) return "CLINICAL SKILLS ALA";
+  // An OSCE is an assessment -- red, wherever it shows.
+  if(/^OSCE #/.test(l)) return "EXAM";
   if(c === "CLINICAL SKILLS"){
     if(l === "CLINICAL SKILLS MLA") return "CLINICAL SKILLS MLA";
     if(l === "CLINICAL SKILLS OSCE") return "CLINICAL SKILLS OSCE";
@@ -1565,8 +1567,9 @@ function monthCell(date, month){
     if(e) return e.label || e.title || "Exam";
     const s = list.find(x => x.kind === "exam");
     if(s) return s.label || "Exam";
-    // OSCE labs are assessments -- Anna wants them read as exams on the month grid.
-    if(list.some(x => (x.label || "").toUpperCase() === "CLINICAL SKILLS OSCE")) return "OSCE Exam";
+    // OSCE sessions are assessments -- show them with the exams on the month grid.
+    const osce = list.find(x => /^(OSCE #|CLINICAL SKILLS OSCE)/.test((x.label || "").toUpperCase()));
+    if(osce) return /^OSCE #/i.test(osce.label || "") ? osce.label : "OSCE Exam";
     return null;
   })();
   if(examName){
