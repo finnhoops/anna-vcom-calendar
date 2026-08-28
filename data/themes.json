@@ -221,8 +221,8 @@
   ],
   "categories": {
     "ANATOMY": {
-      "light": "#1f74c4",
-      "dark": "#7cc0f2",
+      "light": "#4c871a",
+      "dark": "#a6d95a",
       "label": "Anatomy"
     },
     "PHARMACOLOGY": {
@@ -231,8 +231,8 @@
       "label": "Pharmacology"
     },
     "PHYSIOLOGY": {
-      "light": "#4c871a",
-      "dark": "#a6d95a",
+      "light": "#1f74c4",
+      "dark": "#7cc0f2",
       "label": "Physiology"
     },
     "TECHNOLOGY & MONITORING": {
