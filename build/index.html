@@ -1376,10 +1376,11 @@ function applyTheme(name){
 /* "CLINICAL SKILLS" (the base, for a lab the PDF left unclassified) is not
    listed -- it shares the MLA green, and a second identical swatch in the key
    only muddies it. */
+/* OSCE is not listed -- on the month grid it renders as a red "OSCE Exam" chip,
+   not a dot, so it belongs with the exams, which the key deliberately omits. */
 const LEGEND_KEYS = ["ANATOMY","PHARMACOLOGY","PHYSIOLOGY","TECHNOLOGY & MONITORING",
                      "ELECTROPHYSIOLOGY","CLINICAL SKILLS ALA","CLINICAL SKILLS MLA",
-                     "CLINICAL SKILLS OSCE","ORIENTATION","PROFESSIONALISM","ZOOM",
-                     "SPECIAL EVENTS"];
+                     "ORIENTATION","PROFESSIONALISM","ZOOM","SPECIAL EVENTS"];
 
 function buildLegend(){
   const host = document.getElementById("legend");
@@ -2033,7 +2034,10 @@ function monthCell(date, month){
     const e = (DATA.exams || []).find(x => x.date === ds);
     if(e) return e.label || e.title || "Exam";
     const s = list.find(x => x.kind === "exam");
-    return s ? (s.label || "Exam") : null;
+    if(s) return s.label || "Exam";
+    // OSCE labs are assessments -- Anna wants them read as exams on the month grid.
+    if(list.some(x => (x.label || "").toUpperCase() === "CLINICAL SKILLS OSCE")) return "OSCE Exam";
+    return null;
   })();
   if(examName){
     cell.appendChild(el("span",{class:"chip", text:examName, style:`--cat:var(--cat-exam)`}));
