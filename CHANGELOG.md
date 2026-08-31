@@ -815,3 +815,7 @@ regenerating through the normal pipeline.
 ## 2026-08-28 — rebuilt from Block 1 Learning Calendar_CO28_CC_ Curriculum Schedule - 8.12.26.pdf
 
 Run by update-calendar.sh. All safety checks passed.
+
+## 2026-08-30 — rebuilt from Block 1 Learning Calendar_CO28_CC_ Curriculum Schedule - 8.28.26.pdf
+
+Run by update-calendar.sh. All safety checks passed.

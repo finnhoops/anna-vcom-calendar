@@ -1,8 +1,8 @@
 {
   "meta": {
-    "source_pdf": "Block 1 Learning Calendar_CO28_CC_ Curriculum Schedule - 8.12.26.pdf",
-    "source_sha256": "b9260f271be1af6369a18a2f7a33097bfc9165e624f7d8fbbe6f5d82cbc8b42f",
-    "parsed_at": "2026-08-28T12:01:57",
+    "source_pdf": "Block 1 Learning Calendar_CO28_CC_ Curriculum Schedule - 8.28.26.pdf",
+    "source_sha256": "191cb24d6b75494d7ce212696cceb347c8bf4466c9c656c3b35a1e4880f06e08",
+    "parsed_at": "2026-08-30T21:18:39",
     "block": "Block 1",
     "term_start": "2026-09-02",
     "grid_start": "2026-08-31",
@@ -197,6 +197,13 @@
     },
     {
       "date": "2026-11-30",
+      "title": "Patient Risk, Co-Morbidity Assessment, and Risk Factors",
+      "label": "Clinical Skills Patient Risk, Co-Morbidity Assessment, and Risk Factors",
+      "category": "CLINICAL SKILLS",
+      "start": "08:00"
+    },
+    {
+      "date": "2026-11-30",
       "title": "Health Assessment & the Comprehensive Patient History",
       "label": "Clinical Skills Health Assessment & the Comprehensive Patient History",
       "category": "CLINICAL SKILLS",
@@ -347,13 +354,13 @@
           "todoLabel": null
         },
         {
-          "id": "72989c0c06",
+          "id": "9fde3cc082",
           "start": "14:00",
           "end": "15:00",
           "category": "ORIENTATION",
           "seq": null,
           "code": "MLA",
-          "title": "Professionalism in the Classroom (1:30 pm)",
+          "title": "MHSA Honor Code (1:30 pm)",
           "instructor": "K. Dewitt",
           "kind": "admin",
           "mandatory": false,
@@ -885,13 +892,13 @@
           "todoLabel": "Anatomy #5"
         },
         {
-          "id": "4c31c0904a",
+          "id": "f808feb437",
           "start": "11:00",
           "end": "12:00",
           "category": "PHARMACOLOGY",
           "seq": 1,
           "code": "ALA",
-          "title": "Introduction to Pharmacology & Theraputics",
+          "title": "Introduction to Pharmacology & Therapeutics",
           "instructor": "Dr. Rawls",
           "kind": "lecture",
           "mandatory": false,
@@ -1306,19 +1313,19 @@
           "todoLabel": "Physiology #1"
         },
         {
-          "id": "1299303522",
+          "id": "bc8e2415be",
           "start": "09:00",
           "end": "10:00",
           "category": "PHYSIOLOGY",
-          "seq": 2,
+          "seq": 3,
           "code": "ALA",
-          "title": "Autonomic Nervous System",
+          "title": "Physiology of Pain",
           "instructor": "J. Moon",
           "kind": "lecture",
           "mandatory": false,
-          "label": "Physiology #2",
+          "label": "Physiology #3",
           "study": true,
-          "todoLabel": "Physiology #2"
+          "todoLabel": "Physiology #3"
         },
         {
           "id": "2a9e1108e0",
@@ -1711,19 +1718,19 @@
       "week": 4,
       "sessions": [
         {
-          "id": "bc8e2415be",
+          "id": "1299303522",
           "start": "08:00",
           "end": "09:00",
           "category": "PHYSIOLOGY",
-          "seq": 3,
+          "seq": 2,
           "code": "ALA",
-          "title": "Physiology of Pain",
+          "title": "Autonomic Nervous System",
           "instructor": "J. Moon",
           "kind": "lecture",
           "mandatory": false,
-          "label": "Physiology #3",
+          "label": "Physiology #2",
           "study": true,
-          "todoLabel": "Physiology #3"
+          "todoLabel": "Physiology #2"
         },
         {
           "id": "ac6a4bb536",
@@ -2106,17 +2113,17 @@
           "todoLabel": null
         },
         {
-          "id": "07f1d7d73c",
+          "id": "5494b3e952",
           "start": "13:00",
           "end": "16:00",
           "category": "CLINICAL SKILLS",
           "seq": null,
           "code": null,
-          "title": "OSCE #2 ANESTHESIA MACHINE Faculty Remotae Graded J. Babirak ALL STUDENTS AS ASSIGNED",
+          "title": "OSCE #2 ANESTHESIA MACHINE Faculty Remote Graded J. Babirak ALL STUDENTS AS ASSIGNED",
           "instructor": "",
           "kind": "lab",
           "mandatory": false,
-          "label": "OSCE #2 Anesthesia Machine",
+          "label": "OSCE #2 Anesthesia Machine Faculty Remote Graded",
           "study": false,
           "todoLabel": null
         }
@@ -2162,17 +2169,17 @@
           "todoLabel": null
         },
         {
-          "id": "07f1d7d73c",
+          "id": "5494b3e952",
           "start": "13:00",
           "end": "16:00",
           "category": "CLINICAL SKILLS",
           "seq": null,
           "code": null,
-          "title": "OSCE #2 ANESTHESIA MACHINE Faculty Remotae Graded J. Babirak ALL STUDENTS AS ASSIGNED",
+          "title": "OSCE #2 ANESTHESIA MACHINE Faculty Remote Graded J. Babirak ALL STUDENTS AS ASSIGNED",
           "instructor": "",
           "kind": "lab",
           "mandatory": false,
-          "label": "OSCE #2 Anesthesia Machine",
+          "label": "OSCE #2 Anesthesia Machine Faculty Remote Graded",
           "study": false,
           "todoLabel": null
         }
@@ -2218,17 +2225,17 @@
           "todoLabel": null
         },
         {
-          "id": "07f1d7d73c",
+          "id": "5494b3e952",
           "start": "13:00",
           "end": "16:00",
           "category": "CLINICAL SKILLS",
           "seq": null,
           "code": null,
-          "title": "OSCE #2 ANESTHESIA MACHINE Faculty Remotae Graded J. Babirak ALL STUDENTS AS ASSIGNED",
+          "title": "OSCE #2 ANESTHESIA MACHINE Faculty Remote Graded J. Babirak ALL STUDENTS AS ASSIGNED",
           "instructor": "",
           "kind": "lab",
           "mandatory": false,
-          "label": "OSCE #2 Anesthesia Machine",
+          "label": "OSCE #2 Anesthesia Machine Faculty Remote Graded",
           "study": false,
           "todoLabel": null
         }
@@ -2880,13 +2887,13 @@
           "todoLabel": "Pharmacology #12"
         },
         {
-          "id": "2a1ef517af",
+          "id": "b87c432c34",
           "start": "11:00",
           "end": "12:00",
           "category": "PHARMACOLOGY",
           "seq": 13,
           "code": "ALA",
-          "title": "Non-Opioid Analgestics",
+          "title": "Non-Opioid Analgesics",
           "instructor": "Dr. Rawls",
           "kind": "lecture",
           "mandatory": false,
@@ -2972,13 +2979,13 @@
           "todoLabel": null
         },
         {
-          "id": "fbe3be38da",
+          "id": "e91a4a4dd6",
           "start": "10:00",
           "end": "11:00",
           "category": "PHARMACOLOGY",
           "seq": 14,
           "code": "ALA",
-          "title": "Anticonvulstants",
+          "title": "Anticonvulsants",
           "instructor": "Dr. Rawls",
           "kind": "lecture",
           "mandatory": false,
@@ -2987,13 +2994,13 @@
           "todoLabel": "Pharmacology #14"
         },
         {
-          "id": "4430598171",
+          "id": "b624eb8861",
           "start": "11:00",
           "end": "12:00",
           "category": "PHARMACOLOGY",
           "seq": 15,
           "code": "ALA",
-          "title": "Steriod Therapy",
+          "title": "Steroid Therapy",
           "instructor": "Dr. Rawls",
           "kind": "lecture",
           "mandatory": false,
@@ -3130,13 +3137,13 @@
           "todoLabel": "Physiology #8"
         },
         {
-          "id": "1f132b1135",
+          "id": "5d46e6731e",
           "start": "11:00",
           "end": "12:00",
           "category": "PHARMACOLOGY",
           "seq": 16,
           "code": "ALA",
-          "title": "Postoperative Nasea & Vomiting",
+          "title": "Postoperative Nausea & Vomiting",
           "instructor": "Dr. Rawls",
           "kind": "lecture",
           "mandatory": false,
@@ -3318,13 +3325,13 @@
           "todoLabel": null
         },
         {
-          "id": "89c89e0399",
+          "id": "3dfa9d57cd",
           "start": "10:00",
           "end": "11:00",
           "category": "ELECTROPHYSIOLOGY",
           "seq": 6,
           "code": "ALA",
-          "title": "Ventricular Arrythmias",
+          "title": "Ventricular Arrhythmias",
           "instructor": "J. Brewer",
           "kind": "lecture",
           "mandatory": false,
@@ -3333,13 +3340,13 @@
           "todoLabel": "Electrophysiology #6"
         },
         {
-          "id": "5c87fdf84a",
+          "id": "2d9c825948",
           "start": "11:00",
           "end": "12:00",
           "category": "ELECTROPHYSIOLOGY",
           "seq": 7,
           "code": "ALA",
-          "title": "Conducation Blocks & Pacemakers",
+          "title": "Conduction Blocks & Pacemakers",
           "instructor": "J. Brewer",
           "kind": "lecture",
           "mandatory": false,
@@ -3927,34 +3934,34 @@
           "todoLabel": null
         },
         {
-          "id": "b71d1777e0",
+          "id": "508efb61a5",
           "start": "10:00",
           "end": "11:00",
+          "category": "PROFESSIONALISM",
+          "seq": 17,
+          "code": "MLA",
+          "title": "Substance Abuse & Addiction in Healthcare",
+          "instructor": "Dr. Fadel",
+          "kind": "lecture",
+          "mandatory": false,
+          "label": "Professionalism",
+          "study": false,
+          "todoLabel": null
+        },
+        {
+          "id": "8d52c03c34",
+          "start": "11:00",
+          "end": "12:00",
           "category": "PHYSIOLOGY",
           "seq": 12,
           "code": "ALA",
-          "title": "Renal Physiology II",
+          "title": "Renal Physiology I",
           "instructor": "J. Moon",
           "kind": "lecture",
           "mandatory": false,
           "label": "Physiology #12",
           "study": true,
           "todoLabel": "Physiology #12"
-        },
-        {
-          "id": "6803aee67e",
-          "start": "11:00",
-          "end": "12:00",
-          "category": "PHYSIOLOGY",
-          "seq": 13,
-          "code": "ALA",
-          "title": "Renal Physiology II",
-          "instructor": "J. Moon",
-          "kind": "lecture",
-          "mandatory": false,
-          "label": "Physiology #13",
-          "study": true,
-          "todoLabel": "Physiology #13"
         },
         {
           "id": "636654314f",
@@ -3972,9 +3979,24 @@
           "todoLabel": null
         },
         {
-          "id": "65e9512d01",
+          "id": "6803aee67e",
           "start": "13:00",
           "end": "14:00",
+          "category": "PHYSIOLOGY",
+          "seq": 13,
+          "code": "ALA",
+          "title": "Renal Physiology II",
+          "instructor": "J. Moon",
+          "kind": "lecture",
+          "mandatory": false,
+          "label": "Physiology #13",
+          "study": true,
+          "todoLabel": "Physiology #13"
+        },
+        {
+          "id": "65e9512d01",
+          "start": "14:00",
+          "end": "15:00",
           "category": "PHYSIOLOGY",
           "seq": 14,
           "code": "ALA",
@@ -4697,13 +4719,13 @@
           "todoLabel": null
         },
         {
-          "id": "56afcaee89",
+          "id": "077f2621e8",
           "start": "13:00",
           "end": "14:00",
           "category": "CLINICAL SKILLS",
           "seq": null,
           "code": "MLA",
-          "title": "Pedatric Mega Code Drills",
+          "title": "Pediatric Mega Code Drills",
           "instructor": "J. Babirak",
           "kind": "lab",
           "mandatory": false,
@@ -5185,19 +5207,19 @@
       "week": 14,
       "sessions": [
         {
-          "id": "2dbbd1c69e",
+          "id": "e9fdbc63b0",
           "start": "08:00",
           "end": "09:00",
           "category": "CLINICAL SKILLS",
           "seq": 19,
           "code": "ALA",
-          "title": "Patient Risk, Co-Morbidity Assesment, and Risk Factors",
+          "title": "Patient Risk, Co-Morbidity Assessment, and Risk Factors",
           "instructor": "S. Childress",
-          "kind": "lab",
+          "kind": "exam",
           "mandatory": false,
-          "label": "Clinical Skills #19",
-          "study": true,
-          "todoLabel": "Clinical Skills ALA #19"
+          "label": "Clinical Skills Patient Risk, Co-Morbidity Assessment, and Risk Factors",
+          "study": false,
+          "todoLabel": null
         },
         {
           "id": "f551bda310",
@@ -5900,28 +5922,43 @@
       "week": 15,
       "sessions": [
         {
-          "id": "2aaee83449",
+          "id": "7527e4e4a0",
           "start": "08:00",
-          "end": "10:00",
-          "category": "CLINICAL SKILLS",
-          "seq": null,
-          "code": "MLA",
-          "title": "Students 19-24 Full Case Management",
-          "instructor": "J. Moon",
-          "kind": "lab",
+          "end": "09:00",
+          "category": "TECHNOLOGY & MONITORING",
+          "seq": 20,
+          "code": "ALA",
+          "title": "Blood Gas Analysis",
+          "instructor": "K. Dewitt",
+          "kind": "lecture",
           "mandatory": false,
-          "label": "Clinical Skills MLA",
-          "study": false,
-          "todoLabel": null
+          "label": "Technology & Monitoring #20",
+          "study": true,
+          "todoLabel": "Technology & Monitoring #20"
         },
         {
-          "id": "b7f415e271",
+          "id": "6e44c4acf7",
+          "start": "09:00",
+          "end": "10:00",
+          "category": "TECHNOLOGY & MONITORING",
+          "seq": 21,
+          "code": "ALA",
+          "title": "Pacemakers and AICDs",
+          "instructor": "K. Dewitt",
+          "kind": "lecture",
+          "mandatory": false,
+          "label": "Technology & Monitoring #21",
+          "study": true,
+          "todoLabel": "Technology & Monitoring #21"
+        },
+        {
+          "id": "2aaee83449",
           "start": "10:00",
           "end": "12:00",
           "category": "CLINICAL SKILLS",
           "seq": null,
           "code": "MLA",
-          "title": "Students 25-30 Full Case Management",
+          "title": "Students 19-24 Full Case Management",
           "instructor": "J. Moon",
           "kind": "lab",
           "mandatory": false,
@@ -5945,34 +5982,19 @@
           "todoLabel": null
         },
         {
-          "id": "7527e4e4a0",
+          "id": "b7f415e271",
           "start": "13:00",
-          "end": "14:00",
-          "category": "TECHNOLOGY & MONITORING",
-          "seq": 20,
-          "code": "ALA",
-          "title": "Blood Gas Analysis",
-          "instructor": "K. Dewitt",
-          "kind": "lecture",
-          "mandatory": false,
-          "label": "Technology & Monitoring #20",
-          "study": true,
-          "todoLabel": "Technology & Monitoring #20"
-        },
-        {
-          "id": "6e44c4acf7",
-          "start": "14:00",
           "end": "15:00",
-          "category": "TECHNOLOGY & MONITORING",
-          "seq": 21,
-          "code": "ALA",
-          "title": "Pacemakers and AICDs",
-          "instructor": "K. Dewitt",
-          "kind": "lecture",
+          "category": "CLINICAL SKILLS",
+          "seq": null,
+          "code": "MLA",
+          "title": "Students 25-30 Full Case Management",
+          "instructor": "J. Moon",
+          "kind": "lab",
           "mandatory": false,
-          "label": "Technology & Monitoring #21",
-          "study": true,
-          "todoLabel": "Technology & Monitoring #21"
+          "label": "Clinical Skills MLA",
+          "study": false,
+          "todoLabel": null
         }
       ],
       "notes": [],
@@ -6189,13 +6211,13 @@
           "todoLabel": null
         },
         {
-          "id": "91dbd9ec67",
+          "id": "1f8a49ee55",
           "start": "10:00",
           "end": "11:00",
           "category": "PHARMACOLOGY",
           "seq": 22,
           "code": "ALA",
-          "title": "Antiarrythmics I",
+          "title": "Arrhythmias I",
           "instructor": "Dr. Rawls",
           "kind": "lecture",
           "mandatory": false,
@@ -6204,13 +6226,13 @@
           "todoLabel": "Pharmacology #22"
         },
         {
-          "id": "8b782198bd",
+          "id": "36efc5c575",
           "start": "11:00",
           "end": "12:00",
           "category": "PHARMACOLOGY",
           "seq": 23,
           "code": "ALA",
-          "title": "Antiarrythmics II",
+          "title": "Arrhythmias II",
           "instructor": "Dr. Rawls",
           "kind": "lecture",
           "mandatory": false,
@@ -6377,21 +6399,6 @@
     "2026-12-16": {
       "week": 16,
       "sessions": [
-        {
-          "id": "508efb61a5",
-          "start": "09:00",
-          "end": "10:00",
-          "category": "PROFESSIONALISM",
-          "seq": 17,
-          "code": "MLA",
-          "title": "Substance Abuse & Addiction in Healthcare",
-          "instructor": "Dr. Fadel",
-          "kind": "lecture",
-          "mandatory": false,
-          "label": "Professionalism",
-          "study": false,
-          "todoLabel": null
-        },
         {
           "id": "1edcc39b2c",
           "start": "10:00",
@@ -6910,14 +6917,14 @@
       "week": 19,
       "sessions": [
         {
-          "id": "f819302f33",
+          "id": "07f1c5d28b",
           "start": "08:00",
           "end": "11:00",
           "category": "CLINICAL SKILLS",
           "seq": null,
           "code": null,
           "title": "OSCE #5 FULL CASE MANAGEMENT EVALUATORS",
-          "instructor": "S. Childres J. Moon",
+          "instructor": "S. Childress J. Moon",
           "kind": "lab",
           "mandatory": false,
           "label": "OSCE #5 Full Case Management",
@@ -7159,14 +7166,6 @@
     },
     "2027-01-14": {
       "week": 20,
-      "sessions": [],
-      "notes": [],
-      "items": [],
-      "assignments": [],
-      "weekday": "Thursday"
-    },
-    "2027-01-15": {
-      "week": 20,
       "sessions": [
         {
           "id": "88fd54f53c",
@@ -7195,6 +7194,30 @@
           "kind": "lecture",
           "mandatory": false,
           "label": "Until Students Are Released by The Program",
+          "study": false,
+          "todoLabel": null
+        }
+      ],
+      "notes": [],
+      "items": [],
+      "assignments": [],
+      "weekday": "Thursday"
+    },
+    "2027-01-15": {
+      "week": 20,
+      "sessions": [
+        {
+          "id": "f4098631ff",
+          "start": "12:00",
+          "end": "13:00",
+          "category": "",
+          "seq": null,
+          "code": null,
+          "title": "Tentative White Coat Ceremony",
+          "instructor": "",
+          "kind": "lecture",
+          "mandatory": false,
+          "label": "Tentative White Coat Ceremony",
           "study": false,
           "todoLabel": null
         }
