@@ -269,6 +269,15 @@ def apply_overrides(schedule, path):
     Manual corrections layered on top of the parse. A merged Clinical Skills
     practical cell leaves its middle hours blank, so the parser can't see how
     long it runs -- these say so explicitly. See data/overrides.json.
+
+    Two entry shapes:
+      - {"at": "HH:MM", "start"?, "end"?}  -- nudge an existing session's
+        start/end and leave its name, topic, category and study flags alone.
+        This is the light touch for "the parser truncated a lab that actually
+        runs to 5 PM".
+      - {"clear": "HH:MM-HH:MM", "start", "end", "label", "title"?, ...}  --
+        drop the parsed fragments in the window and drop in one clean block.
+        `title` defaults to `label` when omitted.
     """
     if not Path(path).exists():
         return 0
@@ -282,6 +291,18 @@ def apply_overrides(schedule, path):
             print(f"  override warning: {date} is not in the schedule -- skipped")
             continue
         for e in entries:
+            if e.get("at"):
+                match = next((s for s in day["sessions"] if s.get("start") == e["at"]), None)
+                if match is None:
+                    print(f"  override warning: {date} has no session starting {e['at']} -- skipped")
+                    continue
+                if e.get("start"):
+                    match["start"] = e["start"]
+                if e.get("end"):
+                    match["end"] = e["end"]
+                day["sessions"].sort(key=lambda s: s.get("start") or "")
+                applied += 1
+                continue
             if e.get("clear"):
                 lo, hi = e["clear"].split("-")
                 day["sessions"] = [s for s in day["sessions"]
@@ -291,7 +312,7 @@ def apply_overrides(schedule, path):
             sess = {
                 "id": oid, "start": e["start"], "end": e["end"],
                 "category": e.get("category", ""), "seq": None, "code": None,
-                "title": e["label"], "label": e["label"], "instructor": "",
+                "title": e.get("title", e["label"]), "label": e["label"], "instructor": "",
                 "kind": e.get("kind", "lab"), "mandatory": False,
                 "study": False, "todoLabel": None,
             }

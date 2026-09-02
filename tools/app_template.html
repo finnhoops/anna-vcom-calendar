@@ -1094,16 +1094,32 @@ function sessionButton(s, dateStr){
   nm.appendChild(document.createTextNode(s.label || s.title));
   if(s.mandatory) nm.appendChild(el("span",{class:"tag tag-mand", text:"Required", style:`--cat:var(--cat-${cssKey(cat)})`}));
   b.appendChild(nm);
-  const bits = [];
-  if(s.start && s.end) bits.push(`${fmtTime(s.start)} – ${fmtTime(s.end)}`);
-  if(s.instructor) bits.push(s.instructor);
-  if(s.location) bits.push(titleish(s.location));
-  if(bits.length) b.appendChild(el("p",{class:"dt", text:bits.join(" · ")}));
+  /* Under the name: what the class is actually on. The time is already in the
+     left column and the instructor is noise here, so neither is repeated --
+     just the topic, and only when it says something the name doesn't. */
+  const sub = sessionSubtitle(s);
+  if(sub) b.appendChild(el("p",{class:"dt", text:sub}));
+  else if(s.location) b.appendChild(el("p",{class:"dt", text:titleish(s.location)}));
   return b;
 }
 const cssKey = c => c.toLowerCase().replace(/[^a-z0-9]+/g,"-");
 const cat_key = cssKey;
 const titleish = t => t.replace(/\w\S*/g, w => w[0].toUpperCase()+w.slice(1).toLowerCase());
+
+/* The topic line shown under a class name in the today panel, the day view and
+   the week grid. `label` is the name ("Anatomy #1", "Anatomy Lab"); `title` is
+   the topic ("Introduction to Clinical Anatomy", "Brain, Spinal Cord & Cranial
+   Nerves"). Returns "" when the topic would only echo the name -- LUNCH, exams,
+   and the Clinical Skills practicals that are already named by what they are
+   ("Clinical Skills- Sterility Techniques") -- so those read exactly as before. */
+function sessionSubtitle(s){
+  const t = (s.title || "").trim();
+  if(!t || s.kind === "break") return "";
+  const norm = x => x.toLowerCase().replace(/[^a-z0-9]+/g,"");
+  const nt = norm(t), nl = norm(s.label || "");
+  if(!nt || !nl || nl.includes(nt) || nt.includes(nl)) return "";
+  return t;
+}
 
 /* ---------------------------------------------------------------------------
    Study workflow. The before/after checklists are generated from whichever
@@ -1685,7 +1701,8 @@ function renderWeek(){
         onclick:() => sessionModal(s, iso(d))
       });
       b.appendChild(el("p",{class:"n", text:s.label||s.title}));
-      if(!strip && height > 40) b.appendChild(el("p",{class:"t", text:`${fmtTime(s.start)} – ${fmtTime(s.end)}`}));
+      const wsub = strip ? "" : sessionSubtitle(s);
+      if(wsub && height > 40) b.appendChild(el("p",{class:"t", text:wsub}));
       col.appendChild(b);
     });
     body.appendChild(col);
