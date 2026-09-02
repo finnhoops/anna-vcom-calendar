@@ -509,10 +509,10 @@ input::placeholder{color:var(--ink3)}
    for the name and a few lines of topic and no more. Clamp both rather than let
    a long topic get chopped mid-word -- the day view and today panel carry the
    full text with no limit. */
-.wsess .n{font-size:12px; font-weight:700; line-height:1.22; overflow-wrap:anywhere;
-  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
-.wsess .t{font-size:10.5px; line-height:1.18; opacity:.88; margin-top:2px; overflow-wrap:anywhere;
+.wsess .n{font-size:11.5px; font-weight:700; line-height:1.18; overflow-wrap:anywhere;
   display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden}
+.wsess .t{font-size:9.5px; line-height:1.12; opacity:.88; margin-top:2px; overflow-wrap:anywhere;
+  display:-webkit-box; -webkit-line-clamp:9; -webkit-box-orient:vertical; overflow:hidden}
 
 /* ---- day view ---------------------------------------------------------- */
 .dayview{display:grid; grid-template-columns:1.35fr 1fr; gap:var(--s3)}
@@ -1655,7 +1655,7 @@ function monthCell(date, month){
 }
 
 /* ---- week -------------------------------------------------------------- */
-const H_START = 8, H_END = 19, PX = 68;   // 8 AM–6 PM; nothing in the block runs later, and taller rows give the topic line room
+const H_START = 8, H_END = 19, PX = 88;   // 8 AM–6 PM; nothing in the block runs later, and taller rows give the topic line room
 
 function renderWeek(){
   const start = startOfWeek(cursor);

@@ -174,6 +174,47 @@ def tidy_exam_name(label):
     return re.sub(r"\s{2,}", " ", out).strip(" :,-")
 
 
+# The same idea for a session's SUBJECT line (the topic shown under the class
+# name in the week/day views). The PDF's merged cells run an instructor, a room,
+# a role note or a second lecture's title straight onto the subject; none of
+# that is what the class is on. A subject that survives every rule unchanged
+# was already clean.
+SUBJ_LEAD = re.compile(r"^\s*(?:(?:MLA|ALA|SDL|CBL|SGL)\s*:\s*|ALL STUDENTS\s*:\s*)+", re.I)
+SUBJ_SPLIT = re.compile(r"\s+(?:MLA|ALA)\s*:\s*\S")          # a 2nd lecture ran on
+SUBJ_TAIL = [
+    re.compile(r"\s*(?:CLINICAL SKILLS|ANATOMY|PHARMACOLOGY|PHYSIOLOGY|"
+               r"ELECTROPHYSIOLOGY|TECHNOLOGY & MONITORING)\s*$"),
+    re.compile(r"\s*(?:ALL STUDENTS(?: AS ASSIGNED)?|EVALUATORS?|CLASSROOM|LAB|"
+               r"LUNCH PROVIDED|SCHEDULE TO FOLLOW|STAFF PROCTOR|"
+               r"FACULTY REMOTE GRADED)\s*$", re.I),
+    re.compile(r"(\s+(?:Dr\.|[A-Za-z]\.)\s*[A-Z][a-z]+"
+               r"(?:\s*/\s*(?:Dr\.|[A-Za-z]\.)\s*[A-Z][a-z]+)*)+\s*$"),
+]
+
+
+def tidy_title(title):
+    out = SUBJ_LEAD.sub("", title or "")
+    m = SUBJ_SPLIT.search(out)               # keep only the first lecture's topic
+    if m:
+        out = out[:m.start()]
+    for _ in range(4):                       # instructor, then a room, then a role
+        for rx in SUBJ_TAIL:
+            out = rx.sub("", out)
+    out = re.sub(r"\s{2,}", " ", out).strip(" :,-/")
+    # A merged cell can leave a practical's name run onto the lecture's -- and it
+    # is usually a phrase already spelled out earlier in the line. Drop the
+    # trailing copy ("...LMA Placement Oral and Nasal Intubation" -> "...LMA
+    # Placement"), longest match first so the whole repeat goes.
+    words = out.split()
+    for n in range(min(8, len(words) // 2), 2, -1):
+        tail = " ".join(words[-n:])
+        head = " ".join(words[:-n])
+        if tail.lower() in head.lower():
+            out = head.rstrip(" :,-/")
+            break
+    return out or (title or "").strip()
+
+
 def build_recall_exams(schedule, report):
     """
     The list "Upcoming Tests" reads from: one clean entry per exam Anna sits.
@@ -314,7 +355,7 @@ def apply_overrides(schedule, path):
                 "category": e.get("category", ""), "seq": None, "code": None,
                 "title": e.get("title", e["label"]), "label": e["label"], "instructor": "",
                 "kind": e.get("kind", "lab"), "mandatory": False,
-                "study": False, "todoLabel": None,
+                "study": bool(e.get("study", False)), "todoLabel": e.get("todoLabel"),
             }
             # A "strip" session renders as a thin bar over whatever it overlaps
             # in the week view (e.g. a 4 PM Zoom sitting on an all-afternoon lab).
@@ -369,6 +410,20 @@ def main():
     n_zoom = add_zoom_strips(schedule)
     if n_zoom:
         print(f"  added {n_zoom} weekly Zoom strip(s)")
+
+    # Clean the subject line on every session: strip instructors, rooms, role
+    # notes and a run-on second lecture that the PDF's merged cells leave on it.
+    n_tidy = 0
+    for day in schedule["days"].values():
+        for s in day["sessions"]:
+            if s.get("kind") == "break":
+                continue
+            clean = tidy_title(s.get("title", ""))
+            if clean != (s.get("title") or ""):
+                s["title"] = clean
+                n_tidy += 1
+    if n_tidy:
+        print(f"  tidied {n_tidy} session subject line(s)")
 
     block = schedule["meta"].get("block") or "Block"
     title = f"Anna's Calendar — {block}"
