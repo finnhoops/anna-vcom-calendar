@@ -42,13 +42,6 @@
   ],
   "exams": [
     {
-      "date": "2026-09-09",
-      "title": "Drug Card Exam - Dosages, Concentrations and Names",
-      "label": "Drug Card Exam - Dosages, Concentrations and Names",
-      "category": "",
-      "start": "08:00"
-    },
-    {
       "date": "2026-09-11",
       "title": "EXAM 1: MEDICAL TERMINOLOGY & ABBREVIATIONS (45 minutes)",
       "label": "Clinical Skills Exam 1: Medical Terminology & Abbreviations (45 minutes)",
@@ -760,21 +753,6 @@
     "2026-09-09": {
       "week": 2,
       "sessions": [
-        {
-          "id": "3e7dd5efb9",
-          "start": "08:00",
-          "end": "09:00",
-          "category": "",
-          "seq": null,
-          "code": null,
-          "title": "Drug Card Exam - Dosages, Concentrations and Names",
-          "instructor": "",
-          "kind": "exam",
-          "mandatory": true,
-          "label": "Drug Card Exam - Dosages, Concentrations and Names",
-          "study": false,
-          "todoLabel": null
-        },
         {
           "id": "4faefd5190",
           "start": "09:00",
