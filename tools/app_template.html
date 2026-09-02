@@ -505,8 +505,14 @@ input::placeholder{color:var(--ink3)}
   box-shadow:0 1px 4px rgba(0,0,0,.28);
 }
 .wsess.strip .n{font-size:10.5px; line-height:1.1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
-.wsess .n{font-size:12px; font-weight:700; line-height:1.25; overflow-wrap:anywhere}
-.wsess .t{font-size:10.5px; opacity:.88; margin-top:1px}
+/* The block is only as tall as the class is long, so a 1-hour lecture has room
+   for the name and a few lines of topic and no more. Clamp both rather than let
+   a long topic get chopped mid-word -- the day view and today panel carry the
+   full text with no limit. */
+.wsess .n{font-size:12px; font-weight:700; line-height:1.22; overflow-wrap:anywhere;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
+.wsess .t{font-size:10.5px; line-height:1.18; opacity:.88; margin-top:2px; overflow-wrap:anywhere;
+  display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden}
 
 /* ---- day view ---------------------------------------------------------- */
 .dayview{display:grid; grid-template-columns:1.35fr 1fr; gap:var(--s3)}
@@ -1649,7 +1655,7 @@ function monthCell(date, month){
 }
 
 /* ---- week -------------------------------------------------------------- */
-const H_START = 8, H_END = 21, PX = 56;   // show the grid through 8 PM
+const H_START = 8, H_END = 19, PX = 68;   // 8 AM–6 PM; nothing in the block runs later, and taller rows give the topic line room
 
 function renderWeek(){
   const start = startOfWeek(cursor);
