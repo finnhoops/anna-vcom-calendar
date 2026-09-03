@@ -723,6 +723,42 @@ if(!Array.isArray(S.hidden)) S.hidden = [];
   }
   if(fixed) try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){}
 })();
+/* One-time repair. The edit modal's Save built its patch as
+   `title: nameField || s.title`, and the name field is prefilled with the class
+   NAME -- so saving any class (even a bare time nudge) overwrote its topic line
+   with its own name, and `sessionSubtitle` then hid the topic because name and
+   topic had become identical. This is what made Clinical Skills #1/#4 and
+   Pharmacology #1 show no subtitle on Anna's device while Private mode (no saved
+   edits) looked fine. Drop the clobbered title from every affected edit so the
+   schedule's real topic shows again, and bin the edit entirely if that was the
+   only thing it carried. Harmless once there is nothing to fix. */
+(() => {
+  const norm = x => (x || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
+  const baseById = new Map();
+  for(const day in DATA.days)
+    for(const s of DATA.days[day].sessions)
+      if(!baseById.has(s.id)) baseById.set(s.id, s);
+  let fixed = 0;
+  for(const key of Object.keys(S.sessionEdits || {})){
+    const p = S.sessionEdits[key];
+    if(!p || !("title" in p)) continue;
+    const baseId = key.includes("|") ? key.slice(key.lastIndexOf("|") + 1) : key;
+    const base = baseById.get(baseId);
+    if(!base) continue;                                  // custom/added: its record is the truth
+    const realTopic = norm(base.title), realName = norm(base.label);
+    if(!realTopic || realTopic === realName) continue;   // nothing distinct to lose
+    const pt = norm(p.title);
+    if(pt !== realTopic && (pt === norm(p.label) || pt === realName)){
+      delete p.title;
+      const bare = !p.start && !p.end && !p.instructor &&
+                   (!p.category || p.category.toUpperCase() === (base.category || "").toUpperCase()) &&
+                   (!p.label || norm(p.label) === realName);
+      if(bare) delete S.sessionEdits[key];
+      fixed++;
+    }
+  }
+  if(fixed) try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){}
+})();
 function persist(){
   try{ localStorage.setItem(KEY, JSON.stringify(S)); }
   catch(e){ announce("Couldn't save — this browser is blocking storage."); }
@@ -1896,9 +1932,15 @@ function sessionModal(session, dateStr, after){
   foot.appendChild(el("button",{class:"btn ghost", type:"button", text:"Cancel", onclick:closeModal}));
   foot.appendChild(el("button",{class:"btn", type:"button", text:isNew?"Add":"Save", onclick:() => {
     const chosen = catSel.value;
+    const nm = nameIn.value.trim();
+    /* The "Name" field maps to `label` only. The topic line (`title`) is not
+       editable here, so a school session's edit must NOT carry `title` at all --
+       leaving it out means the real topic from the schedule always wins. Only a
+       custom/added session, whose stored record IS the source of truth, takes
+       the name as its title. Writing `title: nm` for every session was the bug
+       that hid the topic under the name after any save. */
     const patch = {
-      label: nameIn.value.trim() || s.label || s.title,
-      title: nameIn.value.trim() || s.title,
+      label: nm || s.label || s.title,
       start: startIn.value, end: endIn.value,
       /* Whatever the dropdown says, save it -- including "Other". The old code
          special-cased "OTHER" back to the original category, so you could never
@@ -1914,6 +1956,7 @@ function sessionModal(session, dateStr, after){
           : (s.kind || "lecture")
     };
     if(isNew || s.custom){
+      patch.title = nm || s.title;
       const rec = Object.assign({}, s, patch, {date:dateStr, custom:true, mandatory:!!s.mandatory});
       S.addedSessions = S.addedSessions.filter(x => x.id!==s.id).concat([rec]);
     }else{

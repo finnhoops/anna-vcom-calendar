@@ -2,11 +2,28 @@
 
 Every entry is one rebuild of the calendar from a block-schedule PDF.
 
+## 2026-09-03 — the edit modal was eating topic lines
+
+No new PDF. The real cause of Anna's missing topic lines on Clinical Skills
+#1 / #4 / Pharmacology #1: the session edit modal has one "Name" field,
+prefilled with the class name, and Save wrote `title = nameField` — so saving
+any class (a time nudge, a mis-tap) overwrote its **topic** with its **name**,
+and the calendar then hid the topic because the two were identical. It was in
+her saved edits, so it survived a restart; Private mode looked fine because it
+has no saved edits.
+
+- Save now leaves `title` out of a school session's edit entirely, so the
+  schedule's real topic always wins. Only a custom/added session, whose stored
+  record is the source of truth, takes the name as its title.
+- One-time repair on load: any saved edit whose `title` was clobbered to match
+  its name has that `title` dropped (and the whole edit binned if that was all
+  it held). Verified against a seeded localStorage carrying the bug.
+
 ## 2026-09-03 — stale-tab guard and a topic-line gate
 
-No new PDF; the schedule is unchanged. This fixes Anna seeing topic lines
-missing from Clinical Skills #1 / #4 / Pharmacology #1 — the deployed build was
-correct; her iPhone was showing a cached page from before the fix shipped.
+No new PDF; the schedule is unchanged. First read of Anna's missing topic lines
+(Clinical Skills #1 / #4 / Pharmacology #1) was a stale cache — it wasn't, see
+the entry above, but the guard is worth keeping.
 
 - Every build writes `build/version.json` with a fresh build id (timestamp,
   changes on any rebuild) and bakes the same id into `<meta name="build">`.
