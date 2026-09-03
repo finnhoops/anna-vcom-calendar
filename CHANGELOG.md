@@ -2,6 +2,28 @@
 
 Every entry is one rebuild of the calendar from a block-schedule PDF.
 
+## 2026-09-03 — stale-tab guard and a topic-line gate
+
+No new PDF; the schedule is unchanged. This fixes Anna seeing topic lines
+missing from Clinical Skills #1 / #4 / Pharmacology #1 — the deployed build was
+correct; her iPhone was showing a cached page from before the fix shipped.
+
+- Every build writes `build/version.json` with a fresh build id (timestamp,
+  changes on any rebuild) and bakes the same id into `<meta name="build">`.
+  A new IIFE at the top of the page script fetches `version.json` uncached on
+  load, on back/forward-cache restore, and whenever the tab is brought back to
+  the foreground, and reloads the page once if the id has moved on. A 20s
+  guard stops a broken deploy reload-looping; a failed/offline fetch is
+  swallowed and the page renders from its embedded data as before.
+- `vercel.json` sends `/version.json` as `no-store`.
+- `generate_calendar.py` now **fails the build** if any clean numbered class
+  ("Anatomy #3", "Clinical Skills #1") comes out with no topic line — catches
+  both a parser regression and an override that renames a session without
+  carrying its topic (the Oct 2026 "Clinical Skills #10" bug). The same check
+  runs in `sanity_gate.py`. Current schedule: 129 numbered classes, all clean.
+- Classmate repo: `derive.py` copies `version.json` into every calendar folder,
+  so the guard works for Chloe / Claire / Livvie too.
+
 ## 2026-08-25 — initial build
 
 Source: `Block 1 Learning Calendar_CO28_CC_ Curriculum Schedule - 8.12.26.pdf`

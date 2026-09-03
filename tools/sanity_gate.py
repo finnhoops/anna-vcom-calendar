@@ -20,6 +20,7 @@ Exit 0 = safe to publish. Exit 1 = stop, something is wrong.
 
 import argparse
 import json
+import re
 import sys
 from datetime import date, datetime
 from pathlib import Path
@@ -111,6 +112,29 @@ def main():
           f"{len(exams)} exams",
           f"only {len(exams)} exams found — exam titles live in merged cells and "
           f"are the first thing lost when the layout shifts")
+
+    # 4b — every clean numbered class has a topic line ----------------------
+    # "Anatomy #3", "Clinical Skills #1" and the like carry a subject under the
+    # name in the calendar. A blank one means the parser lost the subject cell
+    # when the layout shifted -- the name alone still looks fine, which is
+    # exactly the kind of quiet loss this gate exists to catch.
+    numbered = re.compile(r"^(?:Anatomy|Pharmacology|Physiology|Technology & Monitoring|"
+                          r"Electrophysiology|Clinical Skills) #\d+$")
+    norm = lambda x: re.sub(r"[^a-z0-9]+", "", (x or "").lower())
+    topicless = []
+    for d, v in days.items():
+        for s in v.get("sessions", []):
+            lab = s.get("label", "")
+            if not numbered.match(lab):
+                continue
+            nt, nl = norm(s.get("title", "")), norm(lab)
+            if not nt or nt in nl or nl in nt:
+                topicless.append(f"{d} {s.get('start', '')} {lab}")
+    check(not topicless,
+          "Every numbered class kept its topic line",
+          "all present",
+          f"{len(topicless)} numbered class(es) came out with no subject — "
+          f"first: {topicless[0] if topicless else ''}")
 
     # 5 — term dates ---------------------------------------------------------
     ts, te = parse_date(meta.get("term_start")), parse_date(meta.get("term_end"))

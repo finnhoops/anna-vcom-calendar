@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>__TITLE__</title>
 <meta name="description" content="__DESCRIPTION__">
+<meta name="build" content="__BUILD_ID__">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,200..800&family=Public+Sans:wght@300;400;500;600;800&display=swap" rel="stylesheet">
@@ -637,6 +638,43 @@ input::placeholder{color:var(--ink3)}
 
 <script>
 "use strict";
+
+/* ---------------------------------------------------------------------------
+   Freshness check. iOS Safari keeps a calendar tab alive in memory for days and
+   restores it from cache without re-fetching, so a rebuilt schedule can sit
+   unseen behind a stale page -- this is what made Anna see missing topic lines
+   that were fixed in the build already live. This compares the build id baked
+   into this file against version.json (fetched uncached) and reloads once if
+   they differ, on load, on a back-forward restore, and when the tab is brought
+   back to the foreground. It is fully independent of everything below: a failed
+   or offline fetch is swallowed, the calendar still renders from its embedded
+   data, and the 20s guard means a genuinely broken deploy cannot reload-loop.
+   ------------------------------------------------------------------------ */
+(function(){
+  var BUILD = (document.querySelector('meta[name="build"]') || {}).content || "";
+  if(!BUILD) return;
+  function freshCheck(){
+    try{
+      fetch("version.json?_=" + Date.now(), {cache:"no-store"})
+        .then(function(r){ return r.ok ? r.json() : null; })
+        .then(function(j){
+          if(!j || !j.build || j.build === BUILD) return;
+          var now = Date.now(), last = 0;
+          try{ last = +sessionStorage.getItem("cal-refresh") || 0; }catch(e){}
+          if(now - last < 20000) return;
+          try{ sessionStorage.setItem("cal-refresh", String(now)); }catch(e){}
+          location.reload();
+        })
+        .catch(function(){});
+    }catch(e){}
+  }
+  freshCheck();
+  window.addEventListener("pageshow", function(e){ if(e.persisted) freshCheck(); });
+  document.addEventListener("visibilitychange", function(){
+    if(document.visibilityState === "visible") freshCheck();
+  });
+})();
+
 const DATA   = __DATA__;
 const THEMES = __THEMES__;
 

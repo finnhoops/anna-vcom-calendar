@@ -425,6 +425,30 @@ def main():
     if n_tidy:
         print(f"  tidied {n_tidy} session subject line(s)")
 
+    # Every clean numbered class ("Anatomy #3", "Clinical Skills #1") must carry a
+    # topic line that says more than its name -- that is the whole point of the
+    # subtitle, and a blank one has meant either a parser regression or an
+    # override that renamed a session without carrying its topic (the Oct 2026
+    # "Clinical Skills #10" bug). Catch it here, on the final data, rather than
+    # shipping a numbered class with nothing under it.
+    numbered = re.compile(r"^(?:Anatomy|Pharmacology|Physiology|Technology & Monitoring|"
+                          r"Electrophysiology|Clinical Skills) #\d+$")
+    def _norm(x):
+        return re.sub(r"[^a-z0-9]+", "", (x or "").lower())
+    topicless = []
+    for date_key, day in schedule["days"].items():
+        for s in day["sessions"]:
+            lab = s.get("label", "")
+            if not numbered.match(lab):
+                continue
+            nt, nl = _norm(s.get("title", "")), _norm(lab)
+            if not nt or nt in nl or nl in nt:
+                topicless.append(f"{date_key} {s.get('start', '')} {lab}")
+    if topicless:
+        raise SystemExit(
+            "STOP: these numbered classes came out with no topic line -- the parser "
+            "or an override dropped it:\n  " + "\n  ".join(topicless))
+
     block = schedule["meta"].get("block") or "Block"
     title = f"Anna's Calendar — {block}"
     description = (f"{block} schedule and to-do list, "
@@ -448,6 +472,11 @@ def main():
         {k: v for k, v in themes.items() if not k.startswith("_")},
         separators=(",", ":"), ensure_ascii=False)
 
+    # A build id that changes on every rebuild -- data OR template -- so the
+    # page's freshness check (see app_template.html) can tell it is stale. It is
+    # written both into the page and into version.json beside it.
+    build_id = datetime.now().strftime("%Y%m%d-%H%M%S")
+
     for token, value in (
         ("__THEME_CSS__", build_theme_css(themes)),
         ("__DATA__", payload),
@@ -456,6 +485,7 @@ def main():
         ("__LOGO__", logo_uri),
         ("__HEADING__", "Anna’s Calendar"),
         ("__DESCRIPTION__", description),
+        ("__BUILD_ID__", build_id),
     ):
         if token not in html:
             raise SystemExit(f"template is missing {token}")
@@ -469,6 +499,13 @@ def main():
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(html, encoding="utf-8")
 
+    # Sits next to index.html in build/, so Vercel serves it at /version.json.
+    # The page fetches it uncached to decide whether it is running behind a
+    # newer deploy.
+    (out.parent / "version.json").write_text(
+        json.dumps({"build": build_id, "parsed_at": schedule["meta"].get("parsed_at")}),
+        encoding="utf-8")
+
     if not args.no_archive:
         versions = ROOT / "versions"
         versions.mkdir(exist_ok=True)
@@ -478,6 +515,7 @@ def main():
     days = len(schedule["days"])
     sessions = sum(len(d["sessions"]) for d in schedule["days"].values())
     print(f"wrote {out}  ({out.stat().st_size/1024:.0f} KB)")
+    print(f"wrote {out.parent / 'version.json'}  (build {build_id})")
     HEADINGS = {
         "deduped": "duplicate exam entries collapsed (the PDF listed them twice)",
         "tidied":  "exam names tidied (instructors, rooms, durations stripped)",

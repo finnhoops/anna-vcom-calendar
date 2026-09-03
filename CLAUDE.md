@@ -116,6 +116,22 @@ every redeploy. There is no new link to send after a rebuild. The hashed
 `*-finn-hoops-projects.vercel.app` URLs the CLI prints are per-deploy snapshots
 that go stale — never pass one to Anna.
 
+## Stale-tab guard
+
+iOS Safari keeps a calendar tab alive in memory for days and restores it from
+cache without re-fetching, so a rebuilt schedule could sit unseen behind an old
+page — this is what made Anna report topic lines missing that were already fixed
+in the live build. Every build now writes `build/version.json` (`{"build": "<ts>"}`,
+a fresh id per rebuild, data or template) and bakes the same id into
+`<meta name="build">`. A small IIFE at the top of the page script fetches
+`version.json` uncached on load, on bfcache restore, and when the tab is
+re-foregrounded, and calls `location.reload()` once if the ids differ (20s guard
+against reload loops). `vercel.json` sends `/version.json` with `no-store`.
+`generate_calendar.py` also **fails the build** if any clean numbered class
+("Anatomy #3", "Clinical Skills #1") ends up with no topic line — the same check
+is in `sanity_gate.py`. The classmate repo's `derive.py` copies `version.json`
+into every calendar's folder so the guard works there too.
+
 ## Pipeline
 
 ```bash
