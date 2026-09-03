@@ -1,8 +1,8 @@
 {
   "meta": {
-    "source_pdf": "Block 1 Learning Calendar_CO28_CC_ Curriculum Schedule - 8.28.26.pdf",
-    "source_sha256": "191cb24d6b75494d7ce212696cceb347c8bf4466c9c656c3b35a1e4880f06e08",
-    "parsed_at": "2026-08-30T21:18:39",
+    "source_pdf": "Block 1 Learning Calendar_CO28_CC_ Curriculum Schedule- 9.3.26.pdf",
+    "source_sha256": "f3cc3379db20397072dd84a57cd3a13002f7d3da79fb1dea8ad040650fc9f4f5",
+    "parsed_at": "2026-09-03T18:29:12",
     "block": "Block 1",
     "term_start": "2026-09-02",
     "grid_start": "2026-08-31",
@@ -252,6 +252,13 @@
       "start": "08:00"
     },
     {
+      "date": "2027-01-04",
+      "title": "Drug Card Exam - Dosages, Concentrations and Names",
+      "label": "Drug Card Exam - Dosages, Concentrations and Names",
+      "category": "",
+      "start": "08:00"
+    },
+    {
       "date": "2027-01-08",
       "title": "EXAM 5: LECTURES 22-27",
       "label": "Pharmacology Exam 5: Lectures 22-27",
@@ -382,7 +389,7 @@
         "Photographs (Magnolia St.) YMCA Signup (151 Ribault St. Spartanburg, SC)"
       ],
       "assignments": [
-        "Drug Card & Med Terms"
+        "Med Term"
       ],
       "weekday": "Wednesday"
     },
@@ -513,58 +520,13 @@
       "notes": [],
       "items": [],
       "assignments": [
-        "Drug Card & Med Terms"
+        "Med Terms"
       ],
       "weekday": "Thursday"
     },
     "2026-09-04": {
       "week": 1,
       "sessions": [
-        {
-          "id": "a3dcf26a2c",
-          "start": "08:00",
-          "end": "09:00",
-          "category": "PROFESSIONALISM",
-          "seq": null,
-          "code": "MLA",
-          "title": "Building your professional identity",
-          "instructor": "G. Jones",
-          "kind": "lecture",
-          "mandatory": false,
-          "label": "Professionalism",
-          "study": false,
-          "todoLabel": null
-        },
-        {
-          "id": "d0a6832ad7",
-          "start": "09:00",
-          "end": "10:00",
-          "category": "PROFESSIONALISM",
-          "seq": null,
-          "code": "MLA",
-          "title": "I'll Know It When I See It: Defining Professionalism",
-          "instructor": "G. Jones",
-          "kind": "lecture",
-          "mandatory": false,
-          "label": "Professionalism",
-          "study": false,
-          "todoLabel": null
-        },
-        {
-          "id": "528af7e1ad",
-          "start": "10:00",
-          "end": "11:00",
-          "category": "PROFESSIONALISM",
-          "seq": null,
-          "code": "MLA",
-          "title": "Wellness Challenge",
-          "instructor": "",
-          "kind": "lecture",
-          "mandatory": false,
-          "label": "Professionalism",
-          "study": false,
-          "todoLabel": null
-        },
         {
           "id": "636654314f",
           "start": "12:00",
@@ -584,7 +546,7 @@
       "notes": [],
       "items": [],
       "assignments": [
-        "Drug Card & Med Terms"
+        "Med Terms"
       ],
       "weekday": "Friday"
     },
@@ -613,7 +575,7 @@
       "sessions": [
         {
           "id": "4e61d1d1cb",
-          "start": "11:00",
+          "start": "12:00",
           "end": "13:00",
           "category": "LABOR DAY",
           "seq": null,
@@ -6829,6 +6791,21 @@
     "2027-01-04": {
       "week": 19,
       "sessions": [
+        {
+          "id": "3e7dd5efb9",
+          "start": "08:00",
+          "end": "09:00",
+          "category": "",
+          "seq": null,
+          "code": null,
+          "title": "Drug Card Exam - Dosages, Concentrations and Names",
+          "instructor": "",
+          "kind": "exam",
+          "mandatory": true,
+          "label": "Drug Card Exam - Dosages, Concentrations and Names",
+          "study": false,
+          "todoLabel": null
+        },
         {
           "id": "636654314f",
           "start": "12:00",

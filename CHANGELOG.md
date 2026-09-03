@@ -819,3 +819,7 @@ Run by update-calendar.sh. All safety checks passed.
 ## 2026-08-30 — rebuilt from Block 1 Learning Calendar_CO28_CC_ Curriculum Schedule - 8.28.26.pdf
 
 Run by update-calendar.sh. All safety checks passed.
+
+## 2026-09-03 — rebuilt from Block 1 Learning Calendar_CO28_CC_ Curriculum Schedule- 9.3.26.pdf
+
+Run by update-calendar.sh. All safety checks passed.
