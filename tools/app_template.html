@@ -1534,6 +1534,13 @@ function studyBlock(dateStr){
       rows.push(checkRow(`${dateStr}|ankicards`, "recall",
         "Remaining Anki memorization cards"));
     }
+    /* Anna's weekly routine, not the school's: a Drug Card write-out every
+       Sunday of the block. getDay()===0 is Sunday regardless of TERM_START's
+       own weekday, so this follows the calendar rather than a fixed date. */
+    if(standing && fromIso(dateStr).getDay() === 0){
+      rows.push(checkRow(`${dateStr}|drugcard`, "recall",
+        "Write out Drug Card"));
+    }
     const live = rows.filter(Boolean);
     if(live.length){
       const rc = disclosure("recall", live.filter(r => r.classList.contains("done")).length,

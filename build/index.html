@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Anna's Calendar — Block 1</title>
 <meta name="description" content="Block 1 schedule and to-do list, 2026-09-02 to 2027-01-15.">
-<meta name="build" content="20260904-133843">
+<meta name="build" content="20260904-153256">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,200..800&family=Public+Sans:wght@300;400;500;600;800&display=swap" rel="stylesheet">
@@ -2026,6 +2026,13 @@ function studyBlock(dateStr){
     if(standing){
       rows.push(checkRow(`${dateStr}|ankicards`, "recall",
         "Remaining Anki memorization cards"));
+    }
+    /* Anna's weekly routine, not the school's: a Drug Card write-out every
+       Sunday of the block. getDay()===0 is Sunday regardless of TERM_START's
+       own weekday, so this follows the calendar rather than a fixed date. */
+    if(standing && fromIso(dateStr).getDay() === 0){
+      rows.push(checkRow(`${dateStr}|drugcard`, "recall",
+        "Write out Drug Card"));
     }
     const live = rows.filter(Boolean);
     if(live.length){
