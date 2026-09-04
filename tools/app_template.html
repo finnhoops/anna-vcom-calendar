@@ -486,10 +486,13 @@ input::placeholder{color:var(--ink3)}
 .whead .whedit{display:block; margin:5px auto 0; padding:3px 12px; min-height:30px; font-size:11px}
 .wbody{display:grid; grid-template-columns:64px repeat(7,minmax(0,1fr)); position:relative}
 .hours{border-right:1px solid var(--line)}
-.hour{height:56px; padding:2px 8px 0 0; text-align:right; font-size:11px; color:var(--ink3); font-weight:600; border-bottom:1px solid var(--line)}
+.hour{height:88px; padding:2px 8px 0 0; text-align:right; font-size:11px; color:var(--ink3); font-weight:600; border-bottom:1px solid var(--line)}
 .wcol{position:relative; border-right:1px solid var(--line)}
 .wcol:last-child{border-right:0}
-.wcol .lines div{height:56px; border-bottom:1px solid var(--line)}
+/* Must match PX below exactly -- these gridlines and the JS that positions each
+   class block both have to agree on pixels-per-hour, or a block renders taller
+   than its own hour slot and appears to run later than it actually does. */
+.wcol .lines div{height:88px; border-bottom:1px solid var(--line)}
 .wsess{
   position:absolute; left:3px; right:3px; border-radius:var(--r1); cursor:pointer; overflow:hidden;
   background:var(--cat); color:var(--surface); padding:5px 7px; text-align:left;
@@ -1729,7 +1732,10 @@ function monthCell(date, month){
 }
 
 /* ---- week -------------------------------------------------------------- */
-const H_START = 8, H_END = 21, PX = 88;   // 8 AM–8 PM, per Anna; taller rows still give the topic line room
+// 8 AM–8 PM, per Anna. PX is pixels per hour for POSITIONING blocks below --
+// it must equal .hour and .wcol .lines div's height in the CSS above, or a
+// block renders past the end of its own hour row.
+const H_START = 8, H_END = 21, PX = 88;
 
 function renderWeek(){
   const start = startOfWeek(cursor);
