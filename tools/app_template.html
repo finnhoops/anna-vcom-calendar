@@ -296,7 +296,7 @@ button{font:inherit; color:inherit; background:none; border:0; margin:0; padding
 .assigned ul{margin:0; padding:0}
 
 .addrow{display:flex; gap:var(--s1); margin-top:var(--s2)}
-input[type=text],input[type=time],select,textarea{
+input[type=text],input[type=time],input[type=number],input[type=date],select,textarea{
   font:inherit; width:100%; padding:9px 12px; border-radius:var(--r2);
   border:1.5px solid var(--line); background:var(--bg); color:var(--ink);
   transition:border-color var(--fast) var(--ease-out), box-shadow var(--fast) var(--ease-out);
@@ -562,6 +562,14 @@ input::placeholder{color:var(--ink3)}
 .modal .fields{padding:var(--s3); display:grid; gap:var(--s2)}
 .field label{display:block; font-size:12px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--ink3); margin-bottom:5px}
 .pair{display:grid; grid-template-columns:1fr 1fr; gap:var(--s2)}
+/* Custom's own sub-panel, indented and boxed so it reads as "part of Repeats"
+   rather than three more top-level fields. */
+.repeat-custom{display:grid; gap:var(--s2); padding:var(--s2); border:1.5px solid var(--line); border-radius:var(--r2); background:var(--surface2)}
+.repeat-custom .row{display:flex; align-items:center; gap:8px; flex-wrap:wrap; color:var(--ink2); font-size:13px; font-weight:600}
+.repeat-custom .row input.num{width:64px; flex:0 0 auto}
+.repeat-custom .row select{width:auto; flex:1 1 120px}
+.repeat-custom .end-detail{display:none}
+.repeat-custom .end-detail.on{display:block}
 .modal footer{display:flex; gap:var(--s1); justify-content:flex-end; padding:0 var(--s3) var(--s3); flex-wrap:wrap}
 .modal footer .spacer{flex:1}
 @keyframes fade{from{opacity:0}to{opacity:1}}
@@ -1907,6 +1915,98 @@ function modalKeys(e){
   else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
 }
 
+/* ---- repeat rules for a custom/added class -------------------------------
+   Same option set and wording as Google Calendar's "Does not repeat" dropdown,
+   computed from whatever date the class is being added on. Every rule is
+   bounded to TERM_END: this calendar is one block's worth of dates, and an
+   occurrence past the block has no page to land on. A hard cap (MAX_OCCURRENCES)
+   backstops that bound in case a rule's own math runs long. */
+const MAX_OCCURRENCES = 366;
+function ordinal(n){
+  const j = n % 10, k = n % 100;
+  if(j===1 && k!==11) return n + "st";
+  if(j===2 && k!==12) return n + "nd";
+  if(j===3 && k!==13) return n + "rd";
+  return n + "th";
+}
+const nthWeekdayOfMonth = date => Math.floor((date.getDate() - 1) / 7) + 1;
+function nthWeekdayOnOrAfter(year, month, weekdayIdx, nth){
+  const first = new Date(year, month, 1);
+  const day = 1 + ((weekdayIdx - first.getDay() + 7) % 7) + (nth - 1) * 7;
+  const test = new Date(year, month, day);
+  return test.getMonth() === month ? test : null;   // the month has no Nth weekday (a 5th Sunday, say) -- skip it
+}
+function addUnit(date, n, unit){
+  const x = new Date(date);
+  if(unit === "day") x.setDate(x.getDate() + n);
+  else if(unit === "week") x.setDate(x.getDate() + 7 * n);
+  else if(unit === "month") x.setMonth(x.getMonth() + n);
+  else if(unit === "year") x.setFullYear(x.getFullYear() + n);
+  return x;
+}
+function repeatOptions(dateStr){
+  const d = fromIso(dateStr);
+  const wd = DAYNAMES[d.getDay()], nth = nthWeekdayOfMonth(d);
+  return [
+    {value:"none",     label:"Does not repeat"},
+    {value:"daily",    label:"Daily"},
+    {value:"weekly",   label:`Weekly on ${wd}`},
+    {value:"monthly",  label:`Monthly on the ${ordinal(nth)} ${wd}`},
+    {value:"annually", label:`Annually on ${MONTHS[d.getMonth()]} ${d.getDate()}`},
+    {value:"weekday",  label:"Every weekday (Monday to Friday)"},
+    {value:"custom",   label:"Custom…"}
+  ];
+}
+function computeOccurrences(startDateStr, rule){
+  if(!rule || rule.type === "none") return [startDateStr];
+  const start = fromIso(startDateStr);
+  const hardEnd = TERM_END;
+  const out = [];
+
+  if(rule.type === "daily"){
+    let d = new Date(start);
+    while(d <= hardEnd && out.length < MAX_OCCURRENCES){ out.push(iso(d)); d = addDays(d, 1); }
+  }else if(rule.type === "weekly"){
+    let d = new Date(start);
+    while(d <= hardEnd && out.length < MAX_OCCURRENCES){ out.push(iso(d)); d = addDays(d, 7); }
+  }else if(rule.type === "weekday"){
+    let d = new Date(start);
+    while(d <= hardEnd && out.length < MAX_OCCURRENCES){
+      if(d.getDay() !== 0 && d.getDay() !== 6) out.push(iso(d));
+      d = addDays(d, 1);
+    }
+  }else if(rule.type === "monthly"){
+    const wdIdx = start.getDay(), nth = nthWeekdayOfMonth(start);
+    let y = start.getFullYear(), m = start.getMonth();
+    while(out.length < MAX_OCCURRENCES && y <= hardEnd.getFullYear() + 1){
+      const occ = nthWeekdayOnOrAfter(y, m, wdIdx, nth);
+      if(occ && occ >= start){
+        if(occ > hardEnd) break;
+        out.push(iso(occ));
+      }
+      m++; if(m > 11){ m = 0; y++; }
+    }
+  }else if(rule.type === "annually"){
+    let d = new Date(start);
+    while(d <= hardEnd && out.length < MAX_OCCURRENCES){ out.push(iso(d)); d = addUnit(d, 1, "year"); }
+  }else if(rule.type === "custom"){
+    const interval = Math.max(1, parseInt(rule.interval, 10) || 1);
+    const unit = ["day","week","month","year"].includes(rule.unit) ? rule.unit : "week";
+    let cap = hardEnd;
+    if(rule.endMode === "date" && rule.endDate){
+      const rd = fromIso(rule.endDate);
+      if(rd < cap) cap = rd;
+    }
+    const maxCount = rule.endMode === "count" ? Math.max(1, parseInt(rule.count, 10) || 1) : MAX_OCCURRENCES;
+    let d = new Date(start);
+    while(d <= cap && out.length < maxCount && out.length < MAX_OCCURRENCES){
+      out.push(iso(d));
+      d = addUnit(d, interval, unit);
+    }
+  }
+  return out.length ? out : [startDateStr];
+}
+
 function sessionModal(session, dateStr, after){
   lastFocus = document.activeElement;
   const isNew = !session;
@@ -1947,6 +2047,48 @@ function sessionModal(session, dateStr, after){
     el("div",{class:"field"},[el("label",{for:"f-end",text:"Ends"}), endIn])
   ]));
 
+  /* Repeat, same option set and wording as Google Calendar's own dropdown,
+     computed from whatever date this is being added on. Only offered when
+     adding a class or editing a standalone custom one -- a school session
+     comes from the PDF, not something to repeat, and an occurrence that is
+     already part of a series gets "Remove series" in the footer instead, so
+     picking a rule here twice can never double up its dates. */
+  let repeatSel = null, everyIn = null, unitSel = null, endSel = null, endDateIn = null, countIn = null;
+  const showRepeat = isNew || (s.custom && !s.seriesId);
+  if(showRepeat){
+    const opts = repeatOptions(dateStr);
+    repeatSel = el("select",{id:"f-repeat"});
+    opts.forEach(o => repeatSel.appendChild(el("option",{value:o.value, text:o.label})));
+    fields.appendChild(el("div",{class:"field"},[el("label",{for:"f-repeat",text:"Repeats"}), repeatSel]));
+
+    everyIn = el("input",{type:"number", min:"1", value:"1", class:"num", "aria-label":"Repeat every"});
+    unitSel = el("select",{"aria-label":"Unit"});
+    ["day","week","month","year"].forEach(u => unitSel.appendChild(el("option",{value:u, text:u+"(s)"})));
+    const everyRow = el("div",{class:"row"},["Every", everyIn, unitSel]);
+
+    endSel = el("select",{"aria-label":"Ends"},[
+      el("option",{value:"block", text:"Until the block ends"}),
+      el("option",{value:"date", text:"On date"}),
+      el("option",{value:"count", text:"After a number of times"})
+    ]);
+    endDateIn = el("input",{type:"date", value:iso(TERM_END), min:dateStr, max:iso(TERM_END), class:"end-date"});
+    countIn = el("input",{type:"number", min:"1", value:"10", class:"num"});
+    const endRow = el("div",{class:"row"},["Ends", endSel]);
+    const endDateRow = el("div",{class:"row end-detail"},[endDateIn]);
+    const endCountRow = el("div",{class:"row end-detail"},[countIn, "time(s)"]);
+    endSel.addEventListener("change", () => {
+      endDateRow.classList.toggle("on", endSel.value === "date");
+      endCountRow.classList.toggle("on", endSel.value === "count");
+    });
+
+    const customPanel = el("div",{class:"repeat-custom", hidden:true},[everyRow, endRow, endDateRow, endCountRow]);
+    fields.appendChild(customPanel);
+    repeatSel.addEventListener("change", () => { customPanel.hidden = repeatSel.value !== "custom"; });
+  }else if(s.custom && s.seriesId){
+    fields.appendChild(el("p",{class:"edithint",
+      text:"Part of a recurring series -- this only changes this one occurrence. Remove the whole series below."}));
+  }
+
   const catSel = el("select",{id:"f-cat"});
   /* Pick the starting option honestly: the session's own category when the
      dropdown offers it, otherwise fall back by kind (Lunch -> Break, a raw
@@ -1981,6 +2123,17 @@ function sessionModal(session, dateStr, after){
         persist(); closeModal(); render();
         announce("Removed from the day. Restore it under Edit.");
       }}));
+    if(s.custom && s.seriesId){
+      /* Every occurrence a series ever generated carries the same seriesId, so
+         this reaches all of them regardless of which one was tapped to open
+         here -- past or future, ticked or not. */
+      foot.appendChild(el("button",{class:"btn danger sm", type:"button", text:"Remove series",
+        onclick:() => {
+          S.addedSessions = S.addedSessions.filter(x => x.seriesId !== s.seriesId);
+          persist(); closeModal(); render();
+          announce("Removed the whole series.");
+        }}));
+    }
     if(!s.custom && S.sessionEdits[stateKey(s, dateStr)]){
       foot.appendChild(el("button",{class:"btn ghost sm", type:"button", text:"Reset",
         onclick:() => { delete S.sessionEdits[stateKey(s, dateStr)]; persist(); closeModal(); render();
@@ -2011,21 +2164,59 @@ function sessionModal(session, dateStr, after){
     };
     if(isNew || s.custom){
       patch.title = topic || nm || s.title;
+      if(showRepeat){
+        /* The repeat rule reads straight off the fields the way they are the
+           moment Add/Save is pressed -- there is nothing to reconcile, this
+           is the only time it is read. computeOccurrences() returns just
+           [dateStr] for "Does not repeat", which is exactly the single-add
+           (or single-edit) behaviour this had before Repeat existed, and is
+           why that case falls straight through to the plain single-record
+           path below rather than needing its own branch. */
+        const rule = repeatSel.value === "none" ? null : {
+          type: repeatSel.value,
+          interval: everyIn.value,
+          unit: unitSel.value,
+          endMode: endSel.value,
+          endDate: endDateIn.value,
+          count: countIn.value
+        };
+        const dates = computeOccurrences(dateStr, rule);
+        if(dates.length > 1){
+          // Editing an existing standalone class into a series replaces its one
+          // record with the new set; adding one has nothing to remove first.
+          S.addedSessions = S.addedSessions.filter(x => x.id !== s.id);
+          const seriesId = "sr" + Date.now(), seed = Date.now();
+          const recs = dates.map((ds, i) => Object.assign({}, s, patch, {
+            id: i === 0 ? s.id : `c${seed}_${i}`,
+            date: ds, custom:true, mandatory:!!s.mandatory, seriesId
+          }));
+          S.addedSessions = S.addedSessions.concat(recs);
+          persist(); closeModal(); render();
+          announce(`${isNew ? "Added" : "Repeated as"} ${dates.length} classes.`);
+          return;
+        }
+      }
+      // No explicit seriesId here on purpose: Object.assign carries s.seriesId
+      // through untouched, which is what both cases need -- undefined on a
+      // brand-new or already-standalone class, the real id on one occurrence
+      // of an existing series, so it stays findable by "Remove series".
       const rec = Object.assign({}, s, patch, {date:dateStr, custom:true, mandatory:!!s.mandatory});
       S.addedSessions = S.addedSessions.filter(x => x.id!==s.id).concat([rec]);
-    }else{
-      /* Only stamp a topic into the edit when it actually differs from the
-         school's own subject line for this exact occurrence -- left as it
-         opened, no override is written, so a later PDF update to this topic
-         still comes through untouched. Changed to anything, including cleared
-         blank, becomes a standing override until Reset. */
-      const dataSession = DATA.days[dateStr]?.sessions.find(x => x.id === s.id);
-      const autoTopic = (dataSession ? dataSession.title : "") || "";
-      if(topic !== autoTopic) patch.title = topic;
-      S.sessionEdits[stateKey(s, dateStr)] = patch;
+      persist(); closeModal(); render();
+      announce(isNew ? "Class added." : "Class updated.");
+      return;
     }
+    /* A school session: only stamp a topic into the edit when it actually
+       differs from the school's own subject line for this exact occurrence --
+       left as it opened, no override is written, so a later PDF update to
+       this topic still comes through untouched. Changed to anything,
+       including cleared blank, becomes a standing override until Reset. */
+    const dataSession = DATA.days[dateStr]?.sessions.find(x => x.id === s.id);
+    const autoTopic = (dataSession ? dataSession.title : "") || "";
+    if(topic !== autoTopic) patch.title = topic;
+    S.sessionEdits[stateKey(s, dateStr)] = patch;
     persist(); closeModal(); render();
-    announce(isNew ? "Class added." : "Class updated.");
+    announce("Class updated.");
   }}));
   modal.appendChild(foot);
 

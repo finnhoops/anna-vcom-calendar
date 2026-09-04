@@ -2,6 +2,35 @@
 
 Every entry is one rebuild of the calendar from a block-schedule PDF.
 
+## 2026-09-04 — a real Repeats option on Add a class
+
+No new PDF. Anna asked for the same repeat dropdown Google Calendar shows
+when adding an event, and for it to actually work rather than just render.
+
+- **Repeats** field on "Add to the day" (and on editing a standalone custom
+  class), with the exact Google option set, worded from whatever date the
+  class is being added on: Does not repeat, Daily, Weekly on `<day>`,
+  Monthly on the `<nth>` `<day>`, Annually on `<date>`, Every weekday
+  (Monday to Friday), and Custom… (interval + day/week/month/year, ending
+  when the block ends, on a date, or after a number of times).
+- Saving with a rule generates one real record per occurrence, all sharing
+  a `seriesId`, bounded to the end of the block -- this calendar is one
+  block's worth of dates, so nothing past it has a page to land on anyway.
+  Tapping any single occurrence edits or removes just that one, the same
+  way editing already worked; **Remove series** (shown on a series
+  occurrence instead of Repeats, so a rule can't double-generate) takes out
+  every date at once.
+- Turning Repeat on while editing an existing standalone custom class
+  converts it into a series starting from that date, same as Google's own
+  behaviour.
+- Verified end-to-end in headless Chrome, not just by reading the code:
+  real button clicks through the actual Add/Save/Remove-series handlers,
+  checked against `localStorage` afterward. Caught and fixed a real bug
+  this way -- editing one occurrence was silently detaching it from its
+  series before the fix. 10/10 checks pass after the fix, including the
+  monthly-occurrence math, weekday-skipping, a custom "every 2 weeks x4"
+  rule, and the series-editing/removal behaviour above.
+
 ## 2026-09-04 — daily events: a note that isn't squeezed into the schedule
 
 No new PDF. Anna wanted somewhere to put a note that belongs to the whole day
