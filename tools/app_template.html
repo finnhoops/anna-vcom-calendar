@@ -1881,6 +1881,17 @@ function sessionModal(session, dateStr, after){
   const nameIn = el("input",{type:"text", value:s.label||s.title||"", placeholder:"e.g. Anatomy #8", id:"f-name"});
   fields.appendChild(el("div",{class:"field"},[el("label",{for:"f-name",text:"Name"}), nameIn]));
 
+  /* The line under the name -- what class actually covered, which can run
+     ahead of or differ from the school's own subject line (e.g. lecture ran
+     long and spilled a topic into the next slot). Prefilled with whatever is
+     showing now, school topic or an earlier edit. Left exactly as it opened,
+     it saves no override, so a school update to this topic later still comes
+     through; changed to anything -- including cleared blank -- that becomes
+     the topic shown, until Reset. */
+  const topicIn = el("input",{type:"text", value:s.title||"",
+    placeholder:"What this class actually covers", id:"f-topic"});
+  fields.appendChild(el("div",{class:"field"},[el("label",{for:"f-topic",text:"Topic"}), topicIn]));
+
   const startIn = el("input",{type:"time", value:s.start||"08:00", id:"f-start"});
   const endIn   = el("input",{type:"time", value:s.end||"09:00", id:"f-end"});
   fields.appendChild(el("div",{class:"pair"},[
@@ -1933,12 +1944,7 @@ function sessionModal(session, dateStr, after){
   foot.appendChild(el("button",{class:"btn", type:"button", text:isNew?"Add":"Save", onclick:() => {
     const chosen = catSel.value;
     const nm = nameIn.value.trim();
-    /* The "Name" field maps to `label` only. The topic line (`title`) is not
-       editable here, so a school session's edit must NOT carry `title` at all --
-       leaving it out means the real topic from the schedule always wins. Only a
-       custom/added session, whose stored record IS the source of truth, takes
-       the name as its title. Writing `title: nm` for every session was the bug
-       that hid the topic under the name after any save. */
+    const topic = topicIn.value.trim();
     const patch = {
       label: nm || s.label || s.title,
       start: startIn.value, end: endIn.value,
@@ -1956,10 +1962,18 @@ function sessionModal(session, dateStr, after){
           : (s.kind || "lecture")
     };
     if(isNew || s.custom){
-      patch.title = nm || s.title;
+      patch.title = topic || nm || s.title;
       const rec = Object.assign({}, s, patch, {date:dateStr, custom:true, mandatory:!!s.mandatory});
       S.addedSessions = S.addedSessions.filter(x => x.id!==s.id).concat([rec]);
     }else{
+      /* Only stamp a topic into the edit when it actually differs from the
+         school's own subject line for this exact occurrence -- left as it
+         opened, no override is written, so a later PDF update to this topic
+         still comes through untouched. Changed to anything, including cleared
+         blank, becomes a standing override until Reset. */
+      const dataSession = DATA.days[dateStr]?.sessions.find(x => x.id === s.id);
+      const autoTopic = (dataSession ? dataSession.title : "") || "";
+      if(topic !== autoTopic) patch.title = topic;
       S.sessionEdits[stateKey(s, dateStr)] = patch;
     }
     persist(); closeModal(); render();

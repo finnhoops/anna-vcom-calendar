@@ -2,6 +2,26 @@
 
 Every entry is one rebuild of the calendar from a block-schedule PDF.
 
+## 2026-09-04 — the topic line is now its own editable field
+
+No new PDF. Anna asked to be able to correct a class's topic herself -- what a
+lecture actually covered can run ahead of or differ from the school's printed
+subject line. The edit modal gains a second field, Topic, under Name:
+
+- Prefilled with whatever is showing now (the school's subject line, or an
+  earlier override). Left exactly as it opened, Save writes no override, so a
+  later PDF update to that topic still comes through untouched. Changed to
+  anything -- including cleared blank, which suppresses the line entirely --
+  becomes a standing override until Reset, the same way a renamed class already
+  works.
+- A custom/added class still takes the Topic field if filled, falling back to
+  the Name field if left blank, since a from-scratch entry has no school topic
+  to compare against.
+- Verified: a deliberately-changed topic renders in place of the school one and
+  is not touched by the previous entry's clobbered-title repair (that repair
+  only strips a topic that exactly echoes the class name -- a real note never
+  will).
+
 ## 2026-09-03 — the edit modal was eating topic lines
 
 No new PDF. The real cause of Anna's missing topic lines on Clinical Skills
