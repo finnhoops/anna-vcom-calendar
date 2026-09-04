@@ -2,6 +2,23 @@
 
 Every entry is one rebuild of the calendar from a block-schedule PDF.
 
+## 2026-09-04 — daily events: a note that isn't squeezed into the schedule
+
+No new PDF. Anna wanted somewhere to put a note that belongs to the whole day
+("casual today, not business casual") without it competing for room with the
+timed classes. New per-day note, stored separately from the schedule:
+
+- **Add daily event** button, next to Edit/Add under "Schedule" -- in the today
+  panel, the day view, and the day sheet the month/week Edit mode opens. Reads
+  "Edit daily event" once the day already has one. One line, no time attached.
+- Shows as a bullet under the class/to-do count on the month grid, under the
+  date and above the timed grid in the week view, and as a banner above the
+  timed list in the today panel and the day view -- four places, one save.
+- Stored in `S.dayNotes` (per date), independent of `sessionEdits`, so it
+  survives a schedule rebuild the same way ticks and to-dos do.
+- Verified with a seeded note on a real class day: renders correctly in month,
+  week, today panel and day view, with no console errors.
+
 ## 2026-09-04 — the topic line is now its own editable field
 
 No new PDF. Anna asked to be able to correct a class's topic herself -- what a

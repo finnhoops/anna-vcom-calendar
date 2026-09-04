@@ -337,6 +337,15 @@ input::placeholder{color:var(--ink3)}
   font-size:11.5px; font-weight:600; letter-spacing:.01em; text-transform:none;
   color:var(--ink3); line-height:1.5; margin:0 0 var(--s2);
 }
+/* A day's own note -- "casual today", a reminder -- sits here, under the
+   Schedule heading and above the timed list, so it reads as a note about the
+   day rather than fighting the classes for room. Same banner in the today
+   panel and the day view, since both are this day's schedule. */
+.daynote{
+  font-size:12.5px; font-weight:600; color:var(--ink2); background:var(--accentSoft);
+  border-left:3px solid var(--accent); border-radius:0 var(--r1) var(--r1) 0;
+  padding:7px 10px; margin:0 0 var(--s2); overflow-wrap:anywhere;
+}
 /* The grid's hint sits straight on the floral, so it carries a surface for the
    same reason the legend does. */
 .gridhint{display:inline-block; margin-bottom:var(--s2); padding:6px 14px;
@@ -473,6 +482,11 @@ input::placeholder{color:var(--ink3)}
   background:var(--cat); color:var(--surface); align-self:flex-start;
   max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
 }
+/* A day's own note (STUDY dress code, a reminder -- anything with nowhere else
+   to go). One line, truncated: the cell is 45px wide on a phone and this is a
+   pointer to the note, not the note itself -- open the day to read it in full. */
+.day .note{font-size:10.5px; font-style:italic; color:var(--ink2);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%}
 .day .cnt{margin-top:auto; color:var(--ink3); font-size:10.5px; font-weight:600}
 
 /* ---- week -------------------------------------------------------------- */
@@ -483,6 +497,10 @@ input::placeholder{color:var(--ink3)}
 .whead div{padding:10px 8px; text-align:center; font-size:12px; font-weight:700; color:var(--ink2)}
 .whead div.is-today{color:var(--accent)}
 .whead div small{display:block; font-size:10.5px; font-weight:600; color:var(--ink3); letter-spacing:.1em; text-transform:uppercase}
+/* The day's own note, under its date and above the timed grid -- so it reads
+   as a note ABOUT the day rather than one more thing squeezed into the hours. */
+.whead div .note{display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+  font-size:10.5px; font-weight:600; font-style:italic; color:var(--accent); margin:3px 0 0; line-height:1.25}
 .whead .whedit{display:block; margin:5px auto 0; padding:3px 12px; min-height:30px; font-size:11px}
 .wbody{display:grid; grid-template-columns:64px repeat(7,minmax(0,1fr)); position:relative}
 .hours{border-right:1px solid var(--line)}
@@ -688,7 +706,7 @@ const THEMES = __THEMES__;
    replacing these two functions and nothing else.
    ------------------------------------------------------------------------ */
 const KEY = "anna-vcom-cal-v1";
-const blank = () => ({version:1, theme:THEMES.default, sessionEdits:{}, addedSessions:[], hidden:[], tasks:{}, gen:{}, genHidden:{},
+const blank = () => ({version:1, theme:THEMES.default, sessionEdits:{}, addedSessions:[], hidden:[], tasks:{}, gen:{}, genHidden:{}, dayNotes:{},
                       open:{tests:true, recall:true, before:true, during:false, after:true}});
 let S = blank();
 try{
@@ -696,6 +714,9 @@ try{
   if(raw) S = Object.assign(blank(), JSON.parse(raw));
 }catch(e){ /* unreadable storage: carry on with defaults */ }
 if(!S.open || typeof S.open !== "object") S.open = blank().open;
+// Saved before dayNotes existed: a missing map here would throw the first time
+// any day is checked for one, which is every day, in every view.
+if(!S.dayNotes || typeof S.dayNotes !== "object") S.dayNotes = {};
 /* Saved before genHidden existed, or saved corrupt: a missing map here would
    throw on every generated to-do row, which is most of the list. */
 if(!S.genHidden || typeof S.genHidden !== "object") S.genHidden = {};
@@ -1115,10 +1136,15 @@ function renderToday(){
     el("span",{text: preTerm ? "First day’s schedule" : "Schedule"}),
     el("div",{class:"headbtns"},[
       editToggle("sched"),
+      el("button",{class:"btn ghost sm", type:"button",
+        text: S.dayNotes[showDate] ? "Edit daily event" : "Add daily event",
+        onclick:() => dayNoteModal(showDate)}),
       el("button",{class:"btn ghost sm", type:"button", text:"Add",
         onclick:() => sessionModal(null, showDate)})
     ])
   ]));
+  const note1 = dayNoteBanner(showDate);
+  if(note1) schedCol.appendChild(note1);
   if(EDIT.sched) schedCol.appendChild(el("p",{class:"edithint",
     text:"Tap a class to change its name or time. ✕ takes it off this day — nothing is lost, it comes back from the strip underneath."}));
   schedCol.appendChild(scheduleList(showDate, preTerm));
@@ -1728,6 +1754,8 @@ function monthCell(date, month){
      number you cannot click through to is worse than no number. The assignments
      are still in data/schedule.json, so putting them back is a render away. */
   if(bits.length) cell.appendChild(el("p",{class:"cnt", text:bits.join(" · ")}));
+  const note = S.dayNotes[ds];
+  if(note) cell.appendChild(el("p",{class:"note", text:"• " + note}));
   return cell;
 }
 
@@ -1749,6 +1777,8 @@ function renderWeek(){
     const c = el("div",{class: sameDay(d,TODAY)?"is-today":""});
     c.appendChild(el("small",{text:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"][i]}));
     c.appendChild(document.createTextNode(`${MONTHS[d.getMonth()].slice(0,3)} ${d.getDate()}`));
+    const wnote = S.dayNotes[iso(d)];
+    if(wnote) c.appendChild(el("p",{class:"note", text:wnote}));
     /* The blocks in the grid are already tap-to-edit; what the week had no way
        to do was ADD. This is that, per day, and it opens the same sheet the
        month does so there is one thing to learn. */
@@ -1809,9 +1839,14 @@ function renderDay(){
     el("span",{text:"Schedule"}),
     el("div",{class:"headbtns"},[
       editToggle("sched"),
+      el("button",{class:"btn ghost sm", type:"button",
+        text: S.dayNotes[ds] ? "Edit daily event" : "Add daily event",
+        onclick:() => dayNoteModal(ds)}),
       el("button",{class:"btn ghost sm", type:"button", text:"Add", onclick:() => sessionModal(null, ds)})
     ])
   ]));
+  const note2 = dayNoteBanner(ds);
+  if(note2) sched.appendChild(note2);
   if(EDIT.sched) sched.appendChild(el("p",{class:"edithint",
     text:"Tap a class to change its name or time. ✕ takes it off this day — nothing is lost, it comes back from the strip underneath."}));
   sched.appendChild(scheduleList(ds));
@@ -1993,6 +2028,60 @@ function sessionModal(session, dateStr, after){
   nameIn.focus();
 }
 
+/* ---- daily note ---------------------------------------------------------
+   A day's own note -- "casual today", a reminder -- that has nowhere to live
+   in the timed schedule itself, so it doesn't try to: one line, stored per
+   date, shown as a bullet on the month grid, under the date in the week, and
+   as a banner above the timed list in the today panel and the day view.
+   ------------------------------------------------------------------------ */
+function dayNoteBanner(dateStr){
+  const note = S.dayNotes[dateStr];
+  return note ? el("p",{class:"daynote", text:note}) : null;
+}
+function dayNoteModal(dateStr, after){
+  lastFocus = document.activeElement;
+  const root = document.getElementById("modalroot");
+  root.textContent = "";
+  modalAfter = after || null;
+  const d = fromIso(dateStr);
+  const cur = S.dayNotes[dateStr] || "";
+
+  const scrim = el("div",{class:"scrim", onclick:e => { if(e.target===scrim) closeModal(); }});
+  const modal = el("div",{class:"modal", role:"dialog", "aria-modal":"true", "aria-labelledby":"mtitle"});
+  modal.appendChild(el("header",{},[
+    el("h3",{id:"mtitle", text:"Daily event"}),
+    el("p",{text:`${DAYNAMES[d.getDay()]}, ${MONTHS[d.getMonth()]} ${d.getDate()}`})
+  ]));
+
+  const fields = el("div",{class:"fields"});
+  const noteIn = el("input",{type:"text", value:cur, placeholder:"e.g. Casual today, not business casual", id:"f-daynote"});
+  fields.appendChild(el("div",{class:"field"},[el("label",{for:"f-daynote",text:"Note"}), noteIn]));
+  fields.appendChild(el("p",{class:"edithint",
+    text:"Shows on the month grid, at the top of this day in the week, and above the schedule here -- not squeezed into the timed list."}));
+  modal.appendChild(fields);
+
+  const foot = el("footer",{});
+  if(cur){
+    foot.appendChild(el("button",{class:"btn danger sm", type:"button", text:"Remove",
+      onclick:() => { delete S.dayNotes[dateStr]; persist(); closeModal(); render();
+                      announce("Daily note removed."); }}));
+  }
+  foot.appendChild(el("span",{class:"spacer"}));
+  foot.appendChild(el("button",{class:"btn ghost", type:"button", text:"Cancel", onclick:closeModal}));
+  foot.appendChild(el("button",{class:"btn", type:"button", text:"Save", onclick:() => {
+    const v = noteIn.value.trim();
+    if(v) S.dayNotes[dateStr] = v; else delete S.dayNotes[dateStr];
+    persist(); closeModal(); render();
+    announce("Daily note saved.");
+  }}));
+  modal.appendChild(foot);
+
+  scrim.appendChild(modal);
+  root.appendChild(scrim);
+  document.addEventListener("keydown", modalKeys);
+  noteIn.focus();
+}
+
 /* ---- day sheet ---------------------------------------------------------
    What the month and the week open when the grid's Edit is on. Neither of those
    two can carry a control per class: a month cell is 45px wide on a phone and a
@@ -2049,6 +2138,9 @@ function dayEditor(dateStr){
   const foot = el("footer",{});
   foot.appendChild(el("button",{class:"btn ghost sm", type:"button", text:"Open this day",
     onclick:() => { cursor = fromIso(dateStr); modalAfter = null; closeModal(); setView("day"); }}));
+  foot.appendChild(el("button",{class:"btn ghost sm", type:"button",
+    text: S.dayNotes[dateStr] ? "Edit daily event" : "Add daily event",
+    onclick:() => dayNoteModal(dateStr, back)}));
   foot.appendChild(el("span",{class:"spacer"}));
   foot.appendChild(el("button",{class:"btn ghost", type:"button", text:"Done", onclick:closeModal}));
   foot.appendChild(el("button",{class:"btn", type:"button", text:"Add a class",
