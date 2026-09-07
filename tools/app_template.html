@@ -302,9 +302,14 @@ button{font:inherit; color:inherit; background:none; border:0; margin:0; padding
 .addtodo .addrow{margin-top:0}
 .td-repeat{display:flex; align-items:center; gap:8px; font-size:12px; font-weight:700;
   letter-spacing:.08em; text-transform:uppercase; color:var(--ink3)}
-.td-repeat span{flex:0 0 auto}
+.td-repeat span{flex:0 0 auto; min-width:58px}
 .td-repeat select{flex:1; text-transform:none; letter-spacing:normal; font-weight:400;
   font-size:14px; color:var(--ink)}
+/* Anna's own to-dos, grouped under the section she filed each one under. The
+   groups are .tdsec disclosures like the generated ones; this just closes the
+   gap under the "My to-dos" header so the first group doesn't double its rule. */
+.myto-groups > .tdsec:first-child{border-top:0}
+.myto-groups .tdsec:first-child > h4 .tdtoggle{padding-top:2px}
 /* Small muted marker on a to-do that is one occurrence of a repeat series, so a
    row that turns up on many days reads as linked rather than retyped. */
 .task .rep{flex:0 0 auto; margin-top:3px; color:var(--ink3); display:grid; place-items:center}
@@ -733,13 +738,18 @@ const THEMES = __THEMES__;
    ------------------------------------------------------------------------ */
 const KEY = "anna-vcom-cal-v1";
 const blank = () => ({version:1, theme:THEMES.default, sessionEdits:{}, addedSessions:[], hidden:[], tasks:{}, gen:{}, genHidden:{}, dayNotes:{},
-                      open:{tests:true, recall:true, before:true, during:false, after:true}});
+                      open:{tests:true, recall:true, before:true, during:false, after:true,
+                            "own-tests":true, "own-recall":true, "own-before":true,
+                            "own-during":true, "own-after":true, "own-mine":true}});
 let S = blank();
 try{
   const raw = localStorage.getItem(KEY);
   if(raw) S = Object.assign(blank(), JSON.parse(raw));
 }catch(e){ /* unreadable storage: carry on with defaults */ }
 if(!S.open || typeof S.open !== "object") S.open = blank().open;
+// Saved before the "own-*" groups existed: fill in any missing open-state key so
+// a group Anna files a to-do under starts expanded rather than stuck shut.
+else for(const k in blank().open) if(!(k in S.open)) S.open[k] = blank().open[k];
 // Saved before dayNotes existed: a missing map here would throw the first time
 // any day is checked for one, which is every day, in every view.
 if(!S.dayNotes || typeof S.dayNotes !== "object") S.dayNotes = {};
@@ -1290,7 +1300,21 @@ const studyLectures = dateStr => sessionsFor(dateStr).filter(s => s.study && s.t
    both be showing the same date at once, so studyBlock runs twice. */
 const PHASES = {tests:"Upcoming Tests", recall:"Daily Tasks",
                 before:"Before lecture tasks", during:"During lecture tasks",
-                after:"After lecture tasks"};
+                after:"After lecture tasks",
+                /* Headers for Anna's own to-dos when she has filed some under a
+                   section. Same names, minus "tasks", and they sit under a
+                   "My to-dos" header below the generated block so the two read
+                   apart. "own-mine" is the leftover bucket for anything she did
+                   not file anywhere. */
+                "own-tests":"Upcoming Tests", "own-recall":"Daily Tasks",
+                "own-before":"Before lecture", "own-during":"During lecture",
+                "own-after":"After lecture", "own-mine":"My to-dos"};
+/* The section Anna can file a new to-do under, in the order the matching
+   generated sections appear above. `mine` is the default / leftover. */
+const OWN_SECTIONS = [["tests","own-tests"],["recall","own-recall"],["before","own-before"],
+                      ["during","own-during"],["after","own-after"],["mine","own-mine"]];
+const OWN_SECTION_KEYS = OWN_SECTIONS.map(([k]) => k);
+const taskSection = t => OWN_SECTION_KEYS.includes(t && t.section) ? t.section : "mine";
 const CHEV = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>';
 let discSeq = 0;
 
@@ -1616,17 +1640,18 @@ function taskList(dateStr){
   const box = el("div",{});
   const items = S.tasks[dateStr] || [];
   const study = studyBlock(dateStr);
-  if(study){
-    box.appendChild(study);
-    box.appendChild(el("h4",{class:"tdsec-own", text:"My to-dos"}));
-  }
+  if(study) box.appendChild(study);
   if(!items.length && !study){
     box.appendChild(el("div",{class:"empty"},[
       el("strong",{text:"No to-dos yet."}),
       "Add what this day actually needs — study blocks, errands, anything. Items stay on this day."
     ]));
   }
-  items.forEach((t, i) => {
+
+  /* One .task row. Pulled out of the loop so the flat list and the grouped one
+     build rows identically. `first`/`last` are within whichever list the row
+     sits in, so the reorder arrows stop at the ends of that list. */
+  const taskRow = (t, first, last) => {
     const row = el("div",{class:"task"+(t.done?" done":"")+(EDIT.todo?" editing":"")});
     row.appendChild(el("button",{
       class:"check", role:"checkbox", type:"button",
@@ -1643,17 +1668,17 @@ function taskList(dateStr){
       /* Arrows, not drag. Dragging a 32px row on a phone fights the page scroll,
          and arrows are the only version of this that also works from a keyboard. */
       row.appendChild(el("button",{
-        class:"move", type:"button", disabled: i===0 || null,
+        class:"move", type:"button", disabled: first || null,
         "aria-label":`Move “${t.text}” up`, title:"Move up", html:ICON_UP,
-        onclick:() => moveTask(dateStr, i, -1)
+        onclick:() => moveTask(dateStr, t, -1)
       }));
       row.appendChild(el("button",{
-        class:"move", type:"button", disabled: i===items.length-1 || null,
+        class:"move", type:"button", disabled: last || null,
         "aria-label":`Move “${t.text}” down`, title:"Move down", html:ICON_DOWN,
-        onclick:() => moveTask(dateStr, i, 1)
+        onclick:() => moveTask(dateStr, t, 1)
       }));
       row.appendChild(rmBtn(`Delete “${t.text}”`, () => {
-        S.tasks[dateStr] = items.filter(x => x !== t);
+        S.tasks[dateStr] = (S.tasks[dateStr] || []).filter(x => x !== t);
         persist(); render(); announce("To-do deleted.");
       }));
       if(t.seriesId){
@@ -1677,11 +1702,32 @@ function taskList(dateStr){
       row.appendChild(el("button",{
         class:"del", type:"button", "aria-label":`Delete “${t.text}”`,
         html:'<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>',
-        onclick:() => { S.tasks[dateStr] = items.filter(x => x!==t); persist(); render(); announce("To-do deleted."); }
+        onclick:() => { S.tasks[dateStr] = (S.tasks[dateStr] || []).filter(x => x!==t); persist(); render(); announce("To-do deleted."); }
       }));
     }
-    box.appendChild(row);
-  });
+    return row;
+  };
+
+  /* Flat unless Anna has filed some to-dos under a section. Then each section
+     she has used renders as its own collapsible group, in the same order the
+     generated sections appear above, under a "My to-dos" header that also shows
+     whenever there is a study block, so the two blocks read apart. */
+  const groups = OWN_SECTIONS
+    .map(([sec, pkey]) => [pkey, items.filter(t => taskSection(t) === sec)])
+    .filter(([, g]) => g.length);
+  const grouped = groups.length > 1 || (groups.length === 1 && groups[0][0] !== "own-mine");
+  if(study || grouped) box.appendChild(el("h4",{class:"tdsec-own", text:"My to-dos"}));
+  if(!grouped){
+    items.forEach((t, i) => box.appendChild(taskRow(t, i === 0, i === items.length - 1)));
+  }else{
+    const wrap = el("div",{class:"myto-groups"});
+    for(const [pkey, g] of groups){
+      const d = disclosure(pkey, g.filter(t => t.done).length, g.length);
+      g.forEach((t, i) => d.body.appendChild(taskRow(t, i === 0, i === g.length - 1)));
+      wrap.appendChild(d.sec);
+    }
+    box.appendChild(wrap);
+  }
 
   /* Generated boxes hide rather than delete -- they are regenerated from the
      schedule every render, so "delete" could only ever mean "not on this day". */
@@ -1702,6 +1748,15 @@ function taskList(dateStr){
      occurrence, each carrying a shared seriesId; editing, ticking or X-ing one
      is per day, and the repeat-icon button in edit mode clears the whole set. */
   const input = el("input",{type:"text", placeholder:"Add a to-do…", "aria-label":"New to-do", "data-d":dateStr});
+
+  /* Which of the to-do headers the new item is filed under. "My to-dos" is the
+     default and the leftover bucket; the rest mirror the generated sections and
+     make the item render inside a group of that name below. Default first, then
+     the sections in the order they appear down the list. */
+  const sectionSel = el("select",{});
+  [["mine","My to-dos"], ...OWN_SECTIONS.filter(([s]) => s !== "mine").map(([s, p]) => [s, PHASES[p]])]
+    .forEach(([v, l]) => sectionSel.appendChild(el("option",{value:v, text:l})));
+
   const repeatSel = el("select",{});
   repeatOptions(dateStr).forEach(o => repeatSel.appendChild(el("option",{value:o.value, text:o.label})));
 
@@ -1732,6 +1787,8 @@ function taskList(dateStr){
     e.preventDefault();
     const v = input.value.trim();
     if(!v) return;
+    const section = sectionSel.value;
+    const where = section === "mine" ? "" : ` under ${PHASES["own-" + section]}`;
     const rule = repeatSel.value === "none" ? null : {
       type: repeatSel.value,
       interval: everyIn.value, unit: unitSel.value,
@@ -1741,14 +1798,14 @@ function taskList(dateStr){
     if(dates.length > 1){
       const seriesId = "ts" + Date.now(), seed = Date.now();
       dates.forEach((ds, i) => {
-        (S.tasks[ds] = S.tasks[ds] || []).push({id:`t${seed}_${i}`, text:v, done:false, source:"manual", seriesId});
+        (S.tasks[ds] = S.tasks[ds] || []).push({id:`t${seed}_${i}`, text:v, done:false, source:"manual", section, seriesId});
       });
-      announce(`Added ${dates.length} to-dos, ${repeatOptions(dateStr).find(o => o.value === repeatSel.value).label.toLowerCase()}.`);
+      announce(`Added ${dates.length} to-dos${where}, ${repeatOptions(dateStr).find(o => o.value === repeatSel.value).label.toLowerCase()}.`);
     }else{
-      (S.tasks[dateStr] = S.tasks[dateStr] || []).push({id:"t"+Date.now(), text:v, done:false, source:"manual"});
-      announce("To-do added.");
+      (S.tasks[dateStr] = S.tasks[dateStr] || []).push({id:"t"+Date.now(), text:v, done:false, source:"manual", section});
+      announce(`To-do added${where}.`);
     }
-    input.value = ""; repeatSel.value = "none"; customPanel.hidden = true;
+    input.value = ""; repeatSel.value = "none"; sectionSel.value = "mine"; customPanel.hidden = true;
     persist(); render();
     document.querySelectorAll(".addtodo input[data-d]").forEach(i => { if(i.dataset.d===dateStr) i.focus(); });
   }});
@@ -1756,18 +1813,26 @@ function taskList(dateStr){
   topRow.appendChild(input);
   topRow.appendChild(el("button",{class:"btn sm", type:"submit", text:"Add"}));
   form.appendChild(topRow);
+  form.appendChild(el("label",{class:"td-repeat td-section"},[el("span",{text:"Section"}), sectionSel]));
   form.appendChild(el("label",{class:"td-repeat"},[el("span",{text:"Repeats"}), repeatSel]));
   form.appendChild(customPanel);
   box.appendChild(form);
   return box;
 }
 
-function moveTask(dateStr, i, dir){
+/* Reorder within the row's own section: skip over any items filed under a
+   different header so an arrow never lifts a to-do out of its group or swaps it
+   past one it isn't next to on screen. Passed the task itself, not an index,
+   because the on-screen list is now grouped and an index into it is not an index
+   into the flat store. */
+function moveTask(dateStr, t, dir){
   const arr = S.tasks[dateStr];
   if(!arr) return;
-  const j = i + dir;
+  const i = arr.indexOf(t);
+  if(i < 0) return;
+  let j = i + dir;
+  while(j >= 0 && j < arr.length && taskSection(arr[j]) !== taskSection(t)) j += dir;
   if(j < 0 || j >= arr.length) return;
-  const t = arr[i];
   arr[i] = arr[j]; arr[j] = t;
   persist(); render();
   announce(`Moved “${t.text}” ${dir < 0 ? "up" : "down"}.`);

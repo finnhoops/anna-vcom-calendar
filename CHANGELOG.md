@@ -2,6 +2,31 @@
 
 Every entry is one rebuild of the calendar from a block-schedule PDF.
 
+## 2026-09-07 — pick which section a new to-do goes under
+
+No new PDF. Every manual to-do used to land in one flat "My to-dos" list.
+Anna asked to be able to file a new one under any of the to-do headers.
+
+- **Section** dropdown on the add row, above Repeats: My to-dos (the default
+  and the leftover bucket), Upcoming Tests, Daily Tasks, Before lecture,
+  During lecture, After lecture — the same headers the generated block uses,
+  in the same order.
+- A to-do with a section renders in its own **collapsible group** under a
+  "My to-dos" header below the generated block, so the two never blur
+  together. Days with nothing filed anywhere look exactly as before — one
+  flat list, no groups. Open/closed per group is remembered in `S.open` under
+  `own-*` keys, separate from the generated sections so collapsing one does
+  not collapse the other.
+- The reorder arrows now move a to-do **within its own group**, skipping over
+  anything filed elsewhere, so an arrow can't lift a row out of its section.
+- `section` rides on the task object like `seriesId` does — no new `blank()`
+  key, nothing for a schedule rebuild to touch. A repeating to-do carries its
+  section onto every occurrence.
+- Verified in headless Chrome alongside the repeat checks (27/27): the picker
+  files single and repeating to-dos under the right group, the group header
+  and collapse state are right, the picker resets to the default after a
+  submit, and reordering stays inside the group.
+
 ## 2026-09-07 — the same Repeats option on adding a to-do
 
 No new PDF. Anna asked for the repeat dropdown that "Add a class" got to be

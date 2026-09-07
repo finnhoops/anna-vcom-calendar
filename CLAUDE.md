@@ -464,6 +464,24 @@ the page scroll, and arrows are the only version that also works from a keyboard
 Only Anna's own to-dos reorder; the generated ones are rebuilt from the schedule
 every render, so their order is not hers to hold.
 
+**A manual to-do can be filed under any of the to-do headers.** The add row's
+**Section** dropdown offers `mine` (the default and the leftover bucket) plus
+one value per generated section — `tests`, `recall`, `before`, `during`,
+`after`, matched to `OWN_SECTIONS` / `PHASES` keys `own-*`. The chosen value is
+written to `t.section` (rides on the task object, no new `blank()` key). In
+`taskList`, if any item on the day carries a non-`mine` section the manual list
+switches from flat to **one collapsible `disclosure()` group per used section**,
+in `OWN_SECTIONS` order, wrapped in `.myto-groups` under a "My to-dos" header;
+otherwise it stays the flat list it always was. The groups' open/closed state is
+`S.open["own-<sec>"]`, deliberately separate from the generated sections' keys —
+`setOpen` keys off `data-phase` so `own-before` and `before` toggle
+independently. A migration loop fills any missing `S.open` key from `blank()` so
+an older save starts every group expanded. `moveTask` takes the **task object**
+now, not an index (the on-screen list is grouped, so an index into it isn't an
+index into `S.tasks[date]`), and walks past neighbours in other sections so an
+arrow never moves a row out of its group. A repeating to-do copies its `section`
+onto every occurrence.
+
 **A repeating to-do is real rows, not a rule.** The "Add a to-do…" row carries
 the same **Repeats** control as "Add a class", sharing `repeatOptions()` and
 `computeOccurrences()` outright. Picking a rule pushes one plain task into each
