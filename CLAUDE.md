@@ -464,6 +464,20 @@ the page scroll, and arrows are the only version that also works from a keyboard
 Only Anna's own to-dos reorder; the generated ones are rebuilt from the schedule
 every render, so their order is not hers to hold.
 
+**A repeating to-do is real rows, not a rule.** The "Add a to-do…" row carries
+the same **Repeats** control as "Add a class", sharing `repeatOptions()` and
+`computeOccurrences()` outright. Picking a rule pushes one plain task into each
+occurrence's `S.tasks[date]`, all stamped with the same `seriesId`; there is no
+recurrence object to expand at render time and nothing new in the `blank()`
+shape — `seriesId` just rides on the task object, so a PDF rebuild ignores it
+the way it ignores ticks. A single occurrence ticks, edits and ✕-es on its own
+day, exactly like one date of a repeated school class; edit mode adds a second
+✕ (the repeat glyph) on a series row that filters every `seriesId` match out of
+`S.tasks` at once — the to-do equivalent of "Remove series", and like it,
+**not** on the restore strip. `computeOccurrences` returning a single date (a
+rule that resolves to one occurrence) falls through to the plain single push
+with no `seriesId`, same as the class path.
+
 **`checkRow` returns `null` when a box is hidden**, so every caller has to cope
 with that — `testTasks` filters, the recall rows filter, and the before/after
 sections build from `shown(phase)`. The disclosure counts come from the

@@ -2,6 +2,37 @@
 
 Every entry is one rebuild of the calendar from a block-schedule PDF.
 
+## 2026-09-07 — the same Repeats option on adding a to-do
+
+No new PDF. Anna asked for the repeat dropdown that "Add a class" got to be
+there when adding a to-do as well.
+
+- **Repeats** control under the "Add a to-do…" row, using the exact option set,
+  wording and rule engine as the class version — `repeatOptions()` and
+  `computeOccurrences()` are shared, not copied. Does not repeat, Daily,
+  Weekly on `<day>`, Monthly on the `<nth>` `<day>`, Annually, Every weekday,
+  and Custom… (interval + unit, ending when the block ends / on a date / after
+  a number of times). Bounded to the end of the block like the class one.
+- A rule pushes one real to-do into each occurrence's day, all sharing a
+  `seriesId`. Ticking, editing the text of, or ✕-ing a single occurrence
+  touches only that day — same as the school-class occurrences. In edit mode a
+  series row carries a second ✕ (the repeat glyph) that removes **every** copy
+  at once, matching "Remove series" on a class. No new storage keys: `seriesId`
+  rides along on the existing task objects in `S.tasks`, so a schedule rebuild
+  leaves it alone the way it leaves ticks and manual to-dos alone.
+- A repeating to-do shows a small muted repeat glyph before its text in the
+  list, so a line that turns up on many days reads as one series rather than as
+  something retyped.
+- Fixed a latent bug in the shared `.repeat-custom` panel while here: its
+  `display:grid` was overriding the browser's `[hidden]` rule, so the Custom
+  sub-panel showed even on "Does not repeat" — on the class modal too. Added
+  `.repeat-custom[hidden]{display:none}`.
+- Verified end-to-end in headless Chrome through the real form and edit-mode
+  handlers, checked against `localStorage`: option wording, weekly/custom
+  occurrence math, single-occurrence delete leaving the rest of the series
+  intact, whole-series removal, and a plain non-repeating add still behaving
+  exactly as before. 19/19 checks pass.
+
 ## 2026-09-04 — a real Repeats option on Add a class
 
 No new PDF. Anna asked for the same repeat dropdown Google Calendar shows

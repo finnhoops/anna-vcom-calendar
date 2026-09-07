@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Anna's Calendar — Block 1</title>
 <meta name="description" content="Block 1 schedule and to-do list, 2026-09-02 to 2027-01-15.">
-<meta name="build" content="20260904-154727">
+<meta name="build" content="20260907-094512">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,200..800&family=Public+Sans:wght@300;400;500;600;800&display=swap" rel="stylesheet">
@@ -789,6 +789,20 @@ button{font:inherit; color:inherit; background:none; border:0; margin:0; padding
 .assigned ul{margin:0; padding:0}
 
 .addrow{display:flex; gap:var(--s1); margin-top:var(--s2)}
+/* The add-a-to-do form: the text row, then a Repeats control that reuses the
+   same .repeat-custom sub-panel the "Add to the day" class modal uses. */
+.addtodo{display:grid; gap:var(--s2); margin-top:var(--s2)}
+.addtodo .addrow{margin-top:0}
+.td-repeat{display:flex; align-items:center; gap:8px; font-size:12px; font-weight:700;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--ink3)}
+.td-repeat span{flex:0 0 auto}
+.td-repeat select{flex:1; text-transform:none; letter-spacing:normal; font-weight:400;
+  font-size:14px; color:var(--ink)}
+/* Small muted marker on a to-do that is one occurrence of a repeat series, so a
+   row that turns up on many days reads as linked rather than retyped. */
+.task .rep{flex:0 0 auto; margin-top:3px; color:var(--ink3); display:grid; place-items:center}
+.task .rep svg{width:13px; height:13px; fill:none; stroke:currentColor; stroke-width:2.2;
+  stroke-linecap:round; stroke-linejoin:round}
 input[type=text],input[type=time],input[type=number],input[type=date],select,textarea{
   font:inherit; width:100%; padding:9px 12px; border-radius:var(--r2);
   border:1.5px solid var(--line); background:var(--bg); color:var(--ink);
@@ -1058,6 +1072,10 @@ input::placeholder{color:var(--ink3)}
 /* Custom's own sub-panel, indented and boxed so it reads as "part of Repeats"
    rather than three more top-level fields. */
 .repeat-custom{display:grid; gap:var(--s2); padding:var(--s2); border:1.5px solid var(--line); border-radius:var(--r2); background:var(--surface2)}
+/* display:grid above beats the UA [hidden] rule, so the panel has to be told to
+   stay down explicitly -- without this the Custom sub-panel shows even on "Does
+   not repeat", here and in the class modal that shares this class. */
+.repeat-custom[hidden]{display:none}
 .repeat-custom .row{display:flex; align-items:center; gap:8px; flex-wrap:wrap; color:var(--ink2); font-size:13px; font-weight:600}
 .repeat-custom .row input.num{width:64px; flex:0 0 auto}
 .repeat-custom .row select{width:auto; flex:1 1 120px}
@@ -1108,7 +1126,7 @@ input::placeholder{color:var(--ink3)}
 
 @media print{
   body{background:#fff}
-  .masthead .themepick,.views,.nav,.iconbtn,.addrow,.btn,.del,.rm,.move,.edithint,.restore{display:none !important}
+  .masthead .themepick,.views,.nav,.iconbtn,.addrow,.addtodo,.btn,.del,.rm,.move,.edithint,.restore{display:none !important}
   #today,.month,.weekwrap,.card{box-shadow:none; border-color:#bbb; break-inside:avoid}
   .wrap{max-width:none; padding:0}
 }
@@ -1486,6 +1504,7 @@ const ICON_X    = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6L6 
 const ICON_UP   = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>';
 const ICON_DOWN = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>';
 const ICON_PEN  = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg>';
+const ICON_REPEAT = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>';
 
 const rmBtn = (label, fn) => el("button",{
   class:"rm", type:"button", "aria-label":label, title:label, html:ICON_X, onclick:fn
@@ -2107,6 +2126,7 @@ function taskList(dateStr){
       "aria-checked":String(!!t.done), "aria-label":`Mark “${t.text}” ${t.done?"not done":"done"}`,
       onclick:() => { t.done = !t.done; persist(); render(); announce(t.done?"Marked done.":"Marked not done."); }
     }));
+    if(t.seriesId) row.appendChild(el("span",{class:"rep", html:ICON_REPEAT, title:"Repeats", "aria-hidden":"true"}));
     row.appendChild(el("span",{
       class:"txt", text:t.text, role:"textbox", tabindex:"0", contenteditable:"true",
       onblur:e => { const v=e.target.textContent.trim(); if(v){ t.text=v; } else { e.target.textContent=t.text; } persist(); },
@@ -2129,6 +2149,20 @@ function taskList(dateStr){
         S.tasks[dateStr] = items.filter(x => x !== t);
         persist(); render(); announce("To-do deleted.");
       }));
+      if(t.seriesId){
+        /* One occurrence of a repeat. The X above takes out just this day's
+           copy, the way editing or ticking one does; this takes out every
+           date the rule generated, matching "Remove series" on a class. */
+        row.appendChild(el("button",{
+          class:"rm", type:"button", html:ICON_REPEAT,
+          title:"Remove every copy of this repeating to-do",
+          "aria-label":`Remove every copy of the repeating to-do “${t.text}”`,
+          onclick:() => {
+            for(const d in S.tasks) S.tasks[d] = (S.tasks[d] || []).filter(x => x.seriesId !== t.seriesId);
+            persist(); render(); announce("Removed the whole repeating series.");
+          }
+        }));
+      }
     }else{
       /* The hover-revealed original, kept for the pointer case. On touch the CSS
          forces it visible; edit mode replaces it outright with the bordered set
@@ -2154,18 +2188,69 @@ function taskList(dateStr){
     if(strip) box.appendChild(strip);
   }
 
-  const form = el("form",{class:"addrow", onsubmit:e => {
+  /* Add a to-do, optionally on a repeat. Same option set, wording and rule
+     machinery as "Add to the day" for a class: repeatOptions() / computeOccurrences()
+     are shared, and "Does not repeat" returns just [dateStr], so the no-rule
+     case is exactly the single push it always was. A rule pushes one record per
+     occurrence, each carrying a shared seriesId; editing, ticking or X-ing one
+     is per day, and the repeat-icon button in edit mode clears the whole set. */
+  const input = el("input",{type:"text", placeholder:"Add a to-do…", "aria-label":"New to-do", "data-d":dateStr});
+  const repeatSel = el("select",{});
+  repeatOptions(dateStr).forEach(o => repeatSel.appendChild(el("option",{value:o.value, text:o.label})));
+
+  const everyIn = el("input",{type:"number", min:"1", value:"1", class:"num", "aria-label":"Repeat every"});
+  const unitSel = el("select",{"aria-label":"Unit"});
+  ["day","week","month","year"].forEach(u => unitSel.appendChild(el("option",{value:u, text:u+"(s)"})));
+  const endSel = el("select",{"aria-label":"Ends"},[
+    el("option",{value:"block", text:"Until the block ends"}),
+    el("option",{value:"date", text:"On date"}),
+    el("option",{value:"count", text:"After a number of times"})
+  ]);
+  const endDateIn = el("input",{type:"date", value:iso(TERM_END), min:dateStr, max:iso(TERM_END), class:"end-date"});
+  const countIn = el("input",{type:"number", min:"1", value:"10", class:"num"});
+  const endDateRow = el("div",{class:"row end-detail"},[endDateIn]);
+  const endCountRow = el("div",{class:"row end-detail"},[countIn, "time(s)"]);
+  endSel.addEventListener("change", () => {
+    endDateRow.classList.toggle("on", endSel.value === "date");
+    endCountRow.classList.toggle("on", endSel.value === "count");
+  });
+  const customPanel = el("div",{class:"repeat-custom", hidden:true},[
+    el("div",{class:"row"},["Every", everyIn, unitSel]),
+    el("div",{class:"row"},["Ends", endSel]),
+    endDateRow, endCountRow
+  ]);
+  repeatSel.addEventListener("change", () => { customPanel.hidden = repeatSel.value !== "custom"; });
+
+  const form = el("form",{class:"addtodo", onsubmit:e => {
     e.preventDefault();
-    const input = form.querySelector("input");
     const v = input.value.trim();
     if(!v) return;
-    (S.tasks[dateStr] = S.tasks[dateStr] || []).push({id:"t"+Date.now(), text:v, done:false, source:"manual"});
-    input.value = ""; persist(); render();
-    announce("To-do added.");
-    document.querySelectorAll(".addrow input").forEach(i => { if(i.dataset.d===dateStr) i.focus(); });
+    const rule = repeatSel.value === "none" ? null : {
+      type: repeatSel.value,
+      interval: everyIn.value, unit: unitSel.value,
+      endMode: endSel.value, endDate: endDateIn.value, count: countIn.value
+    };
+    const dates = computeOccurrences(dateStr, rule);
+    if(dates.length > 1){
+      const seriesId = "ts" + Date.now(), seed = Date.now();
+      dates.forEach((ds, i) => {
+        (S.tasks[ds] = S.tasks[ds] || []).push({id:`t${seed}_${i}`, text:v, done:false, source:"manual", seriesId});
+      });
+      announce(`Added ${dates.length} to-dos, ${repeatOptions(dateStr).find(o => o.value === repeatSel.value).label.toLowerCase()}.`);
+    }else{
+      (S.tasks[dateStr] = S.tasks[dateStr] || []).push({id:"t"+Date.now(), text:v, done:false, source:"manual"});
+      announce("To-do added.");
+    }
+    input.value = ""; repeatSel.value = "none"; customPanel.hidden = true;
+    persist(); render();
+    document.querySelectorAll(".addtodo input[data-d]").forEach(i => { if(i.dataset.d===dateStr) i.focus(); });
   }});
-  form.appendChild(el("input",{type:"text", placeholder:"Add a to-do…", "aria-label":"New to-do", "data-d":dateStr}));
-  form.appendChild(el("button",{class:"btn sm", type:"submit", text:"Add"}));
+  const topRow = el("div",{class:"addrow"});
+  topRow.appendChild(input);
+  topRow.appendChild(el("button",{class:"btn sm", type:"submit", text:"Add"}));
+  form.appendChild(topRow);
+  form.appendChild(el("label",{class:"td-repeat"},[el("span",{text:"Repeats"}), repeatSel]));
+  form.appendChild(customPanel);
   box.appendChild(form);
   return box;
 }
