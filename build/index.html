@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Anna's Calendar — Block 1</title>
 <meta name="description" content="Block 1 schedule and to-do list, 2026-09-02 to 2027-01-15.">
-<meta name="build" content="20260907-100707">
+<meta name="build" content="20260907-103527">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,200..800&family=Public+Sans:wght@300;400;500;600;800&display=swap" rel="stylesheet">
@@ -2158,6 +2158,13 @@ function taskList(dateStr){
       onkeydown:e => { if(e.key==="Enter"){ e.preventDefault(); e.target.blur(); } }
     }));
     if(EDIT.todo){
+      /* The full editor: rename, move to another section, turn a plain to-do
+         into a repeat, and -- for a series occurrence -- "Remove series". The
+         inline arrows and X stay for quick reordering and single deletes. */
+      row.appendChild(el("button",{
+        class:"move", type:"button", title:"Edit", "aria-label":`Edit “${t.text}”`,
+        html:ICON_PEN, onclick:() => todoModal(dateStr, t)
+      }));
       /* Arrows, not drag. Dragging a 32px row on a phone fights the page scroll,
          and arrows are the only version of this that also works from a keyboard. */
       row.appendChild(el("button",{
@@ -2174,20 +2181,6 @@ function taskList(dateStr){
         S.tasks[dateStr] = (S.tasks[dateStr] || []).filter(x => x !== t);
         persist(); render(); announce("To-do deleted.");
       }));
-      if(t.seriesId){
-        /* One occurrence of a repeat. The X above takes out just this day's
-           copy, the way editing or ticking one does; this takes out every
-           date the rule generated, matching "Remove series" on a class. */
-        row.appendChild(el("button",{
-          class:"rm", type:"button", html:ICON_REPEAT,
-          title:"Remove every copy of this repeating to-do",
-          "aria-label":`Remove every copy of the repeating to-do “${t.text}”`,
-          onclick:() => {
-            for(const d in S.tasks) S.tasks[d] = (S.tasks[d] || []).filter(x => x.seriesId !== t.seriesId);
-            persist(); render(); announce("Removed the whole repeating series.");
-          }
-        }));
-      }
     }else{
       /* The hover-revealed original, kept for the pointer case. On touch the CSS
          forces it visible; edit mode replaces it outright with the bordered set
@@ -2329,6 +2322,129 @@ function moveTask(dateStr, t, dir){
   arr[i] = arr[j]; arr[j] = t;
   persist(); render();
   announce(`Moved “${t.text}” ${dir < 0 ? "up" : "down"}.`);
+}
+
+/* The editor behind the pencil on a to-do row. Rename, move to another section,
+   and -- for a to-do that is not already part of a series -- turn it into one
+   from this day forward, exactly the way the class modal converts a standalone
+   class. A series occurrence gets the hint + "Remove series" instead of the
+   Repeats field, so a rule can never double-generate. Name and Section always
+   apply to this one day only, matching how editing one class occurrence works. */
+function todoModal(dateStr, t){
+  lastFocus = document.activeElement;
+  const root = document.getElementById("modalroot");
+  root.textContent = "";
+  modalAfter = null;
+  const d = fromIso(dateStr);
+  const series = !!t.seriesId;
+
+  const scrim = el("div",{class:"scrim", onclick:e => { if(e.target===scrim) closeModal(); }});
+  const modal = el("div",{class:"modal", role:"dialog", "aria-modal":"true", "aria-labelledby":"mtitle"});
+  modal.appendChild(el("header",{},[
+    el("h3",{id:"mtitle", text:"Edit to-do"}),
+    el("p",{text:`${DAYNAMES[d.getDay()]}, ${MONTHS[d.getMonth()]} ${d.getDate()}`})
+  ]));
+
+  const fields = el("div",{class:"fields"});
+
+  const nameIn = el("input",{type:"text", value:t.text||"", placeholder:"e.g. Re-read cranial nerves", id:"f-tdname"});
+  fields.appendChild(el("div",{class:"field"},[el("label",{for:"f-tdname",text:"Name"}), nameIn]));
+
+  const sectionSel = el("select",{id:"f-tdsec"});
+  [["mine","My to-dos"], ...OWN_SECTIONS.filter(([x]) => x !== "mine").map(([x,p]) => [x, PHASES[p]])]
+    .forEach(([v,l]) => {
+      const o = el("option",{value:v, text:l});
+      if(v === taskSection(t)) o.selected = true;
+      sectionSel.appendChild(o);
+    });
+  fields.appendChild(el("div",{class:"field"},[el("label",{for:"f-tdsec",text:"Section"}), sectionSel]));
+
+  let repeatSel = null, everyIn = null, unitSel = null, endSel = null, endDateIn = null, countIn = null;
+  if(!series){
+    repeatSel = el("select",{id:"f-tdrepeat"});
+    repeatOptions(dateStr).forEach(o => repeatSel.appendChild(el("option",{value:o.value, text:o.label})));
+    fields.appendChild(el("div",{class:"field"},[el("label",{for:"f-tdrepeat",text:"Repeats"}), repeatSel]));
+
+    everyIn = el("input",{type:"number", min:"1", value:"1", class:"num", "aria-label":"Repeat every"});
+    unitSel = el("select",{"aria-label":"Unit"});
+    ["day","week","month","year"].forEach(u => unitSel.appendChild(el("option",{value:u, text:u+"(s)"})));
+    endSel = el("select",{"aria-label":"Ends"},[
+      el("option",{value:"block", text:"Until the block ends"}),
+      el("option",{value:"date", text:"On date"}),
+      el("option",{value:"count", text:"After a number of times"})
+    ]);
+    endDateIn = el("input",{type:"date", value:iso(TERM_END), min:dateStr, max:iso(TERM_END), class:"end-date"});
+    countIn = el("input",{type:"number", min:"1", value:"10", class:"num"});
+    const endDateRow = el("div",{class:"row end-detail"},[endDateIn]);
+    const endCountRow = el("div",{class:"row end-detail"},[countIn, "time(s)"]);
+    endSel.addEventListener("change", () => {
+      endDateRow.classList.toggle("on", endSel.value === "date");
+      endCountRow.classList.toggle("on", endSel.value === "count");
+    });
+    const customPanel = el("div",{class:"repeat-custom", hidden:true},[
+      el("div",{class:"row"},["Every", everyIn, unitSel]),
+      el("div",{class:"row"},["Ends", endSel]),
+      endDateRow, endCountRow
+    ]);
+    fields.appendChild(customPanel);
+    repeatSel.addEventListener("change", () => { customPanel.hidden = repeatSel.value !== "custom"; });
+  }else{
+    fields.appendChild(el("p",{class:"edithint",
+      text:"Part of a repeating series — Name and Section change only this one day. Use Remove series below to take out every copy."}));
+  }
+  modal.appendChild(fields);
+
+  const foot = el("footer",{});
+  foot.appendChild(el("button",{class:"btn danger sm", type:"button", text:"Delete",
+    onclick:() => {
+      S.tasks[dateStr] = (S.tasks[dateStr] || []).filter(x => x !== t);
+      persist(); closeModal(); render(); announce("To-do deleted.");
+    }}));
+  if(series){
+    foot.appendChild(el("button",{class:"btn danger sm", type:"button", text:"Remove series",
+      onclick:() => {
+        for(const dd in S.tasks) S.tasks[dd] = (S.tasks[dd] || []).filter(x => x.seriesId !== t.seriesId);
+        persist(); closeModal(); render(); announce("Removed the whole repeating series.");
+      }}));
+  }
+  foot.appendChild(el("span",{class:"spacer"}));
+  foot.appendChild(el("button",{class:"btn ghost", type:"button", text:"Cancel", onclick:closeModal}));
+  foot.appendChild(el("button",{class:"btn", type:"button", text:"Save", onclick:() => {
+    const name = nameIn.value.trim() || t.text;
+    const section = sectionSel.value;
+
+    if(!series && repeatSel.value !== "none"){
+      const rule = {
+        type: repeatSel.value,
+        interval: everyIn.value, unit: unitSel.value,
+        endMode: endSel.value, endDate: endDateIn.value, count: countIn.value
+      };
+      const dates = computeOccurrences(dateStr, rule);
+      if(dates.length > 1){
+        S.tasks[dateStr] = (S.tasks[dateStr] || []).filter(x => x !== t);
+        const seriesId = "ts" + Date.now(), seed = Date.now();
+        dates.forEach((ds, i) => {
+          (S.tasks[ds] = S.tasks[ds] || []).push({
+            id:`t${seed}_${i}`, text:name, done: i === 0 ? !!t.done : false,
+            source:"manual", section, seriesId
+          });
+        });
+        persist(); closeModal(); render();
+        announce(`Repeated as ${dates.length} to-dos.`);
+        return;
+      }
+    }
+    t.text = name;
+    t.section = section;
+    persist(); closeModal(); render();
+    announce("To-do updated.");
+  }}));
+  modal.appendChild(foot);
+
+  scrim.appendChild(modal);
+  root.appendChild(scrim);
+  document.addEventListener("keydown", modalKeys);
+  nameIn.focus();
 }
 
 /* ---- month ------------------------------------------------------------- */

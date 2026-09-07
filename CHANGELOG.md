@@ -2,6 +2,34 @@
 
 Every entry is one rebuild of the calendar from a block-schedule PDF.
 
+## 2026-09-07 — an edit modal on an existing to-do
+
+No new PDF. The section and repeat pickers were only on the add row, so a
+to-do already on the list was stuck where it was made. It now has a full
+editor.
+
+- In edit mode every to-do row gains a **pencil**. It opens "Edit to-do" —
+  the same modal shape as "Add a class" — with **Name**, **Section**, and,
+  for a to-do that is not already part of a series, **Repeats** (the full
+  option set + Custom sub-panel).
+- Setting Repeats to a rule **turns a plain to-do into a series** from that
+  day forward, the way the class modal converts a standalone class: one
+  record per occurrence, shared `seriesId`, the (possibly just-renamed) name
+  and chosen section copied onto every one, the seed day keeping its done
+  state.
+- On a **series occurrence** the modal drops the Repeats field and shows a
+  hint plus **Remove series** in the footer, so a rule can't double-generate.
+  Name and Section there change only that one day, matching how editing a
+  single class occurrence works.
+- Footer **Delete** removes just that occurrence. The inline ✕, arrows and
+  the row's own quick edits are unchanged; the old inline "remove whole
+  series" ✕ is gone — that lives in the modal now.
+- Verified in headless Chrome (17/17): pencil opens the modal, rename +
+  section move land on the one record, plain→series conversion carries name
+  and section to every Tuesday and keeps the seed's done state, a series
+  occurrence has no Repeats field but has Remove series, renaming one
+  occurrence leaves the rest, and Delete / Remove series scope correctly.
+
 ## 2026-09-07 — pick which section a new to-do goes under
 
 No new PDF. Every manual to-do used to land in one flat "My to-dos" list.

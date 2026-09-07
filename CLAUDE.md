@@ -464,6 +464,19 @@ the page scroll, and arrows are the only version that also works from a keyboard
 Only Anna's own to-dos reorder; the generated ones are rebuilt from the schedule
 every render, so their order is not hers to hold.
 
+**`todoModal(dateStr, t)` is the pencil on a to-do row in edit mode** — the
+same modal shape as `sessionModal`, cut down to Name, Section and (for a to-do
+with no `seriesId`) Repeats + the shared `.repeat-custom` panel. Saving with a
+rule that resolves to more than one date does the same conversion the class
+modal does: drop the single record, generate one per occurrence from `dateStr`
+forward under a fresh `seriesId`, carrying the edited name and section, the seed
+day keeping `t.done`. A series occurrence gets the hint + a footer **Remove
+series** instead of the Repeats field (so a rule can't double-generate), and its
+Name/Section edits apply to that one day only — same rule as editing one class
+occurrence. Footer **Delete** filters just that occurrence out of
+`S.tasks[dateStr]`. The inline row keeps its ✕ and arrows; the old inline
+"remove whole series" ✕ was removed when the modal took over that job.
+
 **A manual to-do can be filed under any of the to-do headers.** The add row's
 **Section** dropdown offers `mine` (the default and the leftover bucket) plus
 one value per generated section — `tests`, `recall`, `before`, `during`,
