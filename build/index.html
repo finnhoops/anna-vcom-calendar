@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Anna's Calendar — Block 1</title>
 <meta name="description" content="Block 1 schedule and to-do list, 2026-09-02 to 2027-01-15.">
-<meta name="build" content="20260909-175416">
+<meta name="build" content="20260909-180647">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,200..800&family=Public+Sans:wght@300;400;500;600;800&display=swap" rel="stylesheet">
@@ -1385,6 +1385,26 @@ const REPEAT_IDS = (() => {
 })();
 const stateKey = (s, dateStr) => REPEAT_IDS.has(s.id) ? `${dateStr}|${s.id}` : s.id;
 
+/* Anna is one student in a class of ~44, and the Clinical Skills MLA rotations
+   run in cohorts on the printed schedule -- "Students 1-10", "Students 21-30",
+   "Students 20 - 26" -- several a day, only one of them hers. The others are
+   noise on her calendar, so a session whose title carries a "Students N-M"
+   range that does not include her number is dropped in sessionsFor() below,
+   which every view and every count reads from. A session with no such range
+   ("ALL STUDENTS", a lecture, an exam, anything) is always kept.
+   STUDENT_NUMBER is rewritten per person by the classmate repo's derive.py;
+   0 there turns the filter off. ?cohorts=all shows every cohort regardless. */
+const STUDENT_NUMBER = 9;
+const COHORT_FILTER = qs.get("cohorts") === "all" ? 0 : STUDENT_NUMBER;
+function cohortMiss(s){
+  if(!COHORT_FILTER) return false;
+  if((s.category || "").toUpperCase() !== "CLINICAL SKILLS") return false;
+  const m = String(s.title || s.label || "").match(/students?\s*(\d+)\s*[-–]\s*(\d+)/i);
+  if(!m) return false;
+  const lo = Math.min(+m[1], +m[2]), hi = Math.max(+m[1], +m[2]);
+  return COHORT_FILTER < lo || COHORT_FILTER > hi;
+}
+
 function sessionsFor(dateStr){
   const base = (DATA.days[dateStr]?.sessions || []).map(s => {
     const patch = S.sessionEdits[stateKey(s, dateStr)];
@@ -1393,6 +1413,7 @@ function sessionsFor(dateStr){
   const added = S.addedSessions.filter(s => s.date===dateStr);
   return base.concat(added)
              .filter(s => !S.hidden.includes(stateKey(s, dateStr)))
+             .filter(s => !cohortMiss(s))
              .sort((a,b) => (a.start||"99:99").localeCompare(b.start||"99:99"));
 }
 function catColor(s){

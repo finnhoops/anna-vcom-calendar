@@ -225,6 +225,24 @@ Anything that matches no rule is reported at the end of every parse run as
 "sessions with no naming rule". Take that list to Finn — Anna names them, and
 the name goes into the rules above. Never invent a name.
 
+## Clinical Skills cohort filter
+
+Clinical Skills MLA runs in cohorts on the printed schedule — `Students 1-10`,
+`Students 21-30`, `Students 20 - 26`, several a day, only one of them Anna's.
+`sessionsFor()` in `app_template.html` drops any **CLINICAL SKILLS** session
+whose `title` carries a `Students N-M` range not containing `STUDENT_NUMBER`
+(Anna is **9**). It is the single chokepoint every view and count reads, so a
+filtered session is gone everywhere — list, week, month dots, month counts,
+day editor — and it is never offered in a restore strip (it was never in
+`S.hidden`). Sessions with no range, or `ALL STUDENTS`, are always kept.
+`?cohorts=all` sets `COHORT_FILTER` to 0 and shows every cohort.
+
+`STUDENT_NUMBER = 9;` is a bare literal on purpose: the classmate repo's
+`derive.py` does a `must_replace` on that exact line, rewriting it to the
+person's number from `registry.json` (`"student"` field) or to `0` (filter
+off) when unknown — so no classmate build inherits Anna's 9. If that line's
+shape changes, update `derive.py` step 2b in the same commit.
+
 ## Design
 
 Global rules in `~/.claude/CLAUDE.md` apply, and `ui-ux-pro-max` must be

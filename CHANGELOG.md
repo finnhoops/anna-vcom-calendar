@@ -2,6 +2,31 @@
 
 Every entry is one rebuild of the calendar from a block-schedule PDF.
 
+## 2026-09-09 — Anna's calendar only shows her Clinical Skills cohort
+
+No new PDF. The Clinical Skills MLA rotations run in cohorts on the printed
+schedule — "Students 1-10", "Students 21-30", "Students 20 - 26" — several a
+day, only one of them Anna's. She is student 9, so the rest are noise.
+
+- `sessionsFor()` now drops any **CLINICAL SKILLS** session whose title
+  carries a `Students N-M` range that doesn't include `STUDENT_NUMBER` (9).
+  Every view and every count reads from `sessionsFor`, so the filtered
+  sessions vanish from the day list, the week, the month dots and counts,
+  and the day editor alike. A session with no such range — "ALL STUDENTS",
+  a lecture, an exam — is always kept.
+- 53 cohort sessions filtered out across the block; the 7 that are hers stay
+  (Sep 14 & 24 "1-10", Oct 29 / Nov 3 / Nov 11 / Dec 7 "7-12", Dec 1
+  "9-10"). Sep 15 and Sep 21 Clinical Skills now show nothing, which is
+  correct — her cohort isn't scheduled those days.
+- `?cohorts=all` in the URL turns the filter off and shows every cohort.
+- `STUDENT_NUMBER` is the one knob. The classmate repo's `derive.py`
+  rewrites it per person from `registry.json` (a new optional `student`
+  field), or to `0` — filter off — when the number isn't known, so a
+  classmate build never inherits Anna's 9.
+- Verified in headless Chrome: with the filter on, Sep 14 keeps only
+  "Students 1-10" and Sep 15 shows no cohort rows while its other classes
+  remain; with `?cohorts=all` both days show every cohort again.
+
 ## 2026-09-07 — an edit modal on an existing to-do
 
 No new PDF. The section and repeat pickers were only on the add row, so a
