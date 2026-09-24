@@ -332,6 +332,16 @@ def apply_overrides(schedule, path):
             print(f"  override warning: {date} is not in the schedule -- skipped")
             continue
         for e in entries:
+            # Guard against a stale correction: an entry may say what it expects to
+            # find on its day. The 9.24.26 reissue moved classes around, and overrides
+            # written for an earlier layout silently rewrote the wrong ones -- the
+            # "times are wrong" report. An entry whose expectation fails is skipped
+            # loudly instead of applied.
+            want = e.get("expect")
+            if want and not any(want.lower() in f"{x.get('label','')} {x.get('title','')}".lower()
+                                for x in day["sessions"]):
+                print(f"  override warning: {date} no longer has '{want}' -- entry skipped (stale?)")
+                continue
             if e.get("at"):
                 match = next((s for s in day["sessions"] if s.get("start") == e["at"]), None)
                 if match is None:
@@ -341,6 +351,11 @@ def apply_overrides(schedule, path):
                     match["start"] = e["start"]
                 if e.get("end"):
                     match["end"] = e["end"]
+                # A merged cell can run its neighbours' text into the title
+                # ("... Witt Assigned"); an entry may reword the session outright.
+                for k in ("label", "title", "category"):
+                    if e.get(k):
+                        match[k] = e[k]
                 day["sessions"].sort(key=lambda s: s.get("start") or "")
                 applied += 1
                 continue

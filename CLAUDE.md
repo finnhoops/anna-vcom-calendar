@@ -225,6 +225,34 @@ Anything that matches no rule is reported at the end of every parse run as
 "sessions with no naming rule". Take that list to Finn — Anna names them, and
 the name goes into the rules above. Never invent a name.
 
+## How block times are read (since the 9.24.26 reissue)
+
+The PDF's text does not say how long a block runs, and it cannot: a lab merged down to
+5 PM and a one-hour class with an empty hour under it both leave the lower rows without
+text. So `parse_schedule.py` reads the **drawing**:
+
+- `fit_header_band()` sets `HEADER_MAX_Y` per page from where the date headers actually
+  sit. It was a fixed 64pt until 9.24.26 pushed the headers to ~102pt and every page
+  parsed as zero days.
+- `row_borders()` renders the page and looks for a dark hairline across a column at the top
+  of each hour row. A block **ends at the first drawn border below its start**, else at the
+  foot of the grid (17:00). This is what `extend_blocks()` applies, never past the next
+  block's start.
+- `band_geometry()` paints the page's rectangles in paint order (a white cell over the
+  pale-blue Interview Day strip hides it; one drawing path can hold several disjoint
+  rectangles, so it reads `items`, not `rect`) and finds **tall tinted cells**. Such a
+  cell is one block, read top to bottom -- its text is often centred lower than its top.
+- A drawn Class band is a definitive block start (`_band_start`), so adjacent cells do not
+  merge just because their text looks continuous.
+
+`data/overrides.json` is now only for what the drawing cannot say. **Every entry needs an
+`"expect"` phrase** that must still appear on that day; `apply_overrides` skips a failing
+entry with a warning. The old file was 24 hand-patches against an earlier layout, and after a
+reissue they silently rewrote the wrong classes -- that was the "times are wrong" report.
+When a new PDF comes: parse, then look at every week against the PDF page (render it and
+compare) before publishing; the safety gate checks the parse is *plausible*, not that it is
+*right*.
+
 ## Clinical Skills cohort filter
 
 Clinical Skills MLA runs in cohorts on the printed schedule — `Students 1-10`,

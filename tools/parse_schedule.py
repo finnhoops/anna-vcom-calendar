@@ -30,6 +30,8 @@ import fitz  # PyMuPDF
 # --- grid geometry ---------------------------------------------------------
 LABEL_COL_MAX_X = 130.0   # spans left of this are row labels / hour labels
 HEADER_MAX_Y = 64.0       # date headers live above this; the 8AM Class row starts ~66
+HEADER_OFFSET = 7.7       # header baseline -> cutoff (56.3 -> 64.0 on the Block 1 PDFs)
+DEFAULT_HEADER_MAX_Y = HEADER_MAX_Y
 BAND_PAD = 4.0            # tolerance when splitting a row into its three bands
 
 DATE_RE = re.compile(
@@ -112,6 +114,22 @@ def parse_time(text):
 
 def hhmm(minutes):
     return f"{minutes // 60:02d}:{minutes % 60:02d}"
+
+
+def fit_header_band(spans):
+    """
+    Set HEADER_MAX_Y for THIS page from where its date headers actually sit.
+    It was a fixed 64pt, which held for every Block 1 PDF until the 9.24.26
+    reissue added a title band above the grid and pushed the headers to ~102pt --
+    every date header then fell "below the cutoff" and the whole PDF parsed as
+    zero days. The header-to-first-row gap is the same in both layouts, so anchor
+    the cutoff to the headers instead of to the page.
+    """
+    global HEADER_MAX_Y
+    HEADER_MAX_Y = DEFAULT_HEADER_MAX_Y
+    ys = [sp["y0"] for sp in spans if parse_date(sp["text"])]
+    if ys:
+        HEADER_MAX_Y = min(ys) + HEADER_OFFSET
 
 
 def build_columns(spans, page_width):
@@ -351,6 +369,7 @@ PLAIN_LABELS = {
     "LUNCH": "Lunch", "LUNCH PROVIDED": "Lunch", "BREAK": "Break",
     "NO CLASSES": "No Classes", "LABOR DAY": "Labor Day",
     "THANKSGIVING HOLIDAY": "Thanksgiving Holiday",
+    "THANKSGIVING HOLIDAY BREAK": "Thanksgiving Holiday",
     "CHRISTMAS HOLIDAY BREAK": "Christmas Break",
 }
 EXAM_LABEL_RE = re.compile(
@@ -485,8 +504,152 @@ def session_id(category, seq, title, instructor):
     return hashlib.sha1(key.encode("utf-8")).hexdigest()[:10]
 
 
+# --- drawn-cell geometry ----------------------------------------------------
+# The school's grid is drawn with filled rectangles: every block opens with a
+# coloured "Class" band at the top of an hour row, and a tall merged cell (an
+# interview day, an OSCE) is tinted top to bottom. Those fills are the only place
+# the PDF states where a block really begins and ends -- the text alone cannot say
+# that a lecture whose instructor sits two rows down owns both rows, or that a tinted
+# cell runs to noon. 9.24.26 exposed this: the text-only reading cut two-hour
+# classes to one hour and welded neighbouring cells together.
+ORANGE_BAND = (0.93, 0.49, 0.19)     # the "Class" label band in the label column
+
+
+def _near(c, t, e=0.03):
+    return bool(c) and all(abs(a - b) < e for a, b in zip(c, t))
+
+
+def row_borders(page, columns, rows):
+    """
+    {(date, row_idx): True} where a border line is DRAWN across that column at the
+    top of that hour row. A block ends exactly at the first drawn border below its
+    start and runs on through hours that have none -- the only reliable way to tell a
+    lab whose cell is merged down to 5 PM from a one-hour class with an empty hour
+    under it (both leave the lower rows without any text). The PDF has no border
+    object to read, so look at the rendered page: a dark hairline across the column.
+    """
+    rects = fill_rects(page)
+    tops = []
+    for (x0, y0, x1, y1, f) in sorted(rects, key=lambda t: t[1]):
+        if _near(f, ORANGE_BAND) and 88 < x0 < 104 and (x1 - x0) > 25:
+            if not tops or y0 - tops[-1] > 15:
+                tops.append(y0)
+    if len(tops) != len(rows):
+        tops = [r["top"] for r in rows]
+    Z = 4
+    pix = page.get_pixmap(matrix=fitz.Matrix(Z, Z), colorspace=fitz.csGRAY)
+    W, H, buf = pix.width, pix.height, pix.samples
+
+    def dark(px, py):
+        return 0 <= px < W and 0 <= py < H and buf[py * W + px] < 110
+
+    out = {}
+    for (day, lo, hi) in columns:
+        xs = [lo + (hi - lo) * k for k in (0.2, 0.35, 0.5, 0.65, 0.8)]
+        for ri, t in enumerate(tops):
+            hits = sum(any(dark(int(x * Z), int((t + dy) * Z)) for dy in (-0.6, -0.3, 0, 0.3, 0.6, 0.9))
+                       for x in xs)
+            out[(day, ri)] = hits >= 4
+    return out
+
+
+def fill_rects(page):
+    """(x0, y0, x1, y1, colour) for every filled RECTANGLE, in paint order. A single
+    drawing path can hold several disjoint rectangles (the pale-blue strip is one
+    path that covers Tuesday and Thursday but not Wednesday), so its bounding box
+    lies -- read the sub-rectangles."""
+    out = []
+    for d in page.get_drawings():
+        f = d.get("fill")
+        if not f:
+            continue
+        rects = [it[1] for it in d["items"] if it[0] == "re"]
+        if not rects:
+            rects = [d["rect"]]
+        for r in rects:
+            out.append((r.x0, r.y0, r.x1, r.y1, f))
+    return out
+
+
+def band_geometry(page, columns, rows):
+    """
+    (geom, tall). geom is {(date, row_idx): {"band": True, "region_end": minute-or-None}}
+    for every block the drawing says starts at that row; region_end is set only
+    for a tall coloured region (more than one hour row) and is the end of its last
+    row. tall maps every row inside such a region to (first_row, end_minute).
+    """
+    rects_painted = fill_rects(page)
+    tops = []
+    for (x0, y0, x1, y1, f) in sorted(rects_painted, key=lambda t: t[1]):
+        if _near(f, ORANGE_BAND) and 88 < x0 < 104 and (x1 - x0) > 25:
+            if not tops or y0 - tops[-1] > 15:
+                tops.append(y0)
+    if len(tops) != len(rows):
+        tops = [r["top"] for r in rows]          # fall back to the label-derived edges
+
+    def row_at_top(y, tol=5.0):
+        best = min(range(len(tops)), key=lambda i: abs(tops[i] - y))
+        return best if abs(tops[best] - y) <= tol else None
+
+    def last_row_above(y):
+        idx = [i for i in range(len(tops)) if tops[i] < y - 2.0]
+        return idx[-1] if idx else None
+
+    geom, tall = {}, {}
+    STEP = 0.5
+    y_lo = HEADER_MAX_Y
+    n_bins = int((page.rect.height - y_lo) / STEP)
+    for (day, lo, hi) in columns:
+        cx = (lo + hi) / 2
+        # Paint what the eye sees at this column: later rectangles cover earlier
+        # ones (a white cell laid over the pale-blue "Interview Day" strip hides
+        # it), so read the drawing in paint order rather than piece by piece.
+        seen = [None] * n_bins
+        for (rx0, ry0, rx1, ry1, f) in rects_painted:
+            if not (rx0 <= cx <= rx1) or ry1 < y_lo:
+                continue
+            key = tuple(round(v, 2) for v in f)
+            if max(key) < 0.05:
+                continue            # black is the border artwork, drawn over the cells -- never a cell itself
+            for b in range(max(0, int((ry0 - y_lo) / STEP)), min(n_bins, int((ry1 - y_lo) / STEP) + 1)):
+                seen[b] = key
+        def coloured(c):
+            return c is not None and not (min(c) > 0.97 or max(c) < 0.05)
+        # Runs of one visible colour; hairline black/white gaps do not break a run.
+        regions = []                       # [start_y, end_y, colour]
+        for b, c in enumerate(seen):
+            y = y_lo + b * STEP
+            if not coloured(c):
+                continue
+            if regions:
+                st, en, lc = regions[-1]
+                if y - en <= 1.6:
+                    if c != lc and row_at_top(y) is not None and abs(y - en) <= 1.6 \
+                            and y - st > 6.0 and row_at_top(y) != row_at_top(st):
+                        regions.append([y, y + STEP, c])       # a different-coloured cell opens at a row top
+                    else:
+                        regions[-1][1] = y + STEP
+                        regions[-1][2] = c
+                    continue
+            regions.append([y, y + STEP, c])
+        for st, en, _ in regions:
+            r0 = row_at_top(st)
+            if r0 is None:
+                continue
+            r1 = last_row_above(en)
+            end = rows[r1]["end"] if r1 is not None and r1 > r0 else None
+            geom[(day, r0)] = {"band": True, "region_end": end}
+            if end is not None:
+                # a tall cell: every row inside it belongs to the one block that
+                # opens at r0, however low its text happens to be centred
+                for rr in range(r0, r1 + 1):
+                    tall[(day, rr)] = (r0, end)
+    return geom, tall
+
+
 def parse_page(page, page_no, report):
     spans = spans_of(page)
+    fit_header_band(spans)
     columns = build_columns(spans, page.rect.width)
     rows = build_rows(spans, page.rect.height)
 
@@ -526,6 +689,10 @@ def parse_page(page, page_no, report):
         target = monday + timedelta(days=5 if name == "Saturday" else 6)
         days.setdefault(target, blank_day())["assignments"].extend(texts)
 
+    geom, tall = band_geometry(page, columns, rows)
+    borders = row_borders(page, columns, rows)
+    region_session = {}
+
     # Bucket every content span into its (column, row) cell.
     cells = {}
     loose = []
@@ -543,8 +710,17 @@ def parse_page(page, page_no, report):
             continue
         cells.setdefault((col[0], row_idx), []).append(s)
 
+    occupied = set(cells)          # rows that carry ANY text, instructor-only ones included
     for (day, row_idx), cell_spans in sorted(cells.items(), key=lambda kv: (kv[0][0], kv[0][1])):
         row = rows[row_idx]
+        tl = tall.get((day, row_idx))
+        if tl:
+            # A tall drawn cell is ONE block read top to bottom, not one block per
+            # hour row it happens to cross.
+            if (day, tl[0]) in region_session:
+                continue
+            cell_spans = [sp for rr in range(tl[0], len(rows)) if tall.get((day, rr)) == tl
+                          for sp in cells.get((day, rr), [])]
         category, subject, instructor = split_bands(cell_spans)
 
         if not (category or subject):
@@ -579,7 +755,22 @@ def parse_page(page, page_no, report):
         if not title:
             title = category
         start = row["start"]
-        days[day]["sessions"].append({
+        g = geom.get((day, row_idx), {})
+        if tl:
+            r0, region_end = tl
+            start = rows[r0]["start"]
+            g = {"band": True, "region_end": region_end}
+        # Where this block really ends: the first border the drawing puts across
+        # its column below where it starts, else the foot of the grid.
+        base_row = tl[0] if tl else row_idx
+        ext = rows[-1]["end"]
+        for k in range(base_row + 1, len(rows)):
+            if borders.get((day, k)):
+                ext = rows[k]["start"]
+                break
+        sess = {
+            "_band_start": bool(g.get("band")),
+            "_ext_end": ext,
             "id": session_id(category, seq, title, instructor),
             "start": hhmm(start) if start is not None else None,
             "end": hhmm(row.get("end")) if row.get("end") is not None else None,
@@ -591,7 +782,11 @@ def parse_page(page, page_no, report):
             "kind": classify(category, title),
             "mandatory": mandatory,
             "_placeholder": not subject,
-        })
+        }
+        if tl:
+            sess["end"] = hhmm(region_end)
+            region_session[(day, tl[0])] = sess
+        days[day]["sessions"].append(sess)
 
     # Free-floating text (event banners, checklist bodies) attaches to its column.
     for s in loose:
@@ -622,6 +817,8 @@ def opens_own_cell(session, previous):
     above it. A merged multi-hour cell hands its category to the first row and
     its subject to another, and a wrapped subject spills its tail downward.
     """
+    if session.get("_band_start") and previous is not None:
+        return True          # the PDF drew a new Class band here: a new block, whatever the text says
     if previous is not None and re.search(r"[&,:]$|\b(?:and|or|the|of|in|for|with|to)$",
                                           previous["title"], re.I):
         return False
@@ -647,6 +844,10 @@ def merge_multi_hour(sessions):
             current = []
             continue
         contiguous = bool(current) and current[-1]["end"] == s["start"]
+        if current and not contiguous and current[-1].get("_ext_end"):
+            # Text set in a lower hour of a cell the drawing runs down through
+            # (no border between) belongs to that cell, whatever the row grid says.
+            contiguous = current[-1]["start"] < (s["start"] or "") < hhmm(current[-1]["_ext_end"])
         if contiguous and not opens_own_cell(s, current[-1]):
             current.append(s)
         else:
@@ -691,8 +892,36 @@ def merge_multi_hour(sessions):
             head["location"] = location
         head["kind"] = classify(category, head["title"])
         head["id"] = session_id(category, head["seq"], head["title"], head["instructor"])
+        head["_ext_end"] = max((s.get("_ext_end") or 0 for s in run), default=0) or None
         merged.append(head)
     return merged
+
+
+def extend_blocks(sessions):
+    """
+    Set each block's end to where the drawing's own borders put it (see
+    row_borders), never past the start of the next block.
+    """
+    order = sorted(range(len(sessions)), key=lambda i: sessions[i]["start"] or "99:99")
+    for pos, i in enumerate(order):
+        s = sessions[i]
+        ext = s.pop("_ext_end", None)
+        s.pop("_band_start", None)
+        if not ext or not s["start"]:
+            continue
+        limit = 24 * 60
+        for j in order[pos + 1:]:
+            nxt = sessions[j]["start"]
+            if nxt and nxt > s["start"]:
+                h, m = map(int, nxt.split(":"))
+                limit = h * 60 + m
+                break
+        h, m = map(int, s["start"].split(":"))
+        start_min = h * 60 + m
+        end = min(ext, limit)
+        if end > start_min:
+            s["end"] = hhmm(end)
+    return sessions
 
 
 def main():
@@ -741,7 +970,7 @@ def main():
             all_days[key]["week"] = (date.fromisoformat(key) - first_monday).days // 7 + 1
         day = all_days[key]
         day["sessions"].sort(key=lambda s: (s["start"] or "99:99", s["title"]))
-        day["sessions"] = merge_multi_hour(day["sessions"])
+        day["sessions"] = extend_blocks(merge_multi_hour(day["sessions"]))
         for s in day["sessions"]:
             s.pop("_placeholder", None)
         for s in day["sessions"]:

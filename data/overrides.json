@@ -1,99 +1,52 @@
 {
-  "_comment": "Manual corrections applied by generate_calendar.py AFTER the parse. The parser reads the schedule row by row; a merged Clinical Skills / lab / OSCE cell leaves its middle hours blank, so the block gets split or cut short (usually ending at 3-4 PM when it really runs to 5 PM). Two entry shapes: {\"at\": \"HH:MM\", \"start\"?, \"end\"?} nudges an existing session's start/end and leaves its name, topic and category alone -- the light touch for a truncated lab; {\"clear\": \"HH:MM-HH:MM\", \"start\", \"end\", \"label\", \"title\"?, \"category\", \"kind\"} drops the parsed fragments in the window and inserts one clean block (title defaults to label). Anything labelled 'Clinical Skills- ...' renders in the grey ALA colour. Re-check all of these if the school reissues the schedule.",
-  "2026-09-09": [
-    {"clear": "13:00-17:00", "start": "13:00", "end": "17:00",
-     "label": "Clinical Skills- Sterility Techniques", "category": "CLINICAL SKILLS", "kind": "lab"}
-  ],
-  "2026-09-11": [
-    {"at": "13:00", "end": "17:00"}
-  ],
-  "2026-09-23": [
-    {"clear": "13:00-17:00", "start": "13:00", "end": "17:00",
-     "label": "Clinical Skills- Anesthesia Workstation & Airway Setup", "category": "CLINICAL SKILLS", "kind": "lab"}
-  ],
-  "2026-09-29": [
-    {"at": "13:00", "end": "17:00"}
-  ],
-  "2026-09-30": [
-    {"at": "13:00", "end": "17:00"}
-  ],
-  "2026-10-01": [
-    {"at": "13:00", "end": "17:00"}
-  ],
-  "2026-10-02": [
-    {"at": "13:00", "end": "17:00"}
-  ],
-  "2026-10-06": [
-    {"clear": "10:00-18:00", "start": "10:00", "end": "11:00",
-     "label": "Clinical Skills #10", "title": "IV Insertion, Equipment and Techniques",
-     "category": "CLINICAL SKILLS", "kind": "lab"},
-    {"start": "11:00", "end": "17:00",
-     "label": "Clinical Skills- Intravenous Line Insertion & Fluid Management", "category": "CLINICAL SKILLS", "kind": "lab"}
-  ],
-  "2026-10-07": [
-    {"clear": "13:00-17:00", "start": "13:00", "end": "17:00",
-     "label": "Clinical Skills- Airway Assessment", "category": "CLINICAL SKILLS", "kind": "lab"}
-  ],
-  "2026-10-12": [
-    {"clear": "12:00-16:00", "start": "11:00", "end": "17:00",
-     "label": "OSCE #2 IV Insertion", "category": "CLINICAL SKILLS", "kind": "lab"}
-  ],
-  "2026-10-16": [
-    {"at": "13:00", "end": "17:00"}
-  ],
-  "2026-10-22": [
-    {"at": "15:00", "end": "17:00"}
-  ],
-  "2026-10-28": [
-    {"clear": "08:00-17:00", "start": "08:00", "end": "17:00",
-     "label": "OSCE #4 Assessment Stations", "title": "OSCE #4 Assessment Stations",
-     "category": "OSCE #4", "kind": "exam"}
-  ],
-  "2026-11-06": [
-    {"at": "13:00", "end": "17:00"}
-  ],
-  "2026-12-10": [
-    {"clear": "10:00-12:00", "start": "10:00", "end": "12:00",
-     "label": "Clinical Skills- Patient Interview", "category": "CLINICAL SKILLS", "kind": "lab"}
-  ],
-  "2026-12-14": [
-    {"clear": "12:00-17:00", "start": "11:00", "end": "17:00",
-     "label": "Clinical Skills- Standardized Patient Experience", "title": "Standardized Patient Experience",
-     "category": "CLINICAL SKILLS", "kind": "lab"}
-  ],
-  "2026-12-17": [
-    {"clear": "13:00-17:00", "start": "13:00", "end": "14:00",
-     "label": "Clinical Skills #28", "title": "SOAP Notes, Laboratory Findings, Consults and Progress Notes",
-     "category": "CLINICAL SKILLS", "kind": "lab", "study": true, "todoLabel": "Clinical Skills ALA #28"},
-    {"start": "14:00", "end": "15:00",
-     "label": "Clinical Skills #29", "title": "The Anesthesia Care Plan",
-     "category": "CLINICAL SKILLS", "kind": "lab", "study": true, "todoLabel": "Clinical Skills ALA #29"}
-  ],
-  "2026-12-18": [
-    {"clear": "08:00-17:00", "start": "08:00", "end": "17:00",
-     "label": "OSCE #5 Standardized Patient Encounters", "title": "OSCE #5 Standardized Patient Encounters",
-     "category": "OSCE #5", "kind": "lecture"}
-  ],
+  "_comment": "Manual corrections applied by generate_calendar.py AFTER the parse. Since the 9.24.26 reissue the parser reads block ENDS from the PDF's drawn borders, so the old 'stretch this lab to 5 PM' entries are gone; what is left is only what the drawing cannot say -- today, the afternoon half of each OSCE #5 Full Case Management day (a tinted cell with no text of its own). Two entry shapes: {\\\"at\\\": \\\"HH:MM\\\", \\\"start\\\"?, \\\"end\\\"?} nudges an existing session; {\\\"clear\\\": \\\"HH:MM-HH:MM\\\", ...} replaces parsed fragments; a plain {start, end, label, ...} adds a block. EVERY entry should carry \\\"expect\\\": a phrase that must still be on that day, otherwise the entry is skipped with a warning rather than clobbering whatever the school moved there. Re-check all of these when the school reissues the schedule.",
   "2027-01-05": [
-    {"at": "08:00", "end": "12:00"},
-    {"start": "13:00", "end": "17:00",
-     "label": "OSCE #5 Full Case Management", "title": "OSCE #5 Full Case Management",
-     "category": "CLINICAL SKILLS", "kind": "lab"}
+    {
+      "expect": "OSCE #5 Full Case Management",
+      "start": "13:00",
+      "end": "17:00",
+      "label": "OSCE #5 Full Case Management",
+      "title": "OSCE #5 Full Case Management",
+      "category": "CLINICAL SKILLS",
+      "kind": "lab"
+    }
   ],
   "2027-01-06": [
-    {"at": "08:00", "end": "12:00"},
-    {"start": "13:00", "end": "17:00",
-     "label": "OSCE #5 Full Case Management", "title": "OSCE #5 Full Case Management",
-     "category": "CLINICAL SKILLS", "kind": "lab"}
+    {
+      "expect": "OSCE #5 Full Case Management",
+      "start": "13:00",
+      "end": "17:00",
+      "label": "OSCE #5 Full Case Management",
+      "title": "OSCE #5 Full Case Management",
+      "category": "CLINICAL SKILLS",
+      "kind": "lab"
+    }
   ],
   "2027-01-07": [
-    {"at": "08:00", "end": "12:00"},
-    {"start": "13:00", "end": "17:00",
-     "label": "OSCE #5 Full Case Management", "title": "OSCE #5 Full Case Management",
-     "category": "CLINICAL SKILLS", "kind": "lab"}
+    {
+      "expect": "OSCE #5 Full Case Management",
+      "start": "13:00",
+      "end": "17:00",
+      "label": "OSCE #5 Full Case Management",
+      "title": "OSCE #5 Full Case Management",
+      "category": "CLINICAL SKILLS",
+      "kind": "lab"
+    }
   ],
-  "2027-01-11": [
-    {"clear": "13:00-17:00", "start": "13:00", "end": "17:00",
-     "label": "Clinical Skills- Anesthesia Care Plan Challenge", "category": "CLINICAL SKILLS", "kind": "lab"}
+  "2026-10-22": [
+    {
+      "expect": "Oral and Nasal Intubation",
+      "at": "09:00",
+      "label": "Clinical Skills- Oral and Nasal Intubation",
+      "title": "Oral and Nasal Intubation (all students as assigned; lunch provided)"
+    }
+  ],
+  "2026-10-28": [
+    {
+      "expect": "OSCE #3",
+      "at": "08:00",
+      "label": "OSCE #3 Basic Airway Management & OSCE #4 Assessment Stations",
+      "title": "OSCE #3 Basic Airway Management and OSCE #4 Assessment Stations: Direct Oral Intubation, Video Intubation, Nasal Intubation (all students as assigned)"
+    }
   ]
 }

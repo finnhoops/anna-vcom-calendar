@@ -187,7 +187,7 @@ if ! git remote get-url origin >/dev/null 2>&1; then
   exit 1
 fi
 
-git add build/index.html data/schedule.json data/.last_pdf_hash CHANGELOG.md
+git add build/index.html build/version.json data/schedule.json data/.last_pdf_hash CHANGELOG.md
 git add -A schedule/ 2>/dev/null || true
 
 if git diff --cached --quiet; then
