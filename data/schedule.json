@@ -1,8 +1,8 @@
 {
   "meta": {
-    "source_pdf": "Block 1 Learning Calendar_CO28_CC_ Curriculum Schedule- 9.9.26.pdf",
-    "source_sha256": "e30acd33a2a7002e5ceaa70e0f5b2996fbbcdb604ec14713c8bc8bf9632f3c97",
-    "parsed_at": "2026-09-09T17:54:16",
+    "source_pdf": "Block 1 Learning Calendar_CO2028_CC_Curriculum Schedule_9.24.26.pdf",
+    "source_sha256": "96361844966422183a6ce61c2d9a5a88245c34406abb3c11a18c17bdd8cc8fe4",
+    "parsed_at": "2026-09-24T15:03:58",
     "block": "Block 1",
     "term_start": "2026-09-02",
     "grid_start": "2026-08-31",
@@ -18,28 +18,24 @@
   },
   "categories": [
     "",
-    "ABSOLUTELY NO TRAVEL PLANS ARE TO BE MADE",
-    "ALL STUDENTS",
-    "ALL STUDENTS AS ASSIGNED",
+    "ABSOLUTELY NO TRAVEL PLANS ARE TO BE MADE UNTIL STUDENTS ARE RELEASED BY THE PROGRAM",
     "ANATOMY",
-    "BREAK",
+    "ANATOMY GROSS ANATOMY LAB EXPERIENCE",
     "CHRISTMAS HOLIDAY BREAK",
     "CLINICAL SKILLS",
     "COMPETENCY EXAMS",
     "ELECTROPHYSIOLOGY",
-    "IV INSERTION",
     "LABOR DAY",
     "LUNCH",
     "LUNCH PROVIDED",
     "ORIENTATION",
-    "OSCE #4",
     "PHARMACOLOGY",
     "PHYSIOLOGY",
     "PROFESSIONALISM",
     "PROGRESS & PROMOTIONS COMMITTEE MEETING",
     "SPECIAL EVENT END OF BLOCK PARTY",
     "TECHNOLOGY & MONITORING",
-    "THANKSGIVING HOLIDAY",
+    "THANKSGIVING HOLIDAY BREAK",
     "WELCOME EVENT:"
   ],
   "exams": [
@@ -52,8 +48,8 @@
     },
     {
       "date": "2026-09-16",
-      "title": "EXAM 1: LECTURES 1-7 Interview Day Ambassadors Required Varellas Kim Price DeWitt",
-      "label": "Anatomy Exam 1: Lectures 1-7 Interview Day Ambassadors Required Varellas Kim Price DeWitt",
+      "title": "EXAM 1: LECTURES 1-7",
+      "label": "Anatomy Exam 1: Lectures 1-7",
       "category": "ANATOMY",
       "start": "08:00"
     },
@@ -143,10 +139,10 @@
     },
     {
       "date": "2026-10-28",
-      "title": "ASSESSMENT STATIONS Direct Oral Intubation Video Intubation Nasal Intubation EVALUATORS",
-      "label": "OSCE #4 Assessment Stations Direct Oral Intubation Video Intubation Nasal Intubation",
-      "category": "OSCE #4",
-      "start": "11:00"
+      "title": "OSCE #3 BASIC AIRWAY MANAGEMENT AND OSCE #4 ASSESSMENT STATIONS Direct Oral Intubation Video Intubation Nasal Intubation S. Chilldress J. Moon K. DeWitt M. Varellas All Students Assigned",
+      "label": "OSCE #3 Basic Airway Management And OSCE #4 Assessment Stations Direct Oral Intubation Video Intubation Nasal Intubation Witt Assigned",
+      "category": "CLINICAL SKILLS",
+      "start": "08:00"
     },
     {
       "date": "2026-10-30",
@@ -326,17 +322,32 @@
           "todoLabel": null
         },
         {
-          "id": "12915f63ba",
+          "id": "176053f9e4",
           "start": "11:00",
-          "end": "13:00",
+          "end": "12:00",
           "category": "ORIENTATION",
           "seq": null,
           "code": "MLA",
-          "title": "Orientation to Medical Education (10:45 am) LUNCH- Meet your Academic Advisor",
+          "title": "Orientation to Medical Education (10:45 am)",
           "instructor": "E. Wilson/ R. McMullen",
           "kind": "admin",
           "mandatory": false,
           "label": "Orientation",
+          "study": false,
+          "todoLabel": null
+        },
+        {
+          "id": "45847c2193",
+          "start": "12:00",
+          "end": "13:00",
+          "category": "",
+          "seq": null,
+          "code": null,
+          "title": "LUNCH- Meet your Academic Advisor",
+          "instructor": "",
+          "kind": "admin",
+          "mandatory": false,
+          "label": "Lunch- Meet your Academic Advisor",
           "study": false,
           "todoLabel": null
         },
@@ -444,17 +455,32 @@
           "todoLabel": null
         },
         {
-          "id": "6518c478fa",
+          "id": "c8ad64dc5c",
           "start": "11:00",
-          "end": "13:00",
+          "end": "12:00",
           "category": "ORIENTATION",
           "seq": null,
           "code": "MLA",
-          "title": "Clinical Overview and Goal Setting LUNCH PROVIDED",
+          "title": "Clinical Overview and Goal Setting",
           "instructor": "P. Hutto",
           "kind": "admin",
           "mandatory": false,
           "label": "Orientation",
+          "study": false,
+          "todoLabel": null
+        },
+        {
+          "id": "8b90e4d92a",
+          "start": "12:00",
+          "end": "13:00",
+          "category": "LUNCH PROVIDED",
+          "seq": null,
+          "code": null,
+          "title": "LUNCH PROVIDED",
+          "instructor": "",
+          "kind": "lecture",
+          "mandatory": false,
+          "label": "Lunch",
           "study": false,
           "todoLabel": null
         },
@@ -577,8 +603,8 @@
       "sessions": [
         {
           "id": "4e61d1d1cb",
-          "start": "12:00",
-          "end": "13:00",
+          "start": "08:00",
+          "end": "17:00",
           "category": "LABOR DAY",
           "seq": null,
           "code": null,
@@ -735,7 +761,7 @@
         {
           "id": "25bd8e3476",
           "start": "10:00",
-          "end": "11:00",
+          "end": "12:00",
           "category": "CLINICAL SKILLS",
           "seq": 6,
           "code": "ALA",
@@ -765,7 +791,7 @@
         {
           "id": "d0c0c7f74a",
           "start": "13:00",
-          "end": "15:00",
+          "end": "17:00",
           "category": "CLINICAL SKILLS",
           "seq": null,
           "code": null,
@@ -950,17 +976,16 @@
           "todoLabel": null
         },
         {
-          "id": "dad1cb0aa4",
+          "id": "300ff0b92b",
           "start": "13:00",
-          "end": "16:00",
-          "category": "ANATOMY",
+          "end": "17:00",
+          "category": "ANATOMY GROSS ANATOMY LAB EXPERIENCE",
           "seq": null,
           "code": null,
           "title": "Brain, Spinal Cord & Cranial Nerves",
           "instructor": "",
-          "kind": "lecture",
+          "kind": "lab",
           "mandatory": false,
-          "location": "GROSS ANATOMY LAB EXPERIENCE",
           "label": "Anatomy Lab",
           "study": false,
           "todoLabel": null
@@ -1029,7 +1054,7 @@
         {
           "id": "711d4a603f",
           "start": "10:00",
-          "end": "11:00",
+          "end": "12:00",
           "category": "CLINICAL SKILLS",
           "seq": 7,
           "code": "ALA",
@@ -1099,8 +1124,8 @@
       "sessions": [
         {
           "id": "639b5b989a",
-          "start": "09:00",
-          "end": "11:00",
+          "start": "08:00",
+          "end": "12:00",
           "category": "",
           "seq": null,
           "code": null,
@@ -1169,17 +1194,32 @@
       "week": 3,
       "sessions": [
         {
-          "id": "6abc2f1512",
+          "id": "c160a71432",
           "start": "08:00",
-          "end": "12:00",
+          "end": "10:00",
           "category": "ANATOMY",
           "seq": null,
           "code": null,
-          "title": "EXAM 1: LECTURES 1-7 Interview Day Ambassadors Required Varellas Kim Price DeWitt",
+          "title": "EXAM 1: LECTURES 1-7",
           "instructor": "",
           "kind": "exam",
           "mandatory": false,
-          "label": "Anatomy Exam 1: Lectures 1-7 Interview Day Ambassadors Required Varellas Kim Price DeWitt",
+          "label": "Anatomy Exam 1: Lectures 1-7",
+          "study": false,
+          "todoLabel": null
+        },
+        {
+          "id": "ef8a14437f",
+          "start": "10:00",
+          "end": "12:00",
+          "category": "",
+          "seq": null,
+          "code": null,
+          "title": "Interview Day Ambassadors Required Varellas Kim Price DeWitt",
+          "instructor": "",
+          "kind": "lecture",
+          "mandatory": false,
+          "label": "Interview Day Ambassadors Required Varellas Kim Price DeWitt",
           "study": false,
           "todoLabel": null
         },
@@ -1256,8 +1296,8 @@
       "sessions": [
         {
           "id": "763769f766",
-          "start": "09:00",
-          "end": "11:00",
+          "start": "08:00",
+          "end": "12:00",
           "category": "",
           "seq": null,
           "code": null,
@@ -1285,32 +1325,17 @@
           "todoLabel": null
         },
         {
-          "id": "5e31847301",
+          "id": "b22c443e77",
           "start": "13:00",
-          "end": "15:00",
+          "end": "17:00",
           "category": "CLINICAL SKILLS",
           "seq": null,
           "code": null,
-          "title": "OSCE #1 STERILE TECHNIQUE, DONNING & DOFFING",
+          "title": "OSCE #1 STERILE TECHNIQUE, DONNING & DOFFING M. Violette J. Moon K. Dewitt ALL STUDENTS",
           "instructor": "",
           "kind": "lab",
           "mandatory": false,
           "label": "OSCE #1 Sterile Technique, Donning & Doffing",
-          "study": false,
-          "todoLabel": null
-        },
-        {
-          "id": "f4e8fca6e3",
-          "start": "16:00",
-          "end": "17:00",
-          "category": "ALL STUDENTS",
-          "seq": null,
-          "code": null,
-          "title": "ALL STUDENTS",
-          "instructor": "",
-          "kind": "lecture",
-          "mandatory": false,
-          "label": "All Students",
           "study": false,
           "todoLabel": null
         }
@@ -1490,36 +1515,6 @@
           "label": "Lunch",
           "study": false,
           "todoLabel": null
-        },
-        {
-          "id": "a712f5053e",
-          "start": "13:00",
-          "end": "15:00",
-          "category": "CLINICAL SKILLS",
-          "seq": null,
-          "code": "MLA",
-          "title": "Students 13-19 Anesthesia Machine Checklist",
-          "instructor": "J. Moon",
-          "kind": "lab",
-          "mandatory": false,
-          "label": "Clinical Skills MLA",
-          "study": false,
-          "todoLabel": null
-        },
-        {
-          "id": "a0c54be6d0",
-          "start": "15:00",
-          "end": "17:00",
-          "category": "CLINICAL SKILLS",
-          "seq": null,
-          "code": "MLA",
-          "title": "Students 27-33 Anesthesia Machine Checklist",
-          "instructor": "",
-          "kind": "lab",
-          "mandatory": false,
-          "label": "Clinical Skills MLA",
-          "study": false,
-          "todoLabel": null
         }
       ],
       "notes": [],
@@ -1589,24 +1584,9 @@
       "week": 4,
       "sessions": [
         {
-          "id": "bd74867f48",
+          "id": "4c83088821",
           "start": "08:00",
           "end": "09:00",
-          "category": "ANATOMY",
-          "seq": 10,
-          "code": "ALA",
-          "title": "Sympathetic & Parasympathetic Nervous System",
-          "instructor": "",
-          "kind": "lecture",
-          "mandatory": false,
-          "label": "Anatomy #10",
-          "study": true,
-          "todoLabel": "Anatomy #10"
-        },
-        {
-          "id": "4c83088821",
-          "start": "09:00",
-          "end": "10:00",
           "category": "ANATOMY",
           "seq": 11,
           "code": "ALA",
@@ -1617,6 +1597,21 @@
           "label": "Anatomy #11",
           "study": true,
           "todoLabel": "Anatomy #11"
+        },
+        {
+          "id": "24736e48ba",
+          "start": "09:00",
+          "end": "10:00",
+          "category": "ANATOMY",
+          "seq": 12,
+          "code": "ALA",
+          "title": "Brachial Plexus & Upper Extremities II",
+          "instructor": "",
+          "kind": "lecture",
+          "mandatory": false,
+          "label": "Anatomy #12",
+          "study": true,
+          "todoLabel": "Anatomy #12"
         },
         {
           "id": "97b604fa07",
@@ -1681,7 +1676,7 @@
         {
           "id": "68b9ab6154",
           "start": "14:00",
-          "end": "15:00",
+          "end": "17:00",
           "category": "CLINICAL SKILLS",
           "seq": null,
           "code": null,
@@ -1866,6 +1861,36 @@
           "todoLabel": null
         },
         {
+          "id": "206a5a6d59",
+          "start": "10:00",
+          "end": "11:00",
+          "category": "PHARMACOLOGY",
+          "seq": 8,
+          "code": "ALA",
+          "title": "Local Anesthetics",
+          "instructor": "",
+          "kind": "lecture",
+          "mandatory": false,
+          "label": "Pharmacology #8",
+          "study": true,
+          "todoLabel": "Pharmacology #8"
+        },
+        {
+          "id": "338836c4e7",
+          "start": "11:00",
+          "end": "12:00",
+          "category": "PHARMACOLOGY",
+          "seq": 11,
+          "code": "ALA",
+          "title": "Neuromuscular Blocking & Reversal Agents",
+          "instructor": "",
+          "kind": "lecture",
+          "mandatory": false,
+          "label": "Pharmacology #11",
+          "study": true,
+          "todoLabel": "Pharmacology #11"
+        },
+        {
           "id": "636654314f",
           "start": "12:00",
           "end": "13:00",
@@ -1983,19 +2008,19 @@
       "week": 5,
       "sessions": [
         {
-          "id": "24736e48ba",
+          "id": "bd74867f48",
           "start": "08:00",
           "end": "09:00",
           "category": "ANATOMY",
-          "seq": 12,
+          "seq": 10,
           "code": "ALA",
-          "title": "Brachial Plexus & Upper Extremities II",
+          "title": "Sympathetic & Parasympathetic Nervous System",
           "instructor": "",
           "kind": "lecture",
           "mandatory": false,
-          "label": "Anatomy #12",
+          "label": "Anatomy #10",
           "study": true,
-          "todoLabel": "Anatomy #12"
+          "todoLabel": "Anatomy #10"
         },
         {
           "id": "a979acf1cc",
@@ -2043,17 +2068,16 @@
           "todoLabel": null
         },
         {
-          "id": "9b0f0a1c94",
+          "id": "c1c0459af2",
           "start": "13:00",
-          "end": "16:00",
-          "category": "ANATOMY",
+          "end": "17:00",
+          "category": "ANATOMY GROSS ANATOMY LAB EXPERIENCE",
           "seq": null,
           "code": null,
           "title": "Upper & Lower Extremity Nerve Plexus",
           "instructor": "",
-          "kind": "lecture",
+          "kind": "lab",
           "mandatory": false,
-          "location": "GROSS ANATOMY LAB EXPERIENCE",
           "label": "Anatomy Lab",
           "study": false,
           "todoLabel": null
@@ -2102,7 +2126,7 @@
         {
           "id": "5494b3e952",
           "start": "13:00",
-          "end": "16:00",
+          "end": "17:00",
           "category": "CLINICAL SKILLS",
           "seq": null,
           "code": null,
@@ -2158,7 +2182,7 @@
         {
           "id": "5494b3e952",
           "start": "13:00",
-          "end": "16:00",
+          "end": "17:00",
           "category": "CLINICAL SKILLS",
           "seq": null,
           "code": null,
@@ -2214,7 +2238,7 @@
         {
           "id": "5494b3e952",
           "start": "13:00",
-          "end": "16:00",
+          "end": "17:00",
           "category": "CLINICAL SKILLS",
           "seq": null,
           "code": null,
@@ -2288,24 +2312,9 @@
           "todoLabel": "Technology & Monitoring #7"
         },
         {
-          "id": "9105370b05",
+          "id": "83fc84d37a",
           "start": "10:00",
           "end": "11:00",
-          "category": "PHARMACOLOGY",
-          "seq": 8,
-          "code": "ALA",
-          "title": "Local Anesthetics",
-          "instructor": "Dr. Rawls",
-          "kind": "lecture",
-          "mandatory": false,
-          "label": "Pharmacology #8",
-          "study": true,
-          "todoLabel": "Pharmacology #8"
-        },
-        {
-          "id": "83fc84d37a",
-          "start": "11:00",
-          "end": "12:00",
           "category": "PHARMACOLOGY",
           "seq": 9,
           "code": "ALA",
@@ -2316,6 +2325,21 @@
           "label": "Pharmacology #9",
           "study": true,
           "todoLabel": "Pharmacology #9"
+        },
+        {
+          "id": "8807ee8d48",
+          "start": "11:00",
+          "end": "12:00",
+          "category": "PHARMACOLOGY",
+          "seq": 10,
+          "code": "ALA",
+          "title": "Pharmacology of Inhaled Anesthetics",
+          "instructor": "Dr. Rawls",
+          "kind": "lecture",
+          "mandatory": false,
+          "label": "Pharmacology #10",
+          "study": true,
+          "todoLabel": "Pharmacology #10"
         },
         {
           "id": "636654314f",
@@ -2331,36 +2355,6 @@
           "label": "Lunch",
           "study": false,
           "todoLabel": null
-        },
-        {
-          "id": "8807ee8d48",
-          "start": "13:00",
-          "end": "14:00",
-          "category": "PHARMACOLOGY",
-          "seq": 10,
-          "code": "ALA",
-          "title": "Pharmacology of Inhaled Anesthetics",
-          "instructor": "Dr. Rawls",
-          "kind": "lecture",
-          "mandatory": false,
-          "label": "Pharmacology #10",
-          "study": true,
-          "todoLabel": "Pharmacology #10"
-        },
-        {
-          "id": "a21c10d8f6",
-          "start": "14:00",
-          "end": "15:00",
-          "category": "PHARMACOLOGY",
-          "seq": 11,
-          "code": "ALA",
-          "title": "Neuromuscular Blocking & Reversal Agents",
-          "instructor": "Dr. Rawls",
-          "kind": "lecture",
-          "mandatory": false,
-          "label": "Pharmacology #11",
-          "study": true,
-          "todoLabel": "Pharmacology #11"
         }
       ],
       "notes": [],
@@ -2391,7 +2385,7 @@
         {
           "id": "c69787c588",
           "start": "10:00",
-          "end": "12:00",
+          "end": "11:00",
           "category": "CLINICAL SKILLS",
           "seq": 10,
           "code": "ALA",
@@ -2404,17 +2398,17 @@
           "todoLabel": "Clinical Skills ALA #10"
         },
         {
-          "id": "868955db22",
-          "start": "13:00",
-          "end": "14:00",
-          "category": "",
+          "id": "1fa93a1669",
+          "start": "11:00",
+          "end": "17:00",
+          "category": "CLINICAL SKILLS",
           "seq": null,
           "code": null,
           "title": "Intravenous Line Insertion & Fluid Management",
           "instructor": "",
-          "kind": "lecture",
+          "kind": "lab",
           "mandatory": false,
-          "label": "Intravenous Line Insertion & Fluid Management",
+          "label": "Clinical Skills- Intravenous Line Insertion & Fluid Management",
           "study": false,
           "todoLabel": null
         }
@@ -2433,7 +2427,7 @@
         {
           "id": "38d15f45e5",
           "start": "09:00",
-          "end": "10:00",
+          "end": "11:00",
           "category": "CLINICAL SKILLS",
           "seq": 11,
           "code": "ALA",
@@ -2478,7 +2472,7 @@
         {
           "id": "637863f7a8",
           "start": "13:00",
-          "end": "16:00",
+          "end": "17:00",
           "category": "CLINICAL SKILLS",
           "seq": null,
           "code": null,
@@ -2649,30 +2643,30 @@
           "todoLabel": "Electrophysiology #4"
         },
         {
-          "id": "91135e08ca",
+          "id": "84f4e8539c",
           "start": "09:00",
-          "end": "11:00",
+          "end": "10:00",
           "category": "ELECTROPHYSIOLOGY",
           "seq": 5,
           "code": "ALA",
-          "title": "Supraventricular Arrythmias CLINICAL SKILLS",
+          "title": "Supraventricular Arrythmias",
           "instructor": "J. Brewer",
-          "kind": "lab",
+          "kind": "lecture",
           "mandatory": false,
           "label": "Electrophysiology #5",
           "study": true,
           "todoLabel": "Electrophysiology #5"
         },
         {
-          "id": "89c885b953",
-          "start": "12:00",
-          "end": "15:00",
-          "category": "IV INSERTION",
+          "id": "3cd96d1d68",
+          "start": "10:00",
+          "end": "17:00",
+          "category": "CLINICAL SKILLS",
           "seq": null,
           "code": null,
-          "title": "OSCE #2 K. Dewitt ALL STUDENTS AS ASSIGNED",
-          "instructor": "S. Childress J. Brewer",
-          "kind": "lecture",
+          "title": "OSCE #2 IV INSERTION S. Childress J. Brewer K. Dewitt ALL STUDENTS AS ASSIGNED",
+          "instructor": "",
+          "kind": "lab",
           "mandatory": false,
           "label": "OSCE #2 IV Insertion",
           "study": false,
@@ -2762,6 +2756,21 @@
       "week": 7,
       "sessions": [
         {
+          "id": "7b63a7d048",
+          "start": "08:00",
+          "end": "10:00",
+          "category": "CLINICAL SKILLS",
+          "seq": null,
+          "code": null,
+          "title": "DRUG CALCULATIONS REMEDIATION",
+          "instructor": "",
+          "kind": "lab",
+          "mandatory": false,
+          "label": "Clinical Skills- DRUG CALCULATIONS REMEDIATION",
+          "study": false,
+          "todoLabel": null
+        },
+        {
           "id": "636654314f",
           "start": "12:00",
           "end": "13:00",
@@ -2773,36 +2782,6 @@
           "kind": "break",
           "mandatory": false,
           "label": "Lunch",
-          "study": false,
-          "todoLabel": null
-        },
-        {
-          "id": "9f244cde14",
-          "start": "13:00",
-          "end": "15:00",
-          "category": "CLINICAL SKILLS",
-          "seq": null,
-          "code": null,
-          "title": "OSCE #3 BASIC AIRWAY MANAGEMENT",
-          "instructor": "",
-          "kind": "lab",
-          "mandatory": false,
-          "label": "OSCE #3 Basic Airway Management",
-          "study": false,
-          "todoLabel": null
-        },
-        {
-          "id": "6e0933187e",
-          "start": "16:00",
-          "end": "17:00",
-          "category": "ALL STUDENTS AS ASSIGNED",
-          "seq": null,
-          "code": null,
-          "title": "ALL STUDENTS AS ASSIGNED",
-          "instructor": "",
-          "kind": "lecture",
-          "mandatory": false,
-          "label": "All Students as Assigned",
           "study": false,
           "todoLabel": null
         }
@@ -2887,36 +2866,6 @@
           "todoLabel": "Anatomy #19"
         },
         {
-          "id": "514630394f",
-          "start": "10:00",
-          "end": "11:00",
-          "category": "PHARMACOLOGY",
-          "seq": 12,
-          "code": "ALA",
-          "title": "Opioid Agonist & Antagonist",
-          "instructor": "Dr. Rawls",
-          "kind": "lecture",
-          "mandatory": false,
-          "label": "Pharmacology #12",
-          "study": true,
-          "todoLabel": "Pharmacology #12"
-        },
-        {
-          "id": "b87c432c34",
-          "start": "11:00",
-          "end": "12:00",
-          "category": "PHARMACOLOGY",
-          "seq": 13,
-          "code": "ALA",
-          "title": "Non-Opioid Analgesics",
-          "instructor": "Dr. Rawls",
-          "kind": "lecture",
-          "mandatory": false,
-          "label": "Pharmacology #13",
-          "study": true,
-          "todoLabel": "Pharmacology #13"
-        },
-        {
           "id": "636654314f",
           "start": "12:00",
           "end": "13:00",
@@ -2932,17 +2881,16 @@
           "todoLabel": null
         },
         {
-          "id": "0141549c4d",
+          "id": "dbb22c71da",
           "start": "13:00",
-          "end": "16:00",
-          "category": "ANATOMY",
+          "end": "17:00",
+          "category": "ANATOMY GROSS ANATOMY LAB EXPERIENCE",
           "seq": null,
           "code": null,
           "title": "Neck, Larynx and Thoracic Wall",
           "instructor": "",
-          "kind": "lecture",
+          "kind": "lab",
           "mandatory": false,
-          "location": "GROSS ANATOMY LAB EXPERIENCE",
           "label": "Anatomy Lab",
           "study": false,
           "todoLabel": null
@@ -2992,34 +2940,34 @@
           "todoLabel": null
         },
         {
-          "id": "e91a4a4dd6",
+          "id": "514630394f",
           "start": "10:00",
           "end": "11:00",
           "category": "PHARMACOLOGY",
-          "seq": 14,
+          "seq": 12,
           "code": "ALA",
-          "title": "Anticonvulsants",
+          "title": "Opioid Agonist & Antagonist",
           "instructor": "Dr. Rawls",
           "kind": "lecture",
           "mandatory": false,
-          "label": "Pharmacology #14",
+          "label": "Pharmacology #12",
           "study": true,
-          "todoLabel": "Pharmacology #14"
+          "todoLabel": "Pharmacology #12"
         },
         {
-          "id": "b624eb8861",
+          "id": "b87c432c34",
           "start": "11:00",
           "end": "12:00",
           "category": "PHARMACOLOGY",
-          "seq": 15,
+          "seq": 13,
           "code": "ALA",
-          "title": "Steroid Therapy",
+          "title": "Non-Opioid Analgesics",
           "instructor": "Dr. Rawls",
           "kind": "lecture",
           "mandatory": false,
-          "label": "Pharmacology #15",
+          "label": "Pharmacology #13",
           "study": true,
-          "todoLabel": "Pharmacology #15"
+          "todoLabel": "Pharmacology #13"
         },
         {
           "id": "636654314f",
@@ -3078,6 +3026,21 @@
           "todoLabel": "Technology & Monitoring #12"
         },
         {
+          "id": "e91a4a4dd6",
+          "start": "11:00",
+          "end": "12:00",
+          "category": "PHARMACOLOGY",
+          "seq": 14,
+          "code": "ALA",
+          "title": "Anticonvulsants",
+          "instructor": "Dr. Rawls",
+          "kind": "lecture",
+          "mandatory": false,
+          "label": "Pharmacology #14",
+          "study": true,
+          "todoLabel": "Pharmacology #14"
+        },
+        {
           "id": "636654314f",
           "start": "12:00",
           "end": "13:00",
@@ -3091,6 +3054,21 @@
           "label": "Lunch",
           "study": false,
           "todoLabel": null
+        },
+        {
+          "id": "b624eb8861",
+          "start": "13:00",
+          "end": "14:00",
+          "category": "PHARMACOLOGY",
+          "seq": 15,
+          "code": "ALA",
+          "title": "Steroid Therapy",
+          "instructor": "Dr. Rawls",
+          "kind": "lecture",
+          "mandatory": false,
+          "label": "Pharmacology #15",
+          "study": true,
+          "todoLabel": "Pharmacology #15"
         }
       ],
       "notes": [],
@@ -3178,6 +3156,21 @@
           "label": "Lunch",
           "study": false,
           "todoLabel": null
+        },
+        {
+          "id": "bb448fe060",
+          "start": "13:00",
+          "end": "14:00",
+          "category": "TECHNOLOGY & MONITORING",
+          "seq": 13,
+          "code": "ALA",
+          "title": "Hemodynamic Monitoring, Homeostasis and TEGs",
+          "instructor": "K. Dewitt",
+          "kind": "lecture",
+          "mandatory": false,
+          "label": "Technology & Monitoring #13",
+          "study": true,
+          "todoLabel": "Technology & Monitoring #13"
         }
       ],
       "notes": [],
@@ -3206,39 +3199,24 @@
           "todoLabel": "Clinical Skills ALA #13"
         },
         {
-          "id": "196fe9699c",
+          "id": "0fd717ec82",
           "start": "09:00",
-          "end": "10:00",
+          "end": "13:00",
           "category": "CLINICAL SKILLS",
           "seq": null,
           "code": null,
-          "title": "Oral and Nasal Intubation",
+          "title": "Oral and Nasal Intubation ALL STUDENTS AS ASSIGNED LUNCH PROVIDED",
           "instructor": "",
           "kind": "lab",
           "mandatory": false,
-          "label": "Clinical Skills- Oral and Nasal Intubation",
-          "study": false,
-          "todoLabel": null
-        },
-        {
-          "id": "65147a7c80",
-          "start": "11:00",
-          "end": "13:00",
-          "category": "LUNCH PROVIDED",
-          "seq": null,
-          "code": null,
-          "title": "ALL STUDENTS AS ASSIGNED",
-          "instructor": "",
-          "kind": "lecture",
-          "mandatory": false,
-          "label": "Lunch",
+          "label": "Clinical Skills- Oral and Nasal Intubation ALL STUDENTS AS ASSIGNED LUNCH PROVIDED",
           "study": false,
           "todoLabel": null
         },
         {
           "id": "168952d6f5",
           "start": "13:00",
-          "end": "14:00",
+          "end": "15:00",
           "category": "CLINICAL SKILLS",
           "seq": 14,
           "code": "ALA",
@@ -3253,7 +3231,7 @@
         {
           "id": "00767f7152",
           "start": "15:00",
-          "end": "16:00",
+          "end": "17:00",
           "category": "CLINICAL SKILLS",
           "seq": null,
           "code": "MLA",
@@ -3290,21 +3268,6 @@
           "label": "Anatomy Exam 3: Lectures 15 - 19",
           "study": false,
           "todoLabel": null
-        },
-        {
-          "id": "bb448fe060",
-          "start": "10:00",
-          "end": "11:00",
-          "category": "TECHNOLOGY & MONITORING",
-          "seq": 13,
-          "code": "ALA",
-          "title": "Hemodynamic Monitoring, Homeostasis and TEGs",
-          "instructor": "K. Dewitt",
-          "kind": "lecture",
-          "mandatory": false,
-          "label": "Technology & Monitoring #13",
-          "study": true,
-          "todoLabel": "Technology & Monitoring #13"
         },
         {
           "id": "636654314f",
@@ -3556,32 +3519,17 @@
       "week": 9,
       "sessions": [
         {
-          "id": "2328c217b6",
+          "id": "53d1222a7b",
           "start": "08:00",
-          "end": "09:00",
+          "end": "17:00",
           "category": "CLINICAL SKILLS",
           "seq": null,
           "code": null,
-          "title": "CLINICAL SKILLS",
-          "instructor": "",
-          "kind": "lab",
-          "mandatory": false,
-          "label": "Clinical Skills",
-          "study": false,
-          "todoLabel": null
-        },
-        {
-          "id": "4c5dd3c725",
-          "start": "11:00",
-          "end": "13:00",
-          "category": "OSCE #4",
-          "seq": null,
-          "code": null,
-          "title": "ASSESSMENT STATIONS Direct Oral Intubation Video Intubation Nasal Intubation EVALUATORS",
+          "title": "OSCE #3 BASIC AIRWAY MANAGEMENT AND OSCE #4 ASSESSMENT STATIONS Direct Oral Intubation Video Intubation Nasal Intubation S. Chilldress J. Moon K. DeWitt M. Varellas All Students Assigned",
           "instructor": "",
           "kind": "exam",
           "mandatory": false,
-          "label": "OSCE #4 Assessment Stations Direct Oral Intubation Video Intubation Nasal Intubation",
+          "label": "OSCE #3 Basic Airway Management And OSCE #4 Assessment Stations Direct Oral Intubation Video Intubation Nasal Intubation Witt Assigned",
           "study": false,
           "todoLabel": null
         }
@@ -4179,17 +4127,16 @@
           "todoLabel": null
         },
         {
-          "id": "b7594b7fa6",
+          "id": "7768511467",
           "start": "13:00",
-          "end": "16:00",
-          "category": "ANATOMY",
+          "end": "17:00",
+          "category": "ANATOMY GROSS ANATOMY LAB EXPERIENCE",
           "seq": null,
           "code": null,
-          "title": "GROSS ANATOMY Heart & Thoracic Cavity",
+          "title": "Heart & Thoracic Cavity",
           "instructor": "",
-          "kind": "lecture",
+          "kind": "lab",
           "mandatory": false,
-          "location": "LAB EXPERIENCE",
           "label": "Anatomy Lab",
           "study": false,
           "todoLabel": null
@@ -4314,7 +4261,7 @@
         {
           "id": "6ac592059f",
           "start": "08:00",
-          "end": "09:00",
+          "end": "10:00",
           "category": "CLINICAL SKILLS",
           "seq": 16,
           "code": "ALA",
@@ -4398,6 +4345,21 @@
     "2026-11-11": {
       "week": 11,
       "sessions": [
+        {
+          "id": "0b23171a69",
+          "start": "08:00",
+          "end": "10:00",
+          "category": "CLINICAL SKILLS",
+          "seq": null,
+          "code": null,
+          "title": "MEDICAL TERMINOLOGY REMEDIATION",
+          "instructor": "",
+          "kind": "lab",
+          "mandatory": false,
+          "label": "Clinical Skills- MEDICAL TERMINOLOGY REMEDIATION",
+          "study": false,
+          "todoLabel": null
+        },
         {
           "id": "636654314f",
           "start": "12:00",
@@ -4649,7 +4611,7 @@
         {
           "id": "6562f20d13",
           "start": "09:00",
-          "end": "10:00",
+          "end": "12:00",
           "category": "CLINICAL SKILLS",
           "seq": null,
           "code": null,
@@ -4679,7 +4641,7 @@
         {
           "id": "8409006bfd",
           "start": "13:00",
-          "end": "14:00",
+          "end": "16:00",
           "category": "CLINICAL SKILLS",
           "seq": null,
           "code": "MLA",
@@ -4735,7 +4697,7 @@
         {
           "id": "1e18a9335f",
           "start": "09:00",
-          "end": "10:00",
+          "end": "12:00",
           "category": "CLINICAL SKILLS",
           "seq": null,
           "code": "MLA",
@@ -4765,7 +4727,7 @@
         {
           "id": "077f2621e8",
           "start": "13:00",
-          "end": "14:00",
+          "end": "16:00",
           "category": "CLINICAL SKILLS",
           "seq": null,
           "code": "MLA",
@@ -4979,7 +4941,7 @@
         {
           "id": "010214ee02",
           "start": "08:00",
-          "end": "09:00",
+          "end": "10:00",
           "category": "CLINICAL SKILLS",
           "seq": null,
           "code": null,
@@ -5032,32 +4994,17 @@
       "week": 13,
       "sessions": [
         {
-          "id": "d0c9040058",
-          "start": "11:00",
-          "end": "12:00",
-          "category": "THANKSGIVING HOLIDAY",
-          "seq": null,
-          "code": null,
-          "title": "THANKSGIVING HOLIDAY",
-          "instructor": "",
-          "kind": "lecture",
-          "mandatory": false,
-          "label": "Thanksgiving Holiday",
-          "study": false,
-          "todoLabel": null
-        },
-        {
-          "id": "e28aef15ef",
-          "start": "12:00",
-          "end": "13:00",
-          "category": "BREAK",
+          "id": "83983906b5",
+          "start": "08:00",
+          "end": "17:00",
+          "category": "THANKSGIVING HOLIDAY BREAK",
           "seq": null,
           "code": null,
           "title": "(No Classes)",
           "instructor": "",
-          "kind": "break",
+          "kind": "lecture",
           "mandatory": false,
-          "label": "Break",
+          "label": "Thanksgiving Holiday",
           "study": false,
           "todoLabel": null
         }
@@ -5073,32 +5020,17 @@
       "week": 13,
       "sessions": [
         {
-          "id": "d0c9040058",
-          "start": "11:00",
-          "end": "12:00",
-          "category": "THANKSGIVING HOLIDAY",
-          "seq": null,
-          "code": null,
-          "title": "THANKSGIVING HOLIDAY",
-          "instructor": "",
-          "kind": "lecture",
-          "mandatory": false,
-          "label": "Thanksgiving Holiday",
-          "study": false,
-          "todoLabel": null
-        },
-        {
-          "id": "e28aef15ef",
-          "start": "12:00",
-          "end": "13:00",
-          "category": "BREAK",
+          "id": "83983906b5",
+          "start": "08:00",
+          "end": "17:00",
+          "category": "THANKSGIVING HOLIDAY BREAK",
           "seq": null,
           "code": null,
           "title": "(No Classes)",
           "instructor": "",
-          "kind": "break",
+          "kind": "lecture",
           "mandatory": false,
-          "label": "Break",
+          "label": "Thanksgiving Holiday",
           "study": false,
           "todoLabel": null
         }
@@ -5114,32 +5046,17 @@
       "week": 13,
       "sessions": [
         {
-          "id": "d0c9040058",
-          "start": "11:00",
-          "end": "12:00",
-          "category": "THANKSGIVING HOLIDAY",
-          "seq": null,
-          "code": null,
-          "title": "THANKSGIVING HOLIDAY",
-          "instructor": "",
-          "kind": "lecture",
-          "mandatory": false,
-          "label": "Thanksgiving Holiday",
-          "study": false,
-          "todoLabel": null
-        },
-        {
-          "id": "e28aef15ef",
-          "start": "12:00",
-          "end": "13:00",
-          "category": "BREAK",
+          "id": "83983906b5",
+          "start": "08:00",
+          "end": "17:00",
+          "category": "THANKSGIVING HOLIDAY BREAK",
           "seq": null,
           "code": null,
           "title": "(No Classes)",
           "instructor": "",
-          "kind": "break",
+          "kind": "lecture",
           "mandatory": false,
-          "label": "Break",
+          "label": "Thanksgiving Holiday",
           "study": false,
           "todoLabel": null
         }
@@ -5155,32 +5072,17 @@
       "week": 13,
       "sessions": [
         {
-          "id": "d0c9040058",
-          "start": "11:00",
-          "end": "12:00",
-          "category": "THANKSGIVING HOLIDAY",
-          "seq": null,
-          "code": null,
-          "title": "THANKSGIVING HOLIDAY",
-          "instructor": "",
-          "kind": "lecture",
-          "mandatory": false,
-          "label": "Thanksgiving Holiday",
-          "study": false,
-          "todoLabel": null
-        },
-        {
-          "id": "e28aef15ef",
-          "start": "12:00",
-          "end": "13:00",
-          "category": "BREAK",
+          "id": "83983906b5",
+          "start": "08:00",
+          "end": "17:00",
+          "category": "THANKSGIVING HOLIDAY BREAK",
           "seq": null,
           "code": null,
           "title": "(No Classes)",
           "instructor": "",
-          "kind": "break",
+          "kind": "lecture",
           "mandatory": false,
-          "label": "Break",
+          "label": "Thanksgiving Holiday",
           "study": false,
           "todoLabel": null
         }
@@ -5194,32 +5096,17 @@
       "week": 13,
       "sessions": [
         {
-          "id": "d0c9040058",
-          "start": "11:00",
-          "end": "12:00",
-          "category": "THANKSGIVING HOLIDAY",
-          "seq": null,
-          "code": null,
-          "title": "THANKSGIVING HOLIDAY",
-          "instructor": "",
-          "kind": "lecture",
-          "mandatory": false,
-          "label": "Thanksgiving Holiday",
-          "study": false,
-          "todoLabel": null
-        },
-        {
-          "id": "e28aef15ef",
-          "start": "12:00",
-          "end": "13:00",
-          "category": "BREAK",
+          "id": "83983906b5",
+          "start": "08:00",
+          "end": "17:00",
+          "category": "THANKSGIVING HOLIDAY BREAK",
           "seq": null,
           "code": null,
           "title": "(No Classes)",
           "instructor": "",
-          "kind": "break",
+          "kind": "lecture",
           "mandatory": false,
-          "label": "Break",
+          "label": "Thanksgiving Holiday",
           "study": false,
           "todoLabel": null
         }
@@ -6333,7 +6220,7 @@
         {
           "id": "33ac4ef862",
           "start": "08:00",
-          "end": "11:00",
+          "end": "10:00",
           "category": "CLINICAL SKILLS",
           "seq": 26,
           "code": "ALA",
@@ -6346,17 +6233,17 @@
           "todoLabel": "Clinical Skills ALA #26"
         },
         {
-          "id": "6ec0e05132",
-          "start": "13:00",
-          "end": "14:00",
-          "category": "",
+          "id": "a0445df33e",
+          "start": "10:00",
+          "end": "17:00",
+          "category": "CLINICAL SKILLS",
           "seq": null,
           "code": null,
           "title": "Standardized Patient Experience",
           "instructor": "J. Babirak",
-          "kind": "lecture",
+          "kind": "lab",
           "mandatory": false,
-          "label": "Standardized Patient Experience",
+          "label": "Clinical Skills- Standardized Patient Experience",
           "study": false,
           "todoLabel": null
         }
@@ -6491,7 +6378,7 @@
         {
           "id": "457a6abf8a",
           "start": "13:00",
-          "end": "16:00",
+          "end": "17:00",
           "category": "CLINICAL SKILLS",
           "seq": null,
           "code": null,
@@ -6560,19 +6447,34 @@
           "todoLabel": null
         },
         {
-          "id": "7a8e038342",
+          "id": "9c99a5504d",
           "start": "13:00",
-          "end": "16:00",
+          "end": "14:00",
           "category": "CLINICAL SKILLS",
           "seq": 28,
           "code": "ALA",
-          "title": "SOAP Notes, Laboratory Findings, Consults and Progress Notes The Anesthesia Care Plan",
+          "title": "SOAP Notes, Laboratory Findings, Consults and Progress Notes",
           "instructor": "S. Childress",
           "kind": "lab",
           "mandatory": false,
           "label": "Clinical Skills #28",
           "study": true,
           "todoLabel": "Clinical Skills ALA #28"
+        },
+        {
+          "id": "8153c4ffe7",
+          "start": "14:00",
+          "end": "16:00",
+          "category": "CLINICAL SKILLS",
+          "seq": 29,
+          "code": "ALA",
+          "title": "The Anesthesia Care Plan",
+          "instructor": "S. Childress",
+          "kind": "lab",
+          "mandatory": false,
+          "label": "Clinical Skills #29",
+          "study": true,
+          "todoLabel": "Clinical Skills ALA #29"
         }
       ],
       "notes": [],
@@ -6625,8 +6527,8 @@
       "sessions": [
         {
           "id": "02a68751d2",
-          "start": "11:00",
-          "end": "13:00",
+          "start": "08:00",
+          "end": "17:00",
           "category": "CHRISTMAS HOLIDAY BREAK",
           "seq": null,
           "code": null,
@@ -6649,8 +6551,8 @@
       "sessions": [
         {
           "id": "02a68751d2",
-          "start": "11:00",
-          "end": "13:00",
+          "start": "08:00",
+          "end": "17:00",
           "category": "CHRISTMAS HOLIDAY BREAK",
           "seq": null,
           "code": null,
@@ -6673,8 +6575,8 @@
       "sessions": [
         {
           "id": "02a68751d2",
-          "start": "11:00",
-          "end": "13:00",
+          "start": "08:00",
+          "end": "17:00",
           "category": "CHRISTMAS HOLIDAY BREAK",
           "seq": null,
           "code": null,
@@ -6697,8 +6599,8 @@
       "sessions": [
         {
           "id": "02a68751d2",
-          "start": "11:00",
-          "end": "13:00",
+          "start": "08:00",
+          "end": "17:00",
           "category": "CHRISTMAS HOLIDAY BREAK",
           "seq": null,
           "code": null,
@@ -6721,8 +6623,8 @@
       "sessions": [
         {
           "id": "02a68751d2",
-          "start": "11:00",
-          "end": "13:00",
+          "start": "08:00",
+          "end": "17:00",
           "category": "CHRISTMAS HOLIDAY BREAK",
           "seq": null,
           "code": null,
@@ -6761,8 +6663,8 @@
       "sessions": [
         {
           "id": "02a68751d2",
-          "start": "12:00",
-          "end": "13:00",
+          "start": "08:00",
+          "end": "17:00",
           "category": "CHRISTMAS HOLIDAY BREAK",
           "seq": null,
           "code": null,
@@ -6785,8 +6687,8 @@
       "sessions": [
         {
           "id": "02a68751d2",
-          "start": "12:00",
-          "end": "13:00",
+          "start": "08:00",
+          "end": "17:00",
           "category": "CHRISTMAS HOLIDAY BREAK",
           "seq": null,
           "code": null,
@@ -6809,8 +6711,8 @@
       "sessions": [
         {
           "id": "02a68751d2",
-          "start": "12:00",
-          "end": "13:00",
+          "start": "08:00",
+          "end": "17:00",
           "category": "CHRISTMAS HOLIDAY BREAK",
           "seq": null,
           "code": null,
@@ -6833,8 +6735,8 @@
       "sessions": [
         {
           "id": "02a68751d2",
-          "start": "12:00",
-          "end": "13:00",
+          "start": "08:00",
+          "end": "17:00",
           "category": "CHRISTMAS HOLIDAY BREAK",
           "seq": null,
           "code": null,
@@ -6857,8 +6759,8 @@
       "sessions": [
         {
           "id": "02a68751d2",
-          "start": "12:00",
-          "end": "13:00",
+          "start": "08:00",
+          "end": "17:00",
           "category": "CHRISTMAS HOLIDAY BREAK",
           "seq": null,
           "code": null,
@@ -6937,7 +6839,7 @@
         {
           "id": "f068824294",
           "start": "08:00",
-          "end": "11:00",
+          "end": "12:00",
           "category": "CLINICAL SKILLS",
           "seq": null,
           "code": null,
@@ -6978,7 +6880,7 @@
         {
           "id": "07f1c5d28b",
           "start": "08:00",
-          "end": "11:00",
+          "end": "12:00",
           "category": "CLINICAL SKILLS",
           "seq": null,
           "code": null,
@@ -7017,7 +6919,7 @@
         {
           "id": "11e7c7af06",
           "start": "08:00",
-          "end": "11:00",
+          "end": "12:00",
           "category": "CLINICAL SKILLS",
           "seq": null,
           "code": null,
@@ -7071,7 +6973,7 @@
         {
           "id": "9924f33044",
           "start": "10:00",
-          "end": "11:00",
+          "end": "12:00",
           "category": "CLINICAL SKILLS",
           "seq": null,
           "code": "MLA",
@@ -7086,7 +6988,7 @@
         {
           "id": "5fe2f8c59b",
           "start": "12:00",
-          "end": "13:00",
+          "end": "14:00",
           "category": "CLINICAL SKILLS",
           "seq": null,
           "code": "MLA",
@@ -7156,7 +7058,7 @@
         {
           "id": "f4e838457f",
           "start": "13:00",
-          "end": "16:00",
+          "end": "17:00",
           "category": "CLINICAL SKILLS",
           "seq": null,
           "code": null,
@@ -7228,8 +7130,8 @@
       "sessions": [
         {
           "id": "88fd54f53c",
-          "start": "12:00",
-          "end": "13:00",
+          "start": "10:00",
+          "end": "15:00",
           "category": "PROGRESS & PROMOTIONS COMMITTEE MEETING",
           "seq": null,
           "code": null,
@@ -7242,17 +7144,17 @@
           "todoLabel": null
         },
         {
-          "id": "00f986f79c",
+          "id": "66a748c429",
           "start": "15:00",
           "end": "17:00",
-          "category": "ABSOLUTELY NO TRAVEL PLANS ARE TO BE MADE",
+          "category": "ABSOLUTELY NO TRAVEL PLANS ARE TO BE MADE UNTIL STUDENTS ARE RELEASED BY THE PROGRAM",
           "seq": null,
           "code": null,
-          "title": "UNTIL STUDENTS ARE RELEASED BY THE PROGRAM",
+          "title": "ABSOLUTELY NO TRAVEL PLANS ARE TO BE MADE UNTIL STUDENTS ARE RELEASED BY THE PROGRAM",
           "instructor": "",
           "kind": "lecture",
           "mandatory": false,
-          "label": "Until Students Are Released by The Program",
+          "label": "Absolutely no Travel Plans Are to be Made Until Students Are Released by The Program",
           "study": false,
           "todoLabel": null
         }
@@ -7267,8 +7169,8 @@
       "sessions": [
         {
           "id": "f4098631ff",
-          "start": "12:00",
-          "end": "13:00",
+          "start": "08:00",
+          "end": "17:00",
           "category": "",
           "seq": null,
           "code": null,

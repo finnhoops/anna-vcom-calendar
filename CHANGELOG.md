@@ -2,6 +2,58 @@
 
 Every entry is one rebuild of the calendar from a block-schedule PDF.
 
+## 2026-09-24 — schedule reissue (9.24.26) and a reading of block times from the PDF's drawing
+
+New PDF: `Block 1 Learning Calendar_CO2028_CC_Curriculum Schedule_9.24.26.pdf`. It was
+laid out differently -- a title band above the grid pushed the date headers from
+~56pt to ~102pt, so the parser (which hard-coded 64pt) found **zero days**. Two things
+came out of fixing that.
+
+**1. The header band is found per page** (`fit_header_band`), not assumed.
+
+**2. Anna's report that "a bunch of the times are wrong" was real, and it was not the school.**
+The old parser gave a block one hour row per row of *text* and stopped. That is wrong
+whenever a cell is merged down through rows that carry no text of their own, and it
+had been papered over by `data/overrides.json` -- a hand-kept list of "stretch this lab
+to 5 PM" patches written against an *earlier* layout. After a reissue those patches
+landed on the wrong classes or left others short: a two-hour class cut to one hour,
+lunch swallowed into the class above it (Sep 2-3, "LUNCH PROVIDED"), the Interview Day
+cell reported as 9-11 when the cell runs 8-12, OSCE #1 as 1-4 when it runs 1-5.
+
+The parser now reads where each block starts and ends **from the drawing** rather than
+guessing from text:
+- a block's **end** is the first row-top border actually drawn across its column below
+  where it starts, else the foot of the grid (`row_borders`, read from the rendered
+  page -- there is no border object in the PDF to query). That distinguishes a lab
+  merged down to 5 PM from a one-hour class with an empty hour under it.
+- a **tall tinted cell** (Interview Day, OSCE, Labor Day, holidays) is read as ONE
+  block from its top, however low its text is centred (`band_geometry`, which paints
+  the page's rectangles in order so a white cell laid over the pale-blue strip hides it;
+  a single drawing path can hold several disjoint rectangles, so it reads sub-rectangles).
+- a drawn Class band is a definitive new block, so neighbouring cells stop merging
+  (Anatomy Exam 1 vs Interview Day, Wed Sep 16).
+- band-less text set inside a border-less tall cell belongs to that cell.
+- the Thanksgiving break is labelled again.
+
+`data/overrides.json` shrank from 24 dates to the few things the drawing genuinely cannot
+say (the blank afternoon half of each OSCE #5 Full Case Management day, and two merged-cell
+titles). **Every override entry now carries `"expect"`** -- a phrase that must still be
+on that day; if it is not, the entry is skipped with a warning instead of rewriting
+whatever the school moved there.
+
+Verified against the PDF itself, page by page (all 20), by rendering each week and comparing it
+with the built calendar -- plus automated checks: no overlaps, nothing outside 8 AM-5 PM,
+lunch present wherever the PDF has one, and the 12 Tuesday Zoom strips match the 12 in the PDF.
+
+What the school changed (9.9 -> 9.24): Anatomy #10/#11/#12 shuffled (Sep 23/29), Pharmacology
+#8/#9/#10/#11 re-slotted (Sep 25, Oct 5), Pharmacology #12-#15 and T&M #13 pushed into Oct 19-21,
+OSCE #3 moved from Oct 14 to Oct 28 (with OSCE #4), Clinical Skills MLA removed from Sep 21,
+and two remediation sessions added (Oct 14 Drug Calculations, Nov 11 Medical Terminology).
+
+Also fixed: `update-calendar.sh` step 11 now stages `build/version.json` -- it was left
+uncommitted after the last rebuild, which put a stale build id on the live site and made the
+page reload on every visit.
+
 ## 2026-09-09 — Anna's calendar only shows her Clinical Skills cohort
 
 No new PDF. The Clinical Skills MLA rotations run in cohorts on the printed
@@ -1039,5 +1091,9 @@ Run by update-calendar.sh. All safety checks passed.
 Run by update-calendar.sh. All safety checks passed.
 
 ## 2026-09-09 — rebuilt from Block 1 Learning Calendar_CO28_CC_ Curriculum Schedule- 9.9.26.pdf
+
+Run by update-calendar.sh. All safety checks passed.
+
+## 2026-09-24 — rebuilt from Block 1 Learning Calendar_CO2028_CC_Curriculum Schedule_9.24.26.pdf
 
 Run by update-calendar.sh. All safety checks passed.
