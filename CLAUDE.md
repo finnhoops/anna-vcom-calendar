@@ -9,10 +9,14 @@ for her and shared with her as a web link.
 - The **schedule** comes from a block-schedule PDF the school issues and reissues.
   Nothing in the schedule is typed by hand — it is parsed.
 - The **to-do list** is generated from Anna's study workflow (STUDY 1.0) plus a
-  manual list she can add to. See "To-do rules" below.
-- The **UI** is: a today panel at the top carrying that day's schedule and
-  to-do list, then a month grid you can click into for a week, and into a week
-  for a single day.
+  manual list she can add to. See "To-do rules" below. **Anna doesn't use it and
+  asked for it off** (2026-10-08) — `SHOW_TODOS = false` in `app_template.html`
+  hides the whole column from her build; see "SHOW_TODOS" further down. The
+  classmate repo's `derive.py` flips it back on for every calendar it derives,
+  so this is Anna-only.
+- The **UI** is: a today panel at the top carrying that day's schedule (and, for
+  everyone but Anna, that day's to-do list), then a month grid you can click
+  into for a week, and into a week for a single day.
 - The calendar must stay **ready to re-parse a new PDF at any time**. That is
   what `/anna-calendar` does.
 
@@ -273,6 +277,32 @@ in the same trailing-keyword list as CLASSROOM / ALL STUDENTS AS ASSIGNED / EVAL
 the same reason -- it is real printed content on a merged cell, not something to special-case
 as a placeholder the way a bare "CLASSROOM" or "SCHEDULE TO FOLLOW" cell with no other text
 is (that one is dropped outright, a few lines above this in the parser).
+
+## SHOW_TODOS — Anna's to-do column is off, classmates' are on
+
+Anna doesn't use the to-do list and asked for it gone (2026-10-08) — not
+emptied, as the classmate calendars already are, but genuinely not there.
+`SHOW_TODOS` in `app_template.html` gates the two places the column gets
+built: `renderToday`'s `taskCol` and `renderDay`'s `side` card both skip
+appending their "To-do" `colhead` + `taskList(...)` when it's `false`; the
+today panel's `.today-body` also gets a `.notodos` class so the schedule's
+column takes the full width (CSS) instead of leaving the panel half blank. The
+day view needs no such adjustment — its side card still has the countdown in
+it either way, so the two-card grid is never down to one.
+
+Deliberately a **gate on the render call sites, not a deletion**: `taskList`,
+`todoModal`, `moveTask`, the STUDY 1.0 engine (`studyBlock` and everything it
+calls), `S.tasks` / `S.gen` / `S.genHidden` are all untouched and still fully
+reachable by flipping the one literal back — nothing about Anna's own saved
+to-dos is lost, they are just not rendered. That matters because the classmate
+repo's `derive.py` **copies Anna's own built `index.html`** as the source for
+every classmate calendar; had the to-do code been deleted outright instead of
+gated, there would be nothing left in the copied HTML for a classmate's
+calendar to show even after re-enabling the flag. Instead `derive.py` does a
+`must_replace` turning `const SHOW_TODOS = false;` into `true` for every
+derived calendar (step "2c", right after the student-number rewrite) — same
+mechanism as `STUDENT_NUMBER`, opposite direction: Anna's template literal is
+the one the classmates have to undo, not the other way around.
 
 ## Clinical Skills cohort filter
 

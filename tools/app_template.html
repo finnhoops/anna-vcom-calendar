@@ -184,6 +184,9 @@ button{font:inherit; color:inherit; background:none; border:0; margin:0; padding
 .cd-then .row .d{font-weight:800; font-variant-numeric:tabular-nums; white-space:nowrap}
 
 .today-body{display:grid; grid-template-columns:1.35fr 1fr; gap:0}
+/* SHOW_TODOS off: no second column to split width with, so the schedule takes
+   the whole panel rather than leaving half of it blank. */
+.today-body.notodos{grid-template-columns:1fr}
 .today-col{padding:var(--s3) var(--s4) var(--s4)}
 .today-col + .today-col{border-left:1px solid var(--line)}
 .colhead{
@@ -903,6 +906,16 @@ const stateKey = (s, dateStr) => REPEAT_IDS.has(s.id) ? `${dateStr}|${s.id}` : s
    0 there turns the filter off. ?cohorts=all shows every cohort regardless. */
 const STUDENT_NUMBER = 9;
 const COHORT_FILTER = qs.get("cohorts") === "all" ? 0 : STUDENT_NUMBER;
+
+/* Anna doesn't use the to-do list -- she asked for it gone, not emptied. This
+   gates the column out of the today panel and the day view (renderToday,
+   renderDay) without touching anything that builds it: taskList, todoModal,
+   the STUDY 1.0 engine, S.tasks/S.gen -- all untouched and still reachable by
+   flipping this back. That matters because the classmate repo's derive.py
+   copies this exact build and rewrites this one literal to `true`, which is
+   what gives classmates their own (empty, hand-filled) to-do column; deleting
+   the to-do code here instead of gating it would take theirs out too. */
+const SHOW_TODOS = false;
 function cohortMiss(s){
   if(!COHORT_FILTER) return false;
   if((s.category || "").toUpperCase() !== "CLINICAL SKILLS") return false;
@@ -1187,7 +1200,7 @@ function renderToday(){
   head.appendChild(countdownCard(TODAY));
   host.appendChild(head);
 
-  const body = el("div",{class:"today-body"});
+  const body = el("div",{class:"today-body"+(SHOW_TODOS?"":" notodos")});
   const schedCol = el("div",{class:"today-col"});
   const showDate = preTerm ? DATA.meta.term_start : ts;
   schedCol.appendChild(el("div",{class:"colhead"},[
@@ -1208,15 +1221,17 @@ function renderToday(){
   schedCol.appendChild(scheduleList(showDate, preTerm));
   body.appendChild(schedCol);
 
-  const taskCol = el("div",{class:"today-col"});
-  taskCol.appendChild(el("div",{class:"colhead"},[
-    el("span",{text:"To-do"}),
-    el("div",{class:"headbtns"},[editToggle("todo")])
-  ]));
-  if(EDIT.todo) taskCol.appendChild(el("p",{class:"edithint",
-    text:"✕ removes a box from this day, and the arrows move your own to-dos up and down. Anything removed comes back from the strip at the bottom."}));
-  taskCol.appendChild(taskList(ts));
-  body.appendChild(taskCol);
+  if(SHOW_TODOS){
+    const taskCol = el("div",{class:"today-col"});
+    taskCol.appendChild(el("div",{class:"colhead"},[
+      el("span",{text:"To-do"}),
+      el("div",{class:"headbtns"},[editToggle("todo")])
+    ]));
+    if(EDIT.todo) taskCol.appendChild(el("p",{class:"edithint",
+      text:"✕ removes a box from this day, and the arrows move your own to-dos up and down. Anything removed comes back from the strip at the bottom."}));
+    taskCol.appendChild(taskList(ts));
+    body.appendChild(taskCol);
+  }
   host.appendChild(body);
 }
 
@@ -2166,13 +2181,15 @@ function renderDay(){
      The today panel's copy stays on TODAY, so the two agree only when the day
      view is showing today, which is the intent. */
   side.appendChild(el("div",{class:"card-cd"}, countdownCard(fromIso(ds))));
-  side.appendChild(el("div",{class:"colhead"},[
-    el("span",{text:"To-do"}),
-    el("div",{class:"headbtns"},[editToggle("todo")])
-  ]));
-  if(EDIT.todo) side.appendChild(el("p",{class:"edithint",
-    text:"✕ removes a box from this day, and the arrows move your own to-dos up and down. Anything removed comes back from the strip at the bottom."}));
-  side.appendChild(taskList(ds));
+  if(SHOW_TODOS){
+    side.appendChild(el("div",{class:"colhead"},[
+      el("span",{text:"To-do"}),
+      el("div",{class:"headbtns"},[editToggle("todo")])
+    ]));
+    if(EDIT.todo) side.appendChild(el("p",{class:"edithint",
+      text:"✕ removes a box from this day, and the arrows move your own to-dos up and down. Anything removed comes back from the strip at the bottom."}));
+    side.appendChild(taskList(ds));
+  }
   grid.appendChild(side);
   return grid;
 }

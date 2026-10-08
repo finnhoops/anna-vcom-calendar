@@ -2,6 +2,32 @@
 
 Every entry is one rebuild of the calendar from a block-schedule PDF.
 
+## 2026-10-08 — Anna's to-do column is off
+
+No new PDF. Anna doesn't use the to-do list and asked for it gone, not just
+emptied the way a classmate calendar's already is.
+
+- New `SHOW_TODOS` flag (`app_template.html`), `false` by default. Gates the
+  two places the to-do column is built — `renderToday`'s `taskCol` and
+  `renderDay`'s `side` card — so neither appends its "To-do" header or
+  `taskList(...)`. The today panel's schedule column takes the full width
+  (`.today-body.notodos`) instead of leaving half the panel blank; the day
+  view needs no such change since its side card still carries the countdown.
+- A gate, not a deletion: `taskList`, `todoModal`, the STUDY 1.0 engine, and
+  everything in `S.tasks`/`S.gen`/`S.genHidden` are untouched. That matters
+  because the classmate repo's `derive.py` copies Anna's own built
+  `index.html` as every classmate calendar's source — deleting the to-do code
+  instead of gating it would have taken theirs out too. `derive.py` now flips
+  `const SHOW_TODOS = false;` to `true` for every derived calendar (new step
+  "2c"), the same mechanism `STUDENT_NUMBER` uses, the opposite direction.
+- Verified in headless Chrome: no "To-do" header in the today panel or the
+  day view, the schedule column computes as the full panel width, the day
+  view still shows two cards (schedule + countdown), and `taskList` /
+  `todoModal` / `studyBlock` are all still defined (so re-enabling is a
+  one-line flip, and classmates are unaffected) — all 8 checks pass. Rebuilt
+  every classmate calendar afterward and confirmed each still ships
+  `SHOW_TODOS = true`.
+
 ## 2026-10-08 — schedule reissue (10.5.26), and the last column was never fully read
 
 New PDF: `Block 1 Learning Calendar_CO2028_CC_Curriculum Schedule_10.05.2026._.pdf`.
