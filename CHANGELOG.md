@@ -2,6 +2,53 @@
 
 Every entry is one rebuild of the calendar from a block-schedule PDF.
 
+## 2026-10-08 — schedule reissue (10.5.26), and the last column was never fully read
+
+New PDF: `Block 1 Learning Calendar_CO2028_CC_Curriculum Schedule_10.05.2026._.pdf`.
+Asked to triple-check this one, so the whole block got re-verified against the
+PDF: every week rendered and compared image-for-image, every day's parsed
+class-label/start cross-checked independently against the PDF's own text
+positions, plus the overlap/range/lunch-coverage/Zoom-count invariant checks.
+That surfaced one real parser bug, found and fixed before anything shipped.
+
+**Friday's column edge was the page width, not the table's.** Both this PDF and
+9.24.26 leave 55-65pt of blank margin after the last printed column (728.5pt /
+737.6pt of a 792pt-wide page) — `build_columns` gave the last column `hi =
+page_width` anyway, so almost a third of Friday's sampled width fell in that
+dead margin. `row_borders`' pixel sampling takes 5 x-positions across a column
+and needs 4 to agree; with 2 of the 5 always landing off the table, Friday could
+never clear that bar, so **every Friday border check came back empty** and
+`extend_blocks` fell through to its last resort, the foot of the grid. The
+practical effect: any Friday whose last real class was followed by nothing else
+that day had that class -- or worse, Lunch itself -- stretched to 5 PM. Exam
+days are exactly that shape, so this had been live since the drawing-based
+reader shipped on 9.24.26 and nobody had hit a Friday case: 2026-10-19 and
+2026-10-23 (an exam alone, correctly 2 hours, was shipping as 4 hours plus a
+5-hour "lunch"), and would have hit 2026-11-20, 2026-12-04 and 2027-01-08 the
+moment their week was reached. New `table_right_edge()` reads the real edge
+from the page's own drawings (max x1 across its filled rects) instead of
+assuming the page; `build_columns` uses that for the last column. Verified by
+re-deriving every Friday's full day across the block after the fix -- none
+stretch past its own last real border.
+
+**Smaller fix, same family:** a trailing instructor name is stripped from a
+practical's title by a regex built for `[A-Z][a-z]+` surnames, which a
+camelCase one -- DeWitt, McMullen -- doesn't fully match, so it survived on the
+title. 2026-10-06's "Intravenous Line Insertion & Fluid Management" was shipping
+as "...Fluid Management K. DeWitt J. Moon M. Violette SCHEDULE TO FOLLOW" (not a
+new bug, the PDF really runs all of that into one merged cell; just never had a
+"SCHEDULE TO FOLLOW" test case before either). Both copies of the surname regex
+(`parse_schedule.py` and `generate_calendar.py`'s title tidier) now accept
+`[A-Z][A-Za-z]+`, and `SCHEDULE TO FOLLOW` joined the trailing-keyword list
+alongside CLASSROOM / ALL STUDENTS AS ASSIGNED / EVALUATORS.
+
+What the school actually changed (9.24 -> 10.5): Pharmacology #12/#13 moved
+Oct 19 -> Oct 14, #14/#15 moved Oct 20 -> Oct 15, #16 and Technology &
+Monitoring #13 moved into Oct 16/21, Pharmacology #10 was dropped from Oct 5,
+Clinical Skills #10 moved an hour later on Oct 6, and the Nov 16 ACLS/BLS
+overview gained an "MLA:" prefix it didn't have before (now correctly labelled
+Clinical Skills MLA instead of a named practical).
+
 ## 2026-09-24 — schedule reissue (9.24.26) and a reading of block times from the PDF's drawing
 
 New PDF: `Block 1 Learning Calendar_CO2028_CC_Curriculum Schedule_9.24.26.pdf`. It was

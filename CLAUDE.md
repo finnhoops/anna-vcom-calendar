@@ -253,6 +253,27 @@ When a new PDF comes: parse, then look at every week against the PDF page (rende
 compare) before publishing; the safety gate checks the parse is *plausible*, not that it is
 *right*.
 
+**The table's right edge is read from the drawing too (`table_right_edge`), not assumed to
+be the page's.** Both 9.24.26 and 10.5.26 leave 55-65pt of blank margin after the last
+column. `build_columns` used to give the last column `hi = page_width`, so up to a third of
+Friday's sampled width in `row_borders` fell in that dead margin -- which needs 4 of 5
+x-positions to agree, so Friday could never pass regardless of what was actually drawn.
+Every Friday border check came back empty, so `extend_blocks` fell to the foot of the grid:
+an exam alone on a Friday, correctly 2 hours, shipped as 4 hours plus a 5-hour "lunch". This
+is checked for specifically now: **re-derive every Friday's day in full after any parser
+change to row/column geometry** -- it is the one column a narrower-than-assumed table edge
+silently breaks, and the previous fix round (9.24.26) never exercised it because that
+reissue's own test days happened not to land on a Friday whose content stopped early.
+
+**A trailing instructor name needs `[A-Z][A-Za-z]+` for its surname, not `[A-Z][a-z]+`** --
+both in `parse_schedule.py`'s practical-name cleanup and `generate_calendar.py`'s
+`SUBJ_TAIL`. DeWitt, McMullen and any other camelCase surname otherwise survive on the
+title when a merged cell runs the instructor line into the subject. `SCHEDULE TO FOLLOW` is
+in the same trailing-keyword list as CLASSROOM / ALL STUDENTS AS ASSIGNED / EVALUATORS for
+the same reason -- it is real printed content on a merged cell, not something to special-case
+as a placeholder the way a bare "CLASSROOM" or "SCHEDULE TO FOLLOW" cell with no other text
+is (that one is dropped outright, a few lines above this in the parser).
+
 ## Clinical Skills cohort filter
 
 Clinical Skills MLA runs in cohorts on the printed schedule — `Students 1-10`,

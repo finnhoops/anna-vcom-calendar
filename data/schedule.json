@@ -1,8 +1,8 @@
 {
   "meta": {
-    "source_pdf": "Block 1 Learning Calendar_CO2028_CC_Curriculum Schedule_9.24.26.pdf",
-    "source_sha256": "96361844966422183a6ce61c2d9a5a88245c34406abb3c11a18c17bdd8cc8fe4",
-    "parsed_at": "2026-09-24T15:03:58",
+    "source_pdf": "Block 1 Learning Calendar_CO2028_CC_Curriculum Schedule_10.05.2026._.pdf",
+    "source_sha256": "2e908866ae9945011c16b0fff19191a46dc86442518e60348a7d6a57f18b202b",
+    "parsed_at": "2026-10-08T19:09:36",
     "block": "Block 1",
     "term_start": "2026-09-02",
     "grid_start": "2026-08-31",
@@ -759,14 +759,14 @@
           "todoLabel": "Clinical Skills ALA #5"
         },
         {
-          "id": "25bd8e3476",
+          "id": "2aca9227dc",
           "start": "10:00",
           "end": "12:00",
           "category": "CLINICAL SKILLS",
           "seq": 6,
           "code": "ALA",
           "title": "Drug Calculations",
-          "instructor": "",
+          "instructor": "S. Childress",
           "kind": "lab",
           "mandatory": false,
           "label": "Clinical Skills #6",
@@ -2327,21 +2327,6 @@
           "todoLabel": "Pharmacology #9"
         },
         {
-          "id": "8807ee8d48",
-          "start": "11:00",
-          "end": "12:00",
-          "category": "PHARMACOLOGY",
-          "seq": 10,
-          "code": "ALA",
-          "title": "Pharmacology of Inhaled Anesthetics",
-          "instructor": "Dr. Rawls",
-          "kind": "lecture",
-          "mandatory": false,
-          "label": "Pharmacology #10",
-          "study": true,
-          "todoLabel": "Pharmacology #10"
-        },
-        {
           "id": "636654314f",
           "start": "12:00",
           "end": "13:00",
@@ -2384,8 +2369,8 @@
         },
         {
           "id": "c69787c588",
-          "start": "10:00",
-          "end": "11:00",
+          "start": "11:00",
+          "end": "12:00",
           "category": "CLINICAL SKILLS",
           "seq": 10,
           "code": "ALA",
@@ -2398,14 +2383,29 @@
           "todoLabel": "Clinical Skills ALA #10"
         },
         {
-          "id": "1fa93a1669",
-          "start": "11:00",
+          "id": "636654314f",
+          "start": "12:00",
+          "end": "13:00",
+          "category": "LUNCH",
+          "seq": null,
+          "code": null,
+          "title": "LUNCH",
+          "instructor": "",
+          "kind": "break",
+          "mandatory": false,
+          "label": "Lunch",
+          "study": false,
+          "todoLabel": null
+        },
+        {
+          "id": "c2b7281b38",
+          "start": "13:00",
           "end": "17:00",
           "category": "CLINICAL SKILLS",
           "seq": null,
           "code": null,
-          "title": "Intravenous Line Insertion & Fluid Management",
-          "instructor": "",
+          "title": "Intravenous Line Insertion & Fluid Management K. DeWitt J. Moon M. Violette SCHEDULE TO FOLLOW",
+          "instructor": "S. Childress",
           "kind": "lab",
           "mandatory": false,
           "label": "Clinical Skills- Intravenous Line Insertion & Fluid Management",
@@ -2424,6 +2424,21 @@
     "2026-10-07": {
       "week": 6,
       "sessions": [
+        {
+          "id": "4295d80262",
+          "start": "08:00",
+          "end": "09:00",
+          "category": "",
+          "seq": 10,
+          "code": "ALA",
+          "title": "Pharmacology of Inhaled Anesthetics",
+          "instructor": "Dr. Rawls",
+          "kind": "lecture",
+          "mandatory": false,
+          "label": "Pharmacology of Inhaled Anesthetics",
+          "study": false,
+          "todoLabel": null
+        },
         {
           "id": "38d15f45e5",
           "start": "09:00",
@@ -2771,6 +2786,36 @@
           "todoLabel": null
         },
         {
+          "id": "514630394f",
+          "start": "10:00",
+          "end": "11:00",
+          "category": "PHARMACOLOGY",
+          "seq": 12,
+          "code": "ALA",
+          "title": "Opioid Agonist & Antagonist",
+          "instructor": "Dr. Rawls",
+          "kind": "lecture",
+          "mandatory": false,
+          "label": "Pharmacology #12",
+          "study": true,
+          "todoLabel": "Pharmacology #12"
+        },
+        {
+          "id": "b87c432c34",
+          "start": "11:00",
+          "end": "12:00",
+          "category": "PHARMACOLOGY",
+          "seq": 13,
+          "code": "ALA",
+          "title": "Non-Opioid Analgesics",
+          "instructor": "Dr. Rawls",
+          "kind": "lecture",
+          "mandatory": false,
+          "label": "Pharmacology #13",
+          "study": true,
+          "todoLabel": "Pharmacology #13"
+        },
+        {
           "id": "636654314f",
           "start": "12:00",
           "end": "13:00",
@@ -2788,7 +2833,9 @@
       ],
       "notes": [],
       "items": [],
-      "assignments": [],
+      "assignments": [
+        "T&M 6 & 7"
+      ],
       "weekday": "Wednesday"
     },
     "2026-10-15": {
@@ -2808,6 +2855,36 @@
           "label": "Clinical Skills Exam 3: Lectures 2-12",
           "study": false,
           "todoLabel": null
+        },
+        {
+          "id": "e91a4a4dd6",
+          "start": "10:00",
+          "end": "11:00",
+          "category": "PHARMACOLOGY",
+          "seq": 14,
+          "code": "ALA",
+          "title": "Anticonvulsants",
+          "instructor": "Dr. Rawls",
+          "kind": "lecture",
+          "mandatory": false,
+          "label": "Pharmacology #14",
+          "study": true,
+          "todoLabel": "Pharmacology #14"
+        },
+        {
+          "id": "b624eb8861",
+          "start": "11:00",
+          "end": "12:00",
+          "category": "PHARMACOLOGY",
+          "seq": 15,
+          "code": "ALA",
+          "title": "Steroid Therapy",
+          "instructor": "Dr. Rawls",
+          "kind": "lecture",
+          "mandatory": false,
+          "label": "Pharmacology #15",
+          "study": true,
+          "todoLabel": "Pharmacology #15"
         },
         {
           "id": "636654314f",
@@ -2864,6 +2941,21 @@
           "label": "Anatomy #19",
           "study": true,
           "todoLabel": "Anatomy #19"
+        },
+        {
+          "id": "5d46e6731e",
+          "start": "11:00",
+          "end": "12:00",
+          "category": "PHARMACOLOGY",
+          "seq": 16,
+          "code": "ALA",
+          "title": "Postoperative Nausea & Vomiting",
+          "instructor": "Dr. Rawls",
+          "kind": "lecture",
+          "mandatory": false,
+          "label": "Pharmacology #16",
+          "study": true,
+          "todoLabel": "Pharmacology #16"
         },
         {
           "id": "636654314f",
@@ -2940,36 +3032,6 @@
           "todoLabel": null
         },
         {
-          "id": "514630394f",
-          "start": "10:00",
-          "end": "11:00",
-          "category": "PHARMACOLOGY",
-          "seq": 12,
-          "code": "ALA",
-          "title": "Opioid Agonist & Antagonist",
-          "instructor": "Dr. Rawls",
-          "kind": "lecture",
-          "mandatory": false,
-          "label": "Pharmacology #12",
-          "study": true,
-          "todoLabel": "Pharmacology #12"
-        },
-        {
-          "id": "b87c432c34",
-          "start": "11:00",
-          "end": "12:00",
-          "category": "PHARMACOLOGY",
-          "seq": 13,
-          "code": "ALA",
-          "title": "Non-Opioid Analgesics",
-          "instructor": "Dr. Rawls",
-          "kind": "lecture",
-          "mandatory": false,
-          "label": "Pharmacology #13",
-          "study": true,
-          "todoLabel": "Pharmacology #13"
-        },
-        {
           "id": "636654314f",
           "start": "12:00",
           "end": "13:00",
@@ -3026,21 +3088,6 @@
           "todoLabel": "Technology & Monitoring #12"
         },
         {
-          "id": "e91a4a4dd6",
-          "start": "11:00",
-          "end": "12:00",
-          "category": "PHARMACOLOGY",
-          "seq": 14,
-          "code": "ALA",
-          "title": "Anticonvulsants",
-          "instructor": "Dr. Rawls",
-          "kind": "lecture",
-          "mandatory": false,
-          "label": "Pharmacology #14",
-          "study": true,
-          "todoLabel": "Pharmacology #14"
-        },
-        {
           "id": "636654314f",
           "start": "12:00",
           "end": "13:00",
@@ -3054,21 +3101,6 @@
           "label": "Lunch",
           "study": false,
           "todoLabel": null
-        },
-        {
-          "id": "b624eb8861",
-          "start": "13:00",
-          "end": "14:00",
-          "category": "PHARMACOLOGY",
-          "seq": 15,
-          "code": "ALA",
-          "title": "Steroid Therapy",
-          "instructor": "Dr. Rawls",
-          "kind": "lecture",
-          "mandatory": false,
-          "label": "Pharmacology #15",
-          "study": true,
-          "todoLabel": "Pharmacology #15"
         }
       ],
       "notes": [],
@@ -3128,19 +3160,19 @@
           "todoLabel": "Physiology #8"
         },
         {
-          "id": "5d46e6731e",
+          "id": "bb448fe060",
           "start": "11:00",
           "end": "12:00",
-          "category": "PHARMACOLOGY",
-          "seq": 16,
+          "category": "TECHNOLOGY & MONITORING",
+          "seq": 13,
           "code": "ALA",
-          "title": "Postoperative Nausea & Vomiting",
-          "instructor": "Dr. Rawls",
+          "title": "Hemodynamic Monitoring, Homeostasis and TEGs",
+          "instructor": "K. Dewitt",
           "kind": "lecture",
           "mandatory": false,
-          "label": "Pharmacology #16",
+          "label": "Technology & Monitoring #13",
           "study": true,
-          "todoLabel": "Pharmacology #16"
+          "todoLabel": "Technology & Monitoring #13"
         },
         {
           "id": "636654314f",
@@ -3156,21 +3188,6 @@
           "label": "Lunch",
           "study": false,
           "todoLabel": null
-        },
-        {
-          "id": "bb448fe060",
-          "start": "13:00",
-          "end": "14:00",
-          "category": "TECHNOLOGY & MONITORING",
-          "seq": 13,
-          "code": "ALA",
-          "title": "Hemodynamic Monitoring, Homeostasis and TEGs",
-          "instructor": "K. Dewitt",
-          "kind": "lecture",
-          "mandatory": false,
-          "label": "Technology & Monitoring #13",
-          "study": true,
-          "todoLabel": "Technology & Monitoring #13"
         }
       ],
       "notes": [],
@@ -4609,17 +4626,17 @@
           "todoLabel": null
         },
         {
-          "id": "6562f20d13",
+          "id": "ca7c6c4d41",
           "start": "09:00",
           "end": "12:00",
           "category": "CLINICAL SKILLS",
           "seq": null,
-          "code": null,
-          "title": ": Adult Basic Life Support (BLS) & Adult Cardiac Life Support (ACLS)",
+          "code": "MLA",
+          "title": "Adult Basic Life Support (BLS) & Adult Cardiac Life Support (ACLS)",
           "instructor": "J. Babirak",
           "kind": "lab",
           "mandatory": false,
-          "label": "Clinical Skills- Adult Basic Life Support (BLS) & Adult Cardiac Life Support (ACLS)",
+          "label": "Clinical Skills MLA",
           "study": false,
           "todoLabel": null
         },

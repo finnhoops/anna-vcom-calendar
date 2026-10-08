@@ -187,8 +187,10 @@ SUBJ_TAIL = [
     re.compile(r"\s*(?:ALL STUDENTS(?: AS ASSIGNED)?|EVALUATORS?|CLASSROOM|LAB|"
                r"LUNCH PROVIDED|SCHEDULE TO FOLLOW|STAFF PROCTOR|"
                r"FACULTY REMOTE GRADED)\s*$", re.I),
-    re.compile(r"(\s+(?:Dr\.|[A-Za-z]\.)\s*[A-Z][a-z]+"
-               r"(?:\s*/\s*(?:Dr\.|[A-Za-z]\.)\s*[A-Z][a-z]+)*)+\s*$"),
+    # [A-Z][A-Za-z]+, not [A-Z][a-z]+, so a camelCase surname (DeWitt, McMullen)
+    # doesn't break the match and strand the instructor name on the title.
+    re.compile(r"(\s+(?:Dr\.|[A-Za-z]\.)\s*[A-Z][A-Za-z]+"
+               r"(?:\s*/\s*(?:Dr\.|[A-Za-z]\.)\s*[A-Z][A-Za-z]+)*)+\s*$"),
 ]
 
 

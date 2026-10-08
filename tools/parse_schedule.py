@@ -132,6 +132,21 @@ def fit_header_band(spans):
         HEADER_MAX_Y = min(ys) + HEADER_OFFSET
 
 
+def table_right_edge(page):
+    """
+    The grid's own right edge, which is NOT the page's -- the 9.24.26/10.05.26
+    PDFs leave 55-65pt of blank margin after the last column (728.5pt and 737.6pt
+    of a 792pt-wide page respectively). Taking the page width for Friday's column
+    bound put a third of its sampled width in that dead margin, so every border
+    check on Friday alone came back short regardless of what was actually drawn --
+    which is why a Friday-only class or Lunch kept stretching to 5 PM: Oct 19/23,
+    Nov 20, Dec 4, Jan 8 all share that one root cause. Found from the page's own
+    drawings, not assumed, in case a future reissue's margin differs again.
+    """
+    edge = max((d["rect"].x1 for d in page.get_drawings()), default=0)
+    return edge if edge > page.rect.width * 0.5 else page.rect.width
+
+
 def build_columns(spans, page_width):
     """Day columns, from the date headers. Returns [(date, x_lo, x_hi), ...]."""
     headers = []
@@ -147,7 +162,7 @@ def build_columns(spans, page_width):
     columns = []
     for i, (d, x0, x1) in enumerate(headers):
         lo = x0 - 8 if i == 0 else (headers[i - 1][2] + x0) / 2
-        hi = page_width if i == len(headers) - 1 else (x1 + headers[i + 1][1]) / 2
+        hi = page_width if i == len(headers) - 1 else (x1 + headers[i + 1][1]) / 2  # page_width is the true table edge here, not the page's
         columns.append((d, max(lo, LABEL_COL_MAX_X), hi))
     return columns
 
@@ -476,12 +491,17 @@ def label_session(session):
             return f"Clinical Skills #{session['seq']}", True
         # A named hands-on practical: "Clinical Skills- <what is being practised>".
         # Strip a trailing run of instructor initials and any "CLASSROOM" /
-        # "ALL STUDENTS AS ASSIGNED" / "EVALUATORS" tail the PDF ran into it.
+        # "ALL STUDENTS AS ASSIGNED" / "EVALUATORS" / "SCHEDULE TO FOLLOW" tail
+        # the PDF ran into it -- the 10.5.26 reissue showed these can precede the
+        # instructor run rather than follow it ("... Management K. DeWitt J. Moon
+        # M. Violette SCHEDULE TO FOLLOW"), so each loop pass strips a keyword
+        # tail first and an instructor tail second, letting either expose the
+        # other for the next pass.
         prac = title.lstrip(" :.-")
         for _ in range(3):
             prac = re.sub(r"\s+(CLASSROOM|ALL STUDENTS AS ASSIGNED|EVALUATORS?|"
-                          r"FACULTY REMOTAE GRADED|STAFF PROCTOR)\s*$", "", prac, flags=re.I)
-            prac = re.sub(r"\s+(?:[A-Za-z]\.\s*[A-Za-z][a-z]+\s*)+$", "", prac)
+                          r"FACULTY REMOTAE GRADED|STAFF PROCTOR|SCHEDULE TO FOLLOW)\s*$", "", prac, flags=re.I)
+            prac = re.sub(r"\s+(?:[A-Za-z]\.\s*[A-Za-z][A-Za-z]+\s*)+$", "", prac)  # [A-Za-z]+ to also catch DeWitt/McMullen-style surnames
         prac = norm(prac)
         if prac and prac.upper() != "CLINICAL SKILLS":
             return f"Clinical Skills- {prac}", True
@@ -650,7 +670,7 @@ def band_geometry(page, columns, rows):
 def parse_page(page, page_no, report):
     spans = spans_of(page)
     fit_header_band(spans)
-    columns = build_columns(spans, page.rect.width)
+    columns = build_columns(spans, table_right_edge(page))
     rows = build_rows(spans, page.rect.height)
 
     week = None
