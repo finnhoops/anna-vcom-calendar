@@ -357,21 +357,29 @@ exist, so use the rules and checklists in the skill body directly.
   the ground and the accent, never what a course colour means.
 - Run `tools/check_contrast.py` after any themes.json edit. It fails the build
   on anything under WCAG AA.
-- **`?today=` and `?date=` are two different things and must stay that way.**
-  `?today=YYYY-MM-DD` fakes what the page believes today is, and is how the
-  pre-term and mid-term states get tested. `?date=YYYY-MM-DD` (with
-  `?view=month|week|day`) only parks the lower half, and `setView` rewrites it
-  every time Anna opens a day.
+- **`?today=` is the only URL override left, and it only fakes what the page
+  believes today is** — how the pre-term and mid-term states get tested.
+  There used to also be a `?date=YYYY-MM-DD` (with `?view=month|week|day`)
+  that `setView` wrote on every navigation and the page read back on load, so
+  the bottom calendar could deep-link to a specific day. **Removed 2026-10-08**
+  — Anna asked for the bottom calendar to always open on the current month and
+  week, for everyone's calendar, and a written-back `?date=` was exactly what
+  stopped that: a bookmark, a tab left open for days, or an iPhone "Add to Home
+  Screen" icon (which captures the URL at the moment it's added) all reopened
+  wherever she'd last navigated instead of today. `setView` now just sets
+  `view` and re-renders; the URL is never touched by navigation, and nothing
+  reads `date`/`view` from it at load. `?today=` is untouched by this — it
+  still fakes TODAY for a screenshot or a test, and the bottom calendar follows
+  it the same way it always did (see `cursor`'s init near the bottom of
+  `app_template.html`).
 
-  They were one parameter until 2026-08-26, and that was a real bug Finn hit:
-  tapping 11 September in the month grid wrote `date=2026-09-11` into the URL,
-  and the **next load** — a refresh, or a phone restoring a backgrounded tab —
-  read it back as "today is 11 September" and moved the today panel there. It
-  never happened in the same session, because TODAY is read once at load, which
-  is why paging with the arrows never showed it and an earlier test using
-  `step()` missed it. **The today panel must not be reachable from anything the
-  lower half writes.** Any screenshot taken with `?today=` will show the panel on
-  that faked date — that is expected, not a bug.
+  They were one parameter until 2026-08-26, which was a related but different
+  bug Finn hit: tapping 11 September in the month grid wrote `date=2026-09-11`
+  into the URL, and the **next load** — a refresh, or a phone restoring a
+  backgrounded tab — read it back as "today is 11 September" and moved the
+  today panel there. **The today panel must never be reachable from anything
+  the bottom calendar does** — true before this change and still true now that
+  the bottom calendar has nothing left to write.
 - **Floral is single-colourway. It has no dark mode, on purpose.** The pack
   carries `"noDark": true` in `themes.json`; `generate_calendar.py` then emits no
   `prefers-color-scheme:dark` block for it, so it renders identically whatever
@@ -499,9 +507,9 @@ exist, so use the rules and checklists in the skill body directly.
   to "Exams / None left".
 - **The today panel does not follow the cursor and never has** — `renderToday`
   reads `iso(TODAY)`, and paging the lower half 20 days does not move it. If this
-  looks wrong while testing, check for a `?date=` in the URL: that override
+  looks wrong while testing, check for a `?today=` in the URL: that override
   changes what the page believes TODAY is, so the panel follows it. Every
-  screenshot taken with `?date=` will show the panel on that date.
+  screenshot taken with `?today=` will show the panel on that date.
   `.card-cd` is the day view's wrapper — it drops the min-width, since the column sets the
   width there, and left-aligns. The pre-term "Starts in N days" card is still
   built inline in `renderToday`, because before the block there is no next exam

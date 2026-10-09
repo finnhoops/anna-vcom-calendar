@@ -2,6 +2,38 @@
 
 Every entry is one rebuild of the calendar from a block-schedule PDF.
 
+## 2026-10-08 — the bottom calendar always opens on today now, for everyone
+
+No new PDF. Anna asked for the bottom (month/week/day) calendar to open on
+whatever month and week we're actually in — for every calendar, not just
+hers.
+
+- It already did, on a plain fresh load. The actual bug: `setView()` wrote
+  `?view=` and `?date=` into the address bar on every navigation, and the page
+  read them back on load. A bookmark, a tab left open for days, or an iPhone
+  "Add to Home Screen" icon (which captures the URL at the moment it's added)
+  would all reopen wherever the calendar was last navigated to instead of the
+  current month/week. That's the realistic way this actually bit: not a
+  fresh visit, but a saved link or icon from an earlier session.
+- `view` now always starts at `"month"`; `cursor` always starts at today
+  (clamped to the block's dates, same as before). Neither is read from the
+  URL at load any more. `setView()` no longer touches the URL at all — no
+  more `history.replaceState`, so there's nothing left for a saved link to
+  capture.
+- `?today=` is untouched — still fakes what today is for testing a specific
+  date's render, pre-term included, and the bottom calendar still follows it
+  exactly as before.
+- Classmate calendars inherit this for free: `derive.py` copies Anna's built
+  `index.html` verbatim for this part, no flag to flip.
+- Verified in headless Chrome, 11/11: a fresh load and a load carrying a
+  stale `?view=week&date=2026-09-01` both land on this month with today's
+  date — the second one is the actual regression test, standing in for the
+  bookmark/home-screen-icon case. `?today=` (including a pre-term date)
+  still overrides correctly. Normal in-session use is unaffected: paging
+  months/weeks, switching Month/Week/Day, the Today button, and clicking a
+  day cell into Day view all still work, and the address bar no longer
+  changes during any of it.
+
 ## 2026-10-08 — Anna's to-do column is off
 
 No new PDF. Anna doesn't use the to-do list and asked for it gone, not just

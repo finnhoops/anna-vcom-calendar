@@ -2657,16 +2657,19 @@ function dayEditor(dateStr){
 }
 
 /* ---- shell ------------------------------------------------------------- */
-/* ?view= and ?date= make any day or week a shareable link, and let the
-   pre-term / mid-term states be checked without waiting for the calendar. */
-const wantView = new URLSearchParams(location.search).get("view");
-let view = ["month","week","day"].includes(wantView) ? wantView : "month";
+/* The bottom calendar always opens on Month view, on today. It used to also
+   read ?view=/?date= back on load so a URL could deep-link straight to a day
+   -- but setView() writes those on every navigation, so a bookmark, a tab
+   left open for days, or an iPhone "Add to Home Screen" icon (which captures
+   the URL at the moment it's added) would all reopen on whatever day was last
+   looked at instead of the current one. That was the actual bug behind
+   "my calendar doesn't open on today" -- Anna asked for this for everyone's
+   calendar, not just a one-off fix for hers. ?today= (below) still fakes what
+   today is, for testing a specific date's render -- that one still works, it
+   just isn't this. */
+let view = "month";
 function setView(v){
   view = v;
-  const u = new URL(location.href);
-  u.searchParams.set("view", v);
-  u.searchParams.set("date", iso(cursor));
-  history.replaceState(null, "", u);
   render();
 }
 
@@ -2739,14 +2742,17 @@ buildSwatches();
 buildLegend();
 applyTheme(S.theme);
 /* Opening on a month with nothing in it is a dead first impression, so before
-   the block starts the grid lands on the first taught month instead. */
+   the block starts the grid lands on the first taught month instead. After
+   the block, likewise the last one -- otherwise the grid opens on *today's*
+   actual month, every time, full stop. No more reading a ?date= back here:
+   see the comment on `view` above for why. */
 cursor = (TODAY < TERM_START) ? new Date(TERM_START)
        : (TODAY > TERM_END)   ? new Date(TERM_END)
        : new Date(TODAY);
-/* A ?date= in the URL parks the lower half there -- that is the deep link, and
-   it is what setView writes back. It cannot touch TODAY. */
-if(isDate(qs.get("date"))) cursor = fromIso(qs.get("date"));
-else if(todayOverride) cursor = new Date(TODAY);
+/* ?today= still wins over the pre/post-term clamp above, so faking a
+   pre-term "today" for testing shows that actual month, not the clamp's
+   first-taught-month fallback. Narrow, dev-only, unrelated to the ?date= bug. */
+if(todayOverride) cursor = new Date(TODAY);
 render();
 </script>
 </body>
