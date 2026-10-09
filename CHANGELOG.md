@@ -1206,3 +1206,7 @@ Run by update-calendar.sh. All safety checks passed.
 ## 2026-10-08 — rebuilt from Block 1 Learning Calendar_CO2028_CC_Curriculum Schedule_10.05.2026._.pdf
 
 Run by update-calendar.sh. All safety checks passed.
+
+## 2026-10-09 — rebuilt from Block 1 Learning Calendar_CO2028_CC_Curriculum Schedule_10.09.2026._.pdf
+
+Run by update-calendar.sh. All safety checks passed.
